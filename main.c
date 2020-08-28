@@ -70,23 +70,57 @@ int add_room(t_lemin *lem, char* line)
 	return 1;
 }
 
+int check_room(char* line)
+{
+	int i;
+	int space;
+
+	i = 0;
+	space = 0;
+	while(line[i] != '\0')
+	{
+		if (line[i] == ' ')
+		{
+			if (line[i + 1] != ' ')
+				space++;
+		}
+		i++;
+	}
+	return (space == 2) ? 1 : 0;
+}
+
+int check_line(char* line)
+{
+	if (line[0] == '#') {
+		return 1;
+	}
+	return check_room(line);
+}
+
 int get_rooms(t_lemin *lem)
 {
 	char* line;
 
-	while(get_next_line(0, &line) && ft_strcmp(line, "# links"))
+	while(get_next_line(0, &line) && check_line(line))
 	{
 		if (!ft_strcmp(line, "##start"))
 		{
-			free(line);
 			get_next_line(0, &line);
+			if (!check_room(line))
+				exit(1);
 			get_room(line, &lem->start_room);
+			free(line);
 		}
 		else if (!ft_strcmp(line, "##end"))
 		{
-			free(line);
 			get_next_line(0, &line);
+			if (!check_room(line))
+				exit(1);
 			get_room(line, &lem->end_room);
+			free(line);
+		}
+		else if (line[0] == '#') {
+			free(line);
 		}
 		else
 			add_room(lem, line);
