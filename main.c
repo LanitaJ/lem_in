@@ -70,6 +70,8 @@ int add_room(t_lemin *lem, char* line)
 	return 1;
 }
 
+//чек на имя комнаты
+
 int check_room(char* line)
 {
 	int i;
@@ -84,6 +86,8 @@ int check_room(char* line)
 			if (line[i + 1] != ' ')
 				space++;
 		}
+		else if (!ft_isdigit(line[i]))
+			return 0;
 		i++;
 	}
 	return (space == 2) ? 1 : 0;
@@ -97,25 +101,30 @@ int check_line(char* line)
 	return check_room(line);
 }
 
-int get_rooms(t_lemin *lem)
+void exit_get_room(char* line)
 {
-	char* line;
+	if (!check_room(line))
+	{
+		ft_putstr("get_room");
+		exit(1);
+	}
+}
 
+char *get_rooms(t_lemin *lem, char* line)
+{
 	while(get_next_line(0, &line) && check_line(line))
 	{
 		if (!ft_strcmp(line, "##start"))
 		{
 			get_next_line(0, &line);
-			if (!check_room(line))
-				exit(1);
+			exit_get_room(line);
 			get_room(line, &lem->start_room);
 			free(line);
 		}
 		else if (!ft_strcmp(line, "##end"))
 		{
 			get_next_line(0, &line);
-			if (!check_room(line))
-				exit(1);
+			exit_get_room(line);
 			get_room(line, &lem->end_room);
 			free(line);
 		}
@@ -125,10 +134,10 @@ int get_rooms(t_lemin *lem)
 		else
 			add_room(lem, line);
 	}
-	return 1;
+	return line;
 }
 
-int compare(t_lemin *lem,char* str)//return number of equivalent char* with rooms
+int compare(t_lemin *lem, char* str)//return number of equivalent char* with rooms
 {
 	int i;
 	int equil;
@@ -142,40 +151,78 @@ int compare(t_lemin *lem,char* str)//return number of equivalent char* with room
 		i++;
 	}
 	equil += (!strcmp(lem->start_room.name, str)) + (!strcmp(lem->end_room.name, str));
-	if (!equil)
+	if (equil != 1)
+	{
+		ft_putstr("compare ");
+		ft_putstr(str);
 		exit(1);
+	}
 	return (equil);
 }
 
-int get_link(char* line, t_link *l, t_lemin *lem)//переделать
+int get_first_room(char* line, t_link *l)
 {
 	int i;
+	int len = 0;
+	char *c;
 
 	i = 0;
-	while(i != strlen(line))
+	while(line[i] != '\0')
 	{
-		l->p1 = ft_strnew(i);
-		ft_strncpy(l->p1, line, i);
 		if (line[i] == '-')
 		{
-			if (compare(lem, l->p1) == 1)
+			len = i;
+			l->p1 = ft_strnew(i);
+			i = 0;
+			while (i != len)
 			{
-				line += i + 1;
-				i = 0;
-				while(i != strlen(line))
-				{
-					l->p2 = ft_strnew(strlen(line));
-					ft_strcpy(l->p2, line);
-					if (compare(lem, l->p2) == 1)
-						return 1;
-					i++;
-				}
-				return 0;
+				l->p1[i] = line[i];
+				i++;
 			}
+			return 1;
 		}
 		i++;
 	}
 	return 0;
+}
+
+int get_second_room(char *line, t_link *l)
+{
+	int		i;
+	int		len;
+
+	len = (int)(ft_strlen(line) - 1);
+	l->p2 = ft_strnew(len);
+	i = 0;
+	while(i != len)
+	{
+		l->p2[i] = line[i + 1];
+		i++;
+	}
+	return 1;
+}
+
+void get_link(char* line, t_link *l, t_lemin *lem)
+{
+
+	if(!get_first_room(line, l))
+	{
+		ft_putstr("get_link ");
+		ft_putstr(line);
+		exit(0);
+	}
+	if(!get_second_room(ft_strchr(line, '-'),l))
+	{
+		ft_putstr("get_link ");
+		ft_putstr(line);
+		exit(0);
+	}
+	if (!(compare(lem,l->p1) * compare(lem,l->p2)))
+	{
+		ft_putstr("compare ");
+		ft_putstr(line);
+		exit(0);
+	}
 }
 
 int add_link(t_lemin *lem, char* line)
@@ -194,12 +241,12 @@ int add_link(t_lemin *lem, char* line)
 	return 1;
 }
 
-int get_links(t_lemin *lem)
+int get_links(t_lemin *lem, char *line)
 {
-	char* line;
 	int i;
 
 	i = 0;
+	add_link(lem, line);
 	while(get_next_line(0, &line))
 		add_link(lem, line);
 	return 1;
@@ -212,8 +259,7 @@ int parse(t_lemin *lem)
 	get_next_line(0, &line);
 	lem->num_ants = ft_atoi(line);
 	free(line);
-	get_rooms(lem);
-	get_links(lem);
+	get_links(lem,get_rooms(lem,line));
 	return 1;
 }
 
