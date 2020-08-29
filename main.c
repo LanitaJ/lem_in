@@ -1,6 +1,8 @@
 #include "lemin.h"
 #include <stdio.h>
 
+
+
 typedef struct	s_link
 {
 	char* p1;
@@ -9,10 +11,19 @@ typedef struct	s_link
 
 typedef struct	s_room
 {
-	char* name;
-	int x;
-	int y;
+	char*		name;
+	int			x;
+	int			y;
+	struct t_rlink*	links;
+	int			num_links;
 }				t_room;
+
+typedef struct	s_rlink
+{
+	t_room*		room;
+	int			block;
+	t_rlink		*next;
+}				t_rlink;
 
 typedef	struct	s_lemin
 {
@@ -252,6 +263,60 @@ int get_links(t_lemin *lem, char *line)
 	return 1;
 }
 
+int create_trlink(t_room *room)
+{
+	t_rlink *new;
+
+	new = (t_rlink *)malloc(sizeof(t_rlink));
+	new->next = (void*)0;
+	new->room = room;
+	return 0;
+}
+
+int add_trlink(t_room *room, t_rlink *prev)
+{
+	t_rlink *new;
+
+	new = (t_rlink *)malloc(sizeof(t_rlink));
+	new->next = (void*)0;
+	new->room = room;
+	prev->next = new;
+	return 0;
+}
+
+t_rlink *last_trlink(t_rlink *rlink)
+{
+	while (rlink->next)
+		rlink = rlink.next;
+	return rlink;
+}
+
+int altor(t_lemin *lem)//add links to rooms
+{
+	int i;
+	int j;
+
+	i = 0;
+	while(i != lem->num_rooms - 1)
+	{
+		lem->rooms[i].num_links = 0;
+		j = 0;
+		while(j != lem->num_links - 1)
+		{
+			if((!ft_strcmp(lem->rooms[i].name, lem->links[j].p1)) || (!ft_strcmp(lem->rooms[i].name, lem->links[j].p2)))
+			{
+				lem->rooms[i].num_links++;
+				if (lem->rooms[i].num_links == 1)
+					create_trlink(lem->rooms[i]);
+				else
+					add_trlink(lem->rooms[i], last_trlink(lem->rooms[i].links[0]));
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 int parse(t_lemin *lem)
 {
 	char* line;
@@ -262,6 +327,8 @@ int parse(t_lemin *lem)
 	get_links(lem,get_rooms(lem,line));
 	return 1;
 }
+
+
 
 void init_lemin(t_lemin *lem)
 {
@@ -311,5 +378,8 @@ int main()
 		ft_putchar('\n');
 		j++;
 	}
+
+ 	altor(lem);
+
 	return 0;
 }
