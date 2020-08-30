@@ -5,8 +5,8 @@
 
 typedef struct	s_link
 {
-	char* p1;
-	char* p2;
+	char* name1;
+	char* name2;
 }				t_link;
 
 typedef struct	s_room
@@ -14,16 +14,10 @@ typedef struct	s_room
 	char*		name;
 	int			x;
 	int			y;
-	struct t_rlink*	links;
+	struct s_room*		*n_rooms;
+	int			*blocks;
 	int			num_links;
 }				t_room;
-
-typedef struct	s_rlink
-{
-	t_room*		room;
-	int			block;
-	t_rlink		*next;
-}				t_rlink;
 
 typedef	struct	s_lemin
 {
@@ -106,9 +100,8 @@ int check_room(char* line)
 
 int check_line(char* line)
 {
-	if (line[0] == '#') {
+	if (line[0] == '#')
 		return 1;
-	}
 	return check_room(line);
 }
 
@@ -183,11 +176,11 @@ int get_first_room(char* line, t_link *l)
 		if (line[i] == '-')
 		{
 			len = i;
-			l->p1 = ft_strnew(i);
+			l->name1 = ft_strnew(i);
 			i = 0;
 			while (i != len)
 			{
-				l->p1[i] = line[i];
+				l->name1[i] = line[i];
 				i++;
 			}
 			return 1;
@@ -203,11 +196,11 @@ int get_second_room(char *line, t_link *l)
 	int		len;
 
 	len = (int)(ft_strlen(line) - 1);
-	l->p2 = ft_strnew(len);
+	l->name2 = ft_strnew(len);
 	i = 0;
 	while(i != len)
 	{
-		l->p2[i] = line[i + 1];
+		l->name2[i] = line[i + 1];
 		i++;
 	}
 	return 1;
@@ -228,7 +221,7 @@ void get_link(char* line, t_link *l, t_lemin *lem)
 		ft_putstr(line);
 		exit(0);
 	}
-	if (!(compare(lem,l->p1) * compare(lem,l->p2)))
+	if (!(compare(lem,l->name1) * compare(lem,l->name2)))
 	{
 		ft_putstr("compare ");
 		ft_putstr(line);
@@ -263,32 +256,59 @@ int get_links(t_lemin *lem, char *line)
 	return 1;
 }
 
-int create_trlink(t_room *room)
+t_room *name_to_room(char *name, t_lemin *lem)
 {
-	t_rlink *new;
+	int i;
 
-	new = (t_rlink *)malloc(sizeof(t_rlink));
-	new->next = (void*)0;
-	new->room = room;
-	return 0;
+	i = 0;
+	while(i != lem->num_rooms)
+	{
+		if(!strcmp(lem->rooms[i].name, name))
+			return &lem->rooms[i];
+		i++;
+	}
+	if(!strcmp(lem->start_room.name, name))
+		return &lem->start_room;
+	if(!strcmp(lem->end_room.name, name))
+		return &lem->end_room;
+	ft_putstr("name_to_room\n");
+	exit(1);
 }
 
-int add_trlink(t_room *room, t_rlink *prev)
+int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 {
-	t_rlink *new;
+	t_room*	*tmp;
+	int*	tmp_blocks;
+	int		i;
 
-	new = (t_rlink *)malloc(sizeof(t_rlink));
-	new->next = (void*)0;
-	new->room = room;
-	prev->next = new;
-	return 0;
+	i = 0;
+	tmp = (t_room* *)malloc(sizeof(t_room*) * ++main_room->num_links);
+	tmp_blocks = (int*)malloc(sizeof(int) * main_room->num_links);
+	while (i != main_room->num_links - 1)
+	{
+		tmp_blocks[i] = 0;
+		tmp[i] = main_room->n_rooms[i];
+		i++;
+	}
+	tmp_blocks[i] = 0;
+	tmp[i] = name_to_room(name_add, lem);
+	if (main_room->num_links != 1)
+	{
+		free(main_room->n_rooms);//дополнить чистку
+		free(main_room->blocks);
+	}
+	main_room->blocks = tmp_blocks;
+	main_room->n_rooms = tmp;
+	return 1;
 }
 
-t_rlink *last_trlink(t_rlink *rlink)
+int create_link(t_room *main_room, t_link *link, t_lemin *lem)
 {
-	while (rlink->next)
-		rlink = rlink.next;
-	return rlink;
+	if (!ft_strcmp(main_room->name, link->name1))
+		add_room_to_room(main_room, link->name2, lem);
+	else
+		add_room_to_room(main_room, link->name1, lem);
+	return 1;
 }
 
 int altor(t_lemin *lem)//add links to rooms
@@ -297,24 +317,19 @@ int altor(t_lemin *lem)//add links to rooms
 	int j;
 
 	i = 0;
-	while(i != lem->num_rooms - 1)
+	while(i != lem->num_rooms)
 	{
 		lem->rooms[i].num_links = 0;
 		j = 0;
-		while(j != lem->num_links - 1)
+		while(j != lem->num_links)
 		{
-			if((!ft_strcmp(lem->rooms[i].name, lem->links[j].p1)) || (!ft_strcmp(lem->rooms[i].name, lem->links[j].p2)))
-			{
-				lem->rooms[i].num_links++;
-				if (lem->rooms[i].num_links == 1)
-					create_trlink(lem->rooms[i]);
-				else
-					add_trlink(lem->rooms[i], last_trlink(lem->rooms[i].links[0]));
-			}
+			if((!ft_strcmp(lem->rooms[i].name, lem->links[j].name1)) || (!ft_strcmp(lem->rooms[i].name, lem->links[j].name2)))
+					create_link(&lem->rooms[i], &lem->links[j], lem);
 			j++;
 		}
 		i++;
 	}
+	return 1;
 }
 
 int parse(t_lemin *lem)
@@ -327,8 +342,6 @@ int parse(t_lemin *lem)
 	get_links(lem,get_rooms(lem,line));
 	return 1;
 }
-
-
 
 void init_lemin(t_lemin *lem)
 {
@@ -372,14 +385,27 @@ int main()
  	int j = 0;
  	while(j != lem.num_links)
 	{
- 		ft_putstr(lem.links[j].p1);
+ 		ft_putstr(lem.links[j].name1);
  		ft_putstr("-");
-		ft_putstr(lem.links[j].p2);
+		ft_putstr(lem.links[j].name2);
 		ft_putchar('\n');
 		j++;
 	}
+ 	altor(&lem);
 
- 	altor(lem);
+ 	t_room *room;
+ 	i = 0;
+ 	ft_putstr(lem.rooms[3].name);
+ 	ft_putchar('\n');
+ 	while(i != lem.rooms[3].num_links)
+	{
+ 		room = lem.rooms[3].n_rooms[i];
+ 		ft_putnbr(lem.rooms[3].blocks[i]);
+ 		ft_putchar('-');
+ 		ft_putstr(room->name);
+		ft_putchar(' ');
 
+ 		i++;
+	}
 	return 0;
 }
