@@ -1,82 +1,17 @@
-#include "lemin.h"
-#include <stdio.h>
-
-
-
-typedef struct	s_link
-{
-	char* name1;
-	char* name2;
-}				t_link;
-
-typedef struct	s_room
-{
-	char*		name;
-	int			x;
-	int			y;
-	struct s_room*		*n_rooms;
-	int			*blocks;
-	int			num_links;
-}				t_room;
-
-typedef	struct	s_lemin
-{
-	int 		num_links;
-	int			num_ants;
-	int			num_rooms;
-	t_room*		rooms;
-	t_room		start_room;
-	t_room		end_room;
-	t_link*		links;
-}				t_lemin;
+#include "includes/lemin.h"
 
 int numlen(int nbr)
 {
-	int i = 0;
-	while(nbr /= 10)
-		i++;
-	return i + 1;
-}
+	int	res;
 
-int get_room(char* line, t_room *room)
-{
-	int i;
-
-	i = 0;
-	while(line[i] != '\0')
-	{
-		if(line[i] == ' ')
-		{
-			room->name = ft_strnew(i);
-			ft_strncpy(room->name, line, i);
-			line += i + 1;
-			room->x = ft_atoi(line);
-			line += numlen(room->x);
-			room->y = ft_atoi(line);
-			return 1;
-		}
-		i++;
-	}
-	return 0;
-}
-
-int add_room(t_lemin *lem, char* line)
-{
-	t_room* tmp;
-	int i = -1;
-
-	tmp = (t_room*)malloc(sizeof(t_room) * ++(lem->num_rooms));
-	while(++i != lem->num_rooms - 1)
-		tmp[i] = lem->rooms[i];
-	get_room(line, &tmp[i]);
-	free(lem->rooms);
-	free(line);
-	lem->rooms = tmp;
-	return 1;
+	res = 1;
+	if (nbr / 10 >= 1)
+		return (numlen(nbr / 10) + res);
+	else
+		return (res);
 }
 
 //чек на имя комнаты
-
 int check_room(char* line)
 {
 	int i;
@@ -101,44 +36,8 @@ int check_room(char* line)
 int check_line(char* line)
 {
 	if (line[0] == '#')
-		return 1;
+		return (1);
 	return check_room(line);
-}
-
-void exit_get_room(char* line)
-{
-	if (!check_room(line))
-	{
-		ft_putstr("get_room");
-		exit(1);
-	}
-}
-
-char *get_rooms(t_lemin *lem, char* line)
-{
-	while(get_next_line(0, &line) && check_line(line))
-	{
-		if (!ft_strcmp(line, "##start"))
-		{
-			get_next_line(0, &line);
-			exit_get_room(line);
-			get_room(line, &lem->start_room);
-			free(line);
-		}
-		else if (!ft_strcmp(line, "##end"))
-		{
-			get_next_line(0, &line);
-			exit_get_room(line);
-			get_room(line, &lem->end_room);
-			free(line);
-		}
-		else if (line[0] == '#') {
-			free(line);
-		}
-		else
-			add_room(lem, line);
-	}
-	return line;
 }
 
 int compare(t_lemin *lem, char* str)//return number of equivalent char* with rooms
@@ -150,11 +49,11 @@ int compare(t_lemin *lem, char* str)//return number of equivalent char* with roo
 	equil = 0;
 	while(i != lem->num_rooms)
 	{
-		if(!strcmp(lem->rooms[i].name, str))
+		if(!ft_strcmp(lem->rooms[i].name, str))
 			equil++;
 		i++;
 	}
-	equil += (!strcmp(lem->start_room.name, str)) + (!strcmp(lem->end_room.name, str));
+	equil += (!ft_strcmp(lem->start_room.name, str)) + (!ft_strcmp(lem->end_room.name, str));
 	if (equil != 1)
 	{
 		ft_putstr("compare ");
@@ -164,97 +63,7 @@ int compare(t_lemin *lem, char* str)//return number of equivalent char* with roo
 	return (equil);
 }
 
-int get_first_room(char* line, t_link *l)
-{
-	int i;
-	int len = 0;
-	char *c;
 
-	i = 0;
-	while(line[i] != '\0')
-	{
-		if (line[i] == '-')
-		{
-			len = i;
-			l->name1 = ft_strnew(i);
-			i = 0;
-			while (i != len)
-			{
-				l->name1[i] = line[i];
-				i++;
-			}
-			return 1;
-		}
-		i++;
-	}
-	return 0;
-}
-
-int get_second_room(char *line, t_link *l)
-{
-	int		i;
-	int		len;
-
-	len = (int)(ft_strlen(line) - 1);
-	l->name2 = ft_strnew(len);
-	i = 0;
-	while(i != len)
-	{
-		l->name2[i] = line[i + 1];
-		i++;
-	}
-	return 1;
-}
-
-void get_link(char* line, t_link *l, t_lemin *lem)
-{
-
-	if(!get_first_room(line, l))
-	{
-		ft_putstr("get_link ");
-		ft_putstr(line);
-		exit(0);
-	}
-	if(!get_second_room(ft_strchr(line, '-'),l))
-	{
-		ft_putstr("get_link ");
-		ft_putstr(line);
-		exit(0);
-	}
-	if (!(compare(lem,l->name1) * compare(lem,l->name2)))
-	{
-		ft_putstr("compare ");
-		ft_putstr(line);
-		exit(0);
-	}
-}
-
-int add_link(t_lemin *lem, char* line)
-{
-	t_link* tmp;
-	int i = -1;
-
-	tmp = (t_link*)malloc(sizeof(t_link) * ++(lem->num_links));
-	while(++i != lem->num_links - 1)
-		tmp[i] = lem->links[i];
-	get_link(line, &tmp[i], lem);
-	if (lem->num_links != 1)
-		free(lem->links);
-	free(line);
-	lem->links = tmp;
-	return 1;
-}
-
-int get_links(t_lemin *lem, char *line)
-{
-	int i;
-
-	i = 0;
-	add_link(lem, line);
-	while(get_next_line(0, &line))
-		add_link(lem, line);
-	return 1;
-}
 
 t_room *name_to_room(char *name, t_lemin *lem)
 {
@@ -263,13 +72,13 @@ t_room *name_to_room(char *name, t_lemin *lem)
 	i = 0;
 	while(i != lem->num_rooms)
 	{
-		if(!strcmp(lem->rooms[i].name, name))
+		if(!ft_strcmp(lem->rooms[i].name, name))
 			return &lem->rooms[i];
 		i++;
 	}
-	if(!strcmp(lem->start_room.name, name))
+	if(!ft_strcmp(lem->start_room.name, name))
 		return &lem->start_room;
-	if(!strcmp(lem->end_room.name, name))
+	if(!ft_strcmp(lem->end_room.name, name))
 		return &lem->end_room;
 	ft_putstr("name_to_room\n");
 	exit(1);
@@ -302,15 +111,6 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	return 1;
 }
 
-int create_link(t_room *main_room, t_link *link, t_lemin *lem)
-{
-	if (!ft_strcmp(main_room->name, link->name1))
-		add_room_to_room(main_room, link->name2, lem);
-	else
-		add_room_to_room(main_room, link->name1, lem);
-	return 1;
-}
-
 int altor(t_lemin *lem)//add links to rooms
 {
 	int i;
@@ -329,18 +129,17 @@ int altor(t_lemin *lem)//add links to rooms
 		}
 		i++;
 	}
-	return 1;
+	return (1);
 }
 
-int parse(t_lemin *lem)
+void parse_rooms(t_lemin *lem)
 {
 	char* line;
 
 	get_next_line(0, &line);
 	lem->num_ants = ft_atoi(line);
 	free(line);
-	get_links(lem,get_rooms(lem,line));
-	return 1;
+	get_links(lem, get_rooms(lem,line));
 }
 
 void init_lemin(t_lemin *lem)
@@ -349,49 +148,31 @@ void init_lemin(t_lemin *lem)
 	lem->num_links = 0;
 }
 
-int main()
+int main(int ac, char **av)
 {
 	t_lemin lem;
 
 	init_lemin(&lem);
-	parse(&lem);
+
+	ft_printf("%s, %d", *av, ac);
+	parse_rooms(&lem);
 	int i = 0;
+	ft_printf("%d", lem.num_ants);
 	while(i != lem.num_rooms)
 	{
-		ft_putstr(lem.rooms[i].name);
-		ft_putchar(' ');
-		ft_putnbr(lem.rooms[i].x);
-		ft_putchar(' ');
-		ft_putnbr(lem.rooms[i].y);
-		ft_putchar(' ');
-		ft_putchar('\n');
+		ft_printf("%s %d %d\n", lem.rooms[i].name, lem.rooms[i].x, lem.rooms[i].y);
 		i++;
 	}
-	ft_putstr(lem.start_room.name);
-	ft_putchar(' ');
-	ft_putnbr(lem.start_room.x);
-	ft_putchar(' ');
-	ft_putnbr(lem.start_room.y);
-	ft_putchar(' ');
-	ft_putchar('\n');
-	ft_putstr(lem.end_room.name);
-	ft_putchar(' ');
-	ft_putnbr(lem.end_room.x);
-	ft_putchar(' ');
-	ft_putnbr(lem.end_room.y);
-	ft_putchar(' ');
-	ft_putchar('\n');
-
+	ft_printf("%s %d %d\n", lem.start_room.name, lem.start_room.x, lem.start_room.y);
+	ft_printf("%s %d %d\n", lem.end_room.name, lem.end_room.x, lem.end_room.y);
+	
  	int j = 0;
  	while(j != lem.num_links)
 	{
- 		ft_putstr(lem.links[j].name1);
- 		ft_putstr("-");
-		ft_putstr(lem.links[j].name2);
-		ft_putchar('\n');
+		ft_printf("%s-%s\n", lem.links[j].name1, lem.links[j].name2);
 		j++;
 	}
- 	altor(&lem);
+	altor(&lem);
 
  	t_room *room;
  	i = 0;
@@ -407,5 +188,5 @@ int main()
 
  		i++;
 	}
-	return 0;
+	return (0);
 }

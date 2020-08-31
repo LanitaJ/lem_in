@@ -5,37 +5,46 @@
 #                                                     +:+ +:+         +:+      #
 #    By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/08/31 13:58:04 by ljerk             #+#    #+#              #
-#    Updated: 2020/08/31 19:42:23 by ljerk            ###   ########.fr        #
+#    Created: 2020/02/25 16:08:43 by ljerk             #+#    #+#              #
+#    Updated: 2020/08/31 14:00:35 by ljerk            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = lem-in
+NAME = libftprintf.a
 
-SRCS := main.c links.c get_rooms.c
-OBJ = $(SRCS:.c=.o)
+HEAD = ft_printf.h
 
-LIB_DIR = ./ft_printf/
-LIBFT = $(LIB_DIR)libftprintf.a
+LIBFT = ./libft/
 
-FLAGS = -Wall -Werror -Wextra 
-INCLUDE = ./includes/lemin.h
+.PHONY: all clean fclean re
+
+SRC =	ft_printf.c specificator.c flags.c fourthflags.c star.c\
+		spec_c_s.c spec_q.c spec_d.c spec_u.c spec_o.c spec_percent.c spec_x.c\
+		spec_b.c spec_p.c spec_f.c\
+		ft_service.c spec_morze.c\
+
+OBJ = $(SRC:.c=.o)
+
+OPTION = ./includes/ft_printf.h
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
-%.o: %.c $(INCLUDE)
-	$(CC) $(FLAGS) -c $<
+%.o: %.c $(OPTION)
+	@gcc $(FLAGS) -I $(OPTION) -o $@ -c $<
 
 $(NAME): $(OBJ)
-	$(MAKE) -C $(LIB_DIR)
-	gcc -o $(NAME) $(FLAGS) $(OBJ) $(LIBFT)
+	@$(MAKE) -C $(LIBFT)
+	@cp libft/libft.a ./$(NAME)
+	@ar rc $(NAME) $(OBJ)
+	@ranlib $(NAME)
 
 clean:
-	rm -f $(OBJ)
-	$(MAKE) -C $(LIB_DIR) clean
+	@$(MAKE) clean -C $(LIBFT)
+	@/bin/rm -f $(OBJ)
 
 fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C $(LIB_DIR) fclean
-
+	@$(MAKE) fclean -C $(LIBFT)
+	@/bin/rm -f $(NAME)
+	
 re: fclean all
