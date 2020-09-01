@@ -12,7 +12,7 @@
 
 #include "includes/lemin.h"
 
-
+//является ли связь валидной
 int		check_link(char *line)
 {
 	//написать:
@@ -22,6 +22,7 @@ int		check_link(char *line)
 	return (0);
 }
 
+//записать связь в основную струкутуру
 void get_link(char* line, t_link *l, t_lemin *lem)
 {
 
@@ -45,6 +46,7 @@ void get_link(char* line, t_link *l, t_lemin *lem)
 	}
 }
 
+//добавить связь к существующем с ежевызываемым удалением
 int add_link(t_lemin *lem, char* line)
 {
 	t_link* tmp;
@@ -61,6 +63,7 @@ int add_link(t_lemin *lem, char* line)
 	return 1;
 }
 
+//записать связи в основную струкутуру
 int get_links(t_lemin *lem, char *line)
 {
 	int i;
@@ -72,6 +75,7 @@ int get_links(t_lemin *lem, char *line)
 	return (1);
 }
 
+//передать ссылки на соседние комнаты
 int create_link(t_room *main_room, t_link *link, t_lemin *lem)
 {
 	if (!ft_strcmp(main_room->name, link->name1))

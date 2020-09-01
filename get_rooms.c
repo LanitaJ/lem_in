@@ -12,6 +12,7 @@
 
 #include "includes/lemin.h"
 
+//записать комнату со строки
 int get_room(char* line, t_room *room)
 {
 	int i;
@@ -34,6 +35,7 @@ int get_room(char* line, t_room *room)
 	return (0);
 }
 
+//добавить комнаты к существующим
 int add_room(t_lemin *lem, char* line)
 {
 	t_room* tmp;
@@ -49,7 +51,7 @@ int add_room(t_lemin *lem, char* line)
 	return (1);
 }
 
-
+//добавочная функция для проверки комнат
 void exit_get_room(char* line)
 {
 	if (!check_room(line))
@@ -59,6 +61,7 @@ void exit_get_room(char* line)
 	}
 }
 
+//записать комнаты в основную структуру
 void get_rooms(t_lemin *lem)
 {
 	char *line;
@@ -94,6 +97,7 @@ void get_rooms(t_lemin *lem)
 	//return line;
 }
 
+//получить название первой комнаты из линка !!!например: 1-2 => записываем комнату 1
 int get_first_room(char* line, t_link *l)
 {
 	int i;
@@ -120,6 +124,7 @@ int get_first_room(char* line, t_link *l)
 	return 0;
 }
 
+//получить название второй комнаты из линка !!!например: 1-2 => записываем комнату 2
 int get_second_room(char *line, t_link *l)
 {
 	int		i;

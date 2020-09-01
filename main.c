@@ -1,5 +1,6 @@
 #include "includes/lemin.h"
 
+//разряд инта !!!пример 1234 - разряд 4
 int numlen(int nbr)
 {
 	int	res;
@@ -33,6 +34,7 @@ int check_room(char* line)
 	return (space == 2) ? 1 : 0;
 }
 
+//проверить комнату
 int check_line(char* line)
 {
 	if (line[0] == '#')
@@ -40,6 +42,7 @@ int check_line(char* line)
 	return check_room(line);
 }
 
+//возвращает количество совпадений строки и комнат
 int compare(t_lemin *lem, char* str)//return number of equivalent char* with rooms
 {
 	int i;
@@ -64,7 +67,7 @@ int compare(t_lemin *lem, char* str)//return number of equivalent char* with roo
 }
 
 
-
+//возвращает ссылку на комнату исходя из имени
 t_room *name_to_room(char *name, t_lemin *lem)
 {
 	int i;
@@ -84,6 +87,7 @@ t_room *name_to_room(char *name, t_lemin *lem)
 	exit(1);
 }
 
+//добавить связующую комнату(по названию name_add) к основной комнате(main_roon)
 int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 {
 	t_room*	*tmp;
@@ -111,6 +115,7 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	return 1;
 }
 
+//добавить связи к комнатам
 int altor(t_lemin *lem)//add links to rooms
 {
 	int i;
