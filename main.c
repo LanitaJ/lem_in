@@ -132,18 +132,68 @@ int altor(t_lemin *lem)//add links to rooms
 	return (1);
 }
 
-void parse_rooms(t_lemin *lem)
+/*
+	парсинг карты:
+					обработка всех ошибок
+					считывание количества муравьев
+					считывание старта/конца
+					считывание комнаты
+					считывание связи
+					игнорирование комментариев и невалидных строк
+	
+	Добавить обработку:
+						связи должны идти после(!) комнат.
+						То есть после комнат могут быть только связи(новых комнат не может быть)
+*/
+void parse_map(t_lemin *lem)
 {
-	char* line;
+	char *line;
 
-	get_next_line(0, &line);
+	get_next_line(lem->fd, &line);
 	lem->num_ants = ft_atoi(line);
-	free(line);
-	get_links(lem, get_rooms(lem,line));
+	if (lem->num_ants < 0 && lem->num_ants > 2147483647)
+		error_ant_count(line);
+	ft_printf("%d\n", lem->num_ants);
+	while (get_next_line(lem->fd, &line) > 0)
+	{
+		//возможно вставить free(line) в команды (чтобы сократить количество строк)
+		if (ft_strequ("##start", line))
+		{
+			free(line);
+			ft_printf("here_start\n");
+			//parse_start();
+		}
+		else if (ft_strequ("##end", line))
+		{
+			free(line);
+			ft_printf("end\n");
+			//parse_end();
+		}
+		else if (check_link(line))
+			ft_printf("link\n");
+			//parse_link();
+		else if (check_room(line))
+			ft_printf("room\n");
+			//parse_room();
+		else if (ft_strchr(line, '#'))
+			free(line);
+		else
+			error_trash(line);
+	}
 }
 
-void init_lemin(t_lemin *lem)
+void init_lemin(t_lemin *lem, int ac, char **av)
 {
+	if (ac == 2)
+	{
+		av++;
+		lem->fd = open(av[0], O_RDONLY);
+		if (lem->fd == -1)
+			ft_printf("input error");
+	}
+	else
+		lem->fd = 0;
+	//ft_printf("%d", lem->fd);
 	lem->num_rooms = 0;
 	lem->num_links = 0;
 }
@@ -152,11 +202,10 @@ int main(int ac, char **av)
 {
 	t_lemin lem;
 
-	init_lemin(&lem);
-
-	ft_printf("%s, %d", *av, ac);
-	parse_rooms(&lem);
-	int i = 0;
+	//ft_printf("%d %s",ac, av[0]);
+	init_lemin(&lem, ac, av);
+	parse_map(&lem);
+	/* int i = 0;
 	ft_printf("%d", lem.num_ants);
 	while(i != lem.num_rooms)
 	{
@@ -187,6 +236,6 @@ int main(int ac, char **av)
 		ft_putchar(' ');
 
  		i++;
-	}
+	} */
 	return (0);
 }

@@ -6,11 +6,21 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 19:35:05 by ljerk             #+#    #+#             */
-/*   Updated: 2020/08/31 19:35:54 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/01 19:45:54 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/lemin.h"
+
+
+int		check_link(char *line)
+{
+	//написать:
+	//парсинг 1го и 2го имени, проверка существования комнаты
+	if (line[1] == '-')
+		return (1);
+	return (0);
+}
 
 void get_link(char* line, t_link *l, t_lemin *lem)
 {

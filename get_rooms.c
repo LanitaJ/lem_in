@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 19:34:06 by ljerk             #+#    #+#             */
-/*   Updated: 2020/08/31 20:59:32 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/01 17:36:54 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int get_room(char* line, t_room *room)
 		if(line[i] == ' ')
 		{
 			room->name = ft_strnew(i);
-			ft_strncpy(room->name, line, i);
+			room->name = ft_strtrim(line);
 			line += i + 1;
 			room->x = ft_atoi(line);
 			line += numlen(room->x);
@@ -59,20 +59,25 @@ void exit_get_room(char* line)
 	}
 }
 
-char *get_rooms(t_lemin *lem, char* line)
+void get_rooms(t_lemin *lem)
 {
-	while(get_next_line(0, &line) && check_line(line))
+	char *line;
+
+	while(get_next_line(lem->fd, &line) > 0 && check_line(line))
 	{
-		if (!ft_strcmp(line, "##start"))
+		//ft_printf("%s\n", line);
+		lem->start_room.name = ft_strtrim(line);
+		ft_printf("%s\n", lem->start_room.name);
+		/* if (!ft_strcmp(line, "##start"))
 		{
-			get_next_line(0, &line);
+			get_next_line(lem->fd, &line);
 			exit_get_room(line);
 			get_room(line, &lem->start_room);
 			free(line);
 		}
 		else if (!ft_strcmp(line, "##end"))
 		{
-			get_next_line(0, &line);
+			get_next_line(lem->fd, &line);
 			exit_get_room(line);
 			get_room(line, &lem->end_room);
 			free(line);
@@ -81,9 +86,12 @@ char *get_rooms(t_lemin *lem, char* line)
 			free(line);
 		}
 		else
+		{
 			add_room(lem, line);
+			free(line);
+		}	 */
 	}
-	return line;
+	//return line;
 }
 
 int get_first_room(char* line, t_link *l)
