@@ -6,7 +6,7 @@
 #    By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/07 20:46:48 by ljerk             #+#    #+#              #
-#    Updated: 2020/08/29 12:43:22 by ljerk            ###   ########.fr        #
+#    Updated: 2020/09/04 18:58:50 by ljerk            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ NAME = libft.a
 
 OPTION = -I libft.h -c
 
-FLAG = -Wall -Wextra -Werror
+FLAG = -g -Wall -Wextra -Werror
 
 all: $(NAME)
 

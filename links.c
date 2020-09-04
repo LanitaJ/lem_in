@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 19:35:05 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/01 19:45:54 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/04 20:37:31 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,52 @@ int		check_link(char *line)
 	return (0);
 }
 
+//получить название первой комнаты из линка !!!например: 1-2 => записываем комнату 1
+int get_first_room(char* line, t_link *l)
+{
+	int i;
+	int len = 0;
+	//char *c;
+
+	i = 0;
+	while(line[i] != '\0')
+	{
+		if (line[i] == '-')
+		{
+			len = i;
+			l->name1 = ft_strnew(i);
+			i = 0;
+			while (i != len)
+			{
+				l->name1[i] = line[i];
+				i++;
+			}
+			return 1;
+		}
+		i++;
+	}
+	return 0;
+}
+//получить название второй комнаты из линка !!!например: 1-2 => записываем комнату 2
+int get_second_room(char *line, t_link *l)
+{
+	int		i;
+	int		len;
+
+	len = (int)(ft_strlen(line) - 1);
+	l->name2 = ft_strnew(len);
+	i = 0;
+	while(i != len)
+	{
+		l->name2[i] = line[i + 1];
+		i++;
+	}
+	return 1;
+}
+
 //записать связь в основную струкутуру
 void get_link(char* line, t_link *l, t_lemin *lem)
 {
-
 	if(!get_first_room(line, l))
 	{
 		ft_putstr("get_link ");
@@ -70,9 +112,9 @@ int get_links(t_lemin *lem, char *line)
 
 	i = 0;
 	add_link(lem, line);
-	while(get_next_line(0, &line))
+	while(get_next_line(lem->fd, &line))
 		add_link(lem, line);
-	return (1);
+	return 1;
 }
 
 //передать ссылки на соседние комнаты
