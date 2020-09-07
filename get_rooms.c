@@ -48,8 +48,9 @@ int add_room(t_lemin *lem, char* line)
 	get_room(line, &tmp[i]);
 	/* 
 	если раскомментить то вылетает ошибка, не понимаю почему(ljerk)
+	 */
 	free(lem->rooms);
-	free(line); */
+	free(line);//раскоментил, ошибок нет не щнаю почему (icanker)
 	lem->rooms = tmp;
 	return 1;
 }
@@ -79,15 +80,15 @@ char *get_rooms(t_lemin *lem, char* line)
 		{
 			get_next_line(lem->fd, &line);
 			exit_get_room(line);
-			get_room(line, &lem->start_room);
-			free(line);
+			add_room(lem, line);
+			lem->start_room = lem->rooms[lem->num_rooms - 1];
 		}
 		else if (!ft_strcmp(line, "##end"))
 		{
 			get_next_line(lem->fd, &line);
 			exit_get_room(line);
-			get_room(line, &lem->end_room);
-			free(line);
+			add_room(lem, line);
+			lem->end_room = lem->rooms[lem->num_rooms - 1];
 		}
 		else if (line[0] == '#') {
 			free(line);

@@ -61,7 +61,6 @@ int compare(t_lemin *lem, char* str)//return number of equivalent char* with roo
 			equil++;
 		i++;
 	}
-	equil += (!ft_strcmp(lem->start_room.name, str)) + (!ft_strcmp(lem->end_room.name, str));
 	if (equil != 1)
 	{
 		ft_putstr("compare ");
@@ -84,10 +83,6 @@ t_room *name_to_room(char *name, t_lemin *lem)
 			return &lem->rooms[i];
 		i++;
 	}
-	if(!ft_strcmp(lem->start_room.name, name))
-		return &lem->start_room;
-	if(!ft_strcmp(lem->end_room.name, name))
-		return &lem->end_room;
 	ft_putstr("name_to_room\n");
 	exit(1);
 }
@@ -195,12 +190,12 @@ int main(int ac, char **av)
 
  	t_room *room;
  	i = 0;
- 	ft_putstr(lem.rooms[3].name);
+ 	ft_putstr(lem.rooms[2].name);
  	ft_putchar('\n');
- 	while(i != lem.rooms[3].num_links)
+ 	while(i != lem.rooms[2].num_links)
 	{
- 		room = lem.rooms[3].n_rooms[i];
- 		ft_putnbr(lem.rooms[3].blocks[i]);
+ 		room = lem.rooms[2].n_rooms[i];
+ 		ft_putstr(lem.rooms[2].name);
  		ft_putchar('-');
  		ft_putstr(room->name);
 		ft_putchar(' ');
