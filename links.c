@@ -113,7 +113,12 @@ int get_links(t_lemin *lem, char *line)
 	i = 0;
 	add_link(lem, line);
 	while(get_next_line(lem->fd, &line))
-		add_link(lem, line);
+	{
+		if (line[0] == '#')
+			free(line);
+		else
+			add_link(lem, line);
+	}
 	return 1;
 }
 
