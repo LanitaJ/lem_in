@@ -146,6 +146,11 @@ int parse_all(t_lemin *lem)
 	free(line);
 	ft_printf("%d", lem->num_ants);
 	get_links(lem, get_rooms(lem,line));
+	if ((!lem->id_start_room && lem->id_start_room != 0) || (!lem->id_end_room && lem->id_end_room != 0))
+	{
+		ft_putstr("start and end room\n");
+		exit(1);
+	}
 	lem->start_room = &(lem->rooms[lem->id_start_room]);
 	lem->end_room = &lem->rooms[lem->id_end_room];
 	return 1;
@@ -162,8 +167,6 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 	}
 	else
 		lem->fd = 0;
-	lem->id_end_room = 0;
-	lem->id_start_room = 0;
 	lem->num_rooms = 0;
 	lem->num_links = 0;
 }
