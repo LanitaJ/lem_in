@@ -80,15 +80,16 @@ char *get_rooms(t_lemin *lem, char* line)
 		{
 			get_next_line(lem->fd, &line);
 			exit_get_room(line);
+			lem->id_start_room = lem->num_rooms;
 			add_room(lem, line);
-			lem->start_room = lem->rooms[lem->num_rooms - 1];
+
 		}
 		else if (!ft_strcmp(line, "##end"))
 		{
 			get_next_line(lem->fd, &line);
 			exit_get_room(line);
+			lem->id_end_room = lem->num_rooms;
 			add_room(lem, line);
-			lem->end_room = lem->rooms[lem->num_rooms - 1];
 		}
 		else if (line[0] == '#') {
 			free(line);

@@ -35,9 +35,11 @@ typedef	struct			s_lemin
 	int					num_ants;
 	int					num_rooms;
 	int					fd;
+	int					id_start_room;
+	int					id_end_room;
 	t_room*				rooms;
-	t_room				start_room;
-	t_room				end_room;
+	t_room				*start_room;
+	t_room				*end_room;
 	t_link*				links;
 }						t_lemin;
 

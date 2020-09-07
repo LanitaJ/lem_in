@@ -146,6 +146,8 @@ int parse_all(t_lemin *lem)
 	free(line);
 	ft_printf("%d", lem->num_ants);
 	get_links(lem, get_rooms(lem,line));
+	lem->start_room = &(lem->rooms[lem->id_start_room]);
+	lem->end_room = &lem->rooms[lem->id_end_room];
 	return 1;
 }
 
@@ -160,6 +162,8 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 	}
 	else
 		lem->fd = 0;
+	lem->id_end_room = 0;
+	lem->id_start_room = 0;
 	lem->num_rooms = 0;
 	lem->num_links = 0;
 }
@@ -177,8 +181,8 @@ int main(int ac, char **av)
 		ft_printf("%s %d %d\n", lem.rooms[i].name, lem.rooms[i].x, lem.rooms[i].y);
 		i++;
 	}
-	ft_printf("%s %d %d\n", lem.start_room.name, lem.start_room.x, lem.start_room.y);
-	ft_printf("%s %d %d\n", lem.end_room.name, lem.end_room.x, lem.end_room.y);
+	ft_printf("%s %d %d\n", lem.start_room->name, lem.start_room->x, lem.start_room->y);
+	ft_printf("%s %d %d\n", lem.end_room->name, lem.end_room->x, lem.end_room->y);
 	
  	int j = 0;
  	while(j != lem.num_links)
@@ -190,16 +194,16 @@ int main(int ac, char **av)
 
  	t_room *room;
  	i = 0;
- 	ft_putstr(lem.rooms[2].name);
+ 	ft_putstr(lem.start_room->name);
  	ft_putchar('\n');
+ 	ft_putnbr(lem.start_room->num_links);
  	while(i != lem.rooms[2].num_links)
 	{
- 		room = lem.rooms[2].n_rooms[i];
- 		ft_putstr(lem.rooms[2].name);
+ 		room = lem.start_room->n_rooms[i];
+ 		ft_putstr(lem.start_room->name);
  		ft_putchar('-');
  		ft_putstr(room->name);
 		ft_putchar(' ');
-
  		i++;
 	}
 	return (0);
