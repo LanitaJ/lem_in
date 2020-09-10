@@ -6,13 +6,13 @@
 #    By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/31 13:58:04 by ljerk             #+#    #+#              #
-#    Updated: 2020/09/03 20:03:57 by ljerk            ###   ########.fr        #
+#    Updated: 2020/09/08 17:31:12 by ljerk            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = lem-in
 
-SRCS := main.c links.c get_rooms.c error_handle.c
+SRCS := main.c links.c get_rooms.c error_handle.c deadlocks.c
 OBJ = $(SRCS:.c=.o)
 
 LIB_DIR = ./ft_printf/

@@ -144,7 +144,7 @@ int parse_all(t_lemin *lem)
 	get_next_line(lem->fd, &line);
 	lem->num_ants = ft_atoi(line);
 	free(line);
-	ft_printf("%d", lem->num_ants);
+	//ft_printf("%d", lem->num_ants);
 	get_links(lem, get_rooms(lem,line));
 	if ((!lem->id_start_room && lem->id_start_room != 0) || (!lem->id_end_room && lem->id_end_room != 0))
 	{
@@ -177,8 +177,8 @@ int main(int ac, char **av)
   
 	init_lemin(&lem, ac, av);
 	parse_all(&lem);
-	int i = 0;
-	ft_printf("num_ants %d", lem.num_ants);
+	/*int i = 0;
+	 ft_printf("num_ants %d", lem.num_ants);
 	while(i != lem.num_rooms)
 	{
 		ft_printf("%s %d %d\n", lem.rooms[i].name, lem.rooms[i].x, lem.rooms[i].y);
@@ -192,10 +192,10 @@ int main(int ac, char **av)
 	{
 		ft_printf("%s-%s\n", lem.links[j].name1, lem.links[j].name2);
 		j++;
-	}
+	} */
 	altor(&lem);
-
- 	t_room *room;
+	find_pathes(&lem);
+ 	/* t_room *room;
  	i = 0;
  	ft_putstr(lem.start_room->name);
  	ft_putchar('\n');
@@ -208,6 +208,6 @@ int main(int ac, char **av)
  		ft_putstr(room->name);
 		ft_putchar(' ');
  		i++;
-	}
+	} */
 	return (0);
 }

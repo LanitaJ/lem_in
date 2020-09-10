@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 14:11:57 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/04 21:06:39 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/08 17:35:18 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,5 @@ void					error_memmory(char *line);
 void					error_map(char *line);
 void					error_link(char *line);
 
-
+//Solver
+void					find_pathes(t_lemin *lem);
