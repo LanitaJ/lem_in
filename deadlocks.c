@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 09:28:36 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/08 19:56:56 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/10 19:29:19 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,38 @@
 	lem->start_room.num_links = 1; */
 //}
 
-void		bfs(t_lemin *lem)
+
+/* void		find_path(t_lemin *lem)
 {
 	t_room *path;
 
 	if ((path = (t_room*)ft_memalloc(sizeof(t_room) * lem->num_rooms)) == NULL)
 		exit(1);
+	
+} */
+
+void		bfs(t_lemin *lem)
+{
+	t_room	**room_arr;//стек комнат
+	int		insert_place;//место в стеке комнат куда встанет следующая комната
+	int		i;//номер рассматриваемой комнаты
+	
+	i = 0;
+	insert_place = 0;
+	if ((room_arr = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
+		exit(1);
+	lem->start_room->depth = 0;
+	lem->end_room->depth = 2147483647;
+	room_arr[i] = lem->start_room;
+	room_arr[lem->num_rooms - 1] = lem->end_room;
+	ft_printf("name %s\n", room_arr[lem->num_rooms-1]->name);
+	while (i < lem->num_rooms)
+	{
+		ft_printf("i = %d\n", i++);
+		insert_place++;
+	}
+//	ft_printf("name %s\n", lem->end_room->name);
+	
 		
 }
 

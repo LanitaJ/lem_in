@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 14:11:57 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/08 17:35:18 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/10 19:02:01 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct			s_room
 	struct s_room*		*n_rooms;
 	int					*blocks;
 	int					num_links;
+	int					depth;
 }						t_room;
 
 typedef	struct			s_lemin
