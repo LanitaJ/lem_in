@@ -6,7 +6,7 @@
 #    By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/31 13:58:04 by ljerk             #+#    #+#              #
-#    Updated: 2020/09/08 17:31:12 by ljerk            ###   ########.fr        #
+#    Updated: 2020/09/13 11:33:10 by ljerk            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJ = $(SRCS:.c=.o)
 LIB_DIR = ./ft_printf/
 LIBFT = $(LIB_DIR)libftprintf.a
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -g -Wall -Werror -Wextra
 INCLUDE = ./includes/lemin.h
 
 all: $(NAME)

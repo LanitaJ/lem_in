@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 14:11:57 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/10 19:02:01 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/13 10:31:48 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ typedef struct			s_room
 	struct s_room*		*n_rooms;
 	int					*blocks;
 	int					num_links;
-	int					depth;
+	int					depth;//глубина комнаты (0 - старт, 2147483647 - конец)
+	int					visited;//метка, что комнату посетили
+	int					in_stack;//метка, что комната в очереди
 }						t_room;
 
 typedef	struct			s_lemin

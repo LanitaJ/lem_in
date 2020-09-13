@@ -194,6 +194,28 @@ int main(int ac, char **av)
 		j++;
 	} */
 	altor(&lem);
+	int i = 0;
+	int j = 0;
+	while(i < lem.num_rooms)
+	{
+		ft_printf("\nroom[%d] = %s\n", i, lem.rooms[i].name);
+		j = 0;
+		ft_printf("links: ");
+		while (j < lem.rooms[i].num_links)
+		{
+			ft_printf("%s ", lem.rooms[i].n_rooms[j]->name);
+			j++;
+		}
+		j = 0;
+		ft_printf("blocks: ");
+		while (j < lem.rooms[i].num_links)
+		{
+			ft_printf("%d ", lem.rooms[i].blocks[j]);
+			j++;
+		}
+		ft_printf("\n");
+		i++;
+	}
 	find_pathes(&lem);
  	/* t_room *room;
  	i = 0;
