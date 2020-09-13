@@ -171,6 +171,33 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 	lem->num_links = 0;
 }
 
+//функция вывода карты в консоль (Вспомогательная функция. После окончания проекта удалить)
+static void	output_map(t_lemin lem)
+{
+	int i = 0;
+	int j = 0;
+	while(i < lem.num_rooms)
+	{
+		ft_printf("\nroom[%d] = %s\n", i, lem.rooms[i].name);
+		j = 0;
+		ft_printf("links: ");
+		while (j < lem.rooms[i].num_links)
+		{
+			ft_printf("%s ", lem.rooms[i].n_rooms[j]->name);
+			j++;
+		}
+		j = 0;
+		ft_printf("blocks: ");
+		while (j < lem.rooms[i].num_links)
+		{
+			ft_printf("%d ", lem.rooms[i].blocks[j]);
+			j++;
+		}
+		ft_printf("\n");
+		i++;
+	}
+}
+
 int main(int ac, char **av)
 {
 	t_lemin lem;
@@ -194,42 +221,8 @@ int main(int ac, char **av)
 		j++;
 	} */
 	altor(&lem);
-	int i = 0;
-	int j = 0;
-	while(i < lem.num_rooms)
-	{
-		ft_printf("\nroom[%d] = %s\n", i, lem.rooms[i].name);
-		j = 0;
-		ft_printf("links: ");
-		while (j < lem.rooms[i].num_links)
-		{
-			ft_printf("%s ", lem.rooms[i].n_rooms[j]->name);
-			j++;
-		}
-		j = 0;
-		ft_printf("blocks: ");
-		while (j < lem.rooms[i].num_links)
-		{
-			ft_printf("%d ", lem.rooms[i].blocks[j]);
-			j++;
-		}
-		ft_printf("\n");
-		i++;
-	}
+	//вывод 
+	output_map(lem);
 	find_pathes(&lem);
- 	/* t_room *room;
- 	i = 0;
- 	ft_putstr(lem.start_room->name);
- 	ft_putchar('\n');
- 	ft_putnbr(lem.start_room->num_links);
- 	while(i != lem.rooms[2].num_links)
-	{
- 		room = lem.start_room->n_rooms[i];
- 		ft_putstr(lem.start_room->name);
- 		ft_putchar('-');
- 		ft_putstr(room->name);
-		ft_putchar(' ');
- 		i++;
-	} */
 	return (0);
 }
