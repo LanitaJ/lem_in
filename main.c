@@ -27,8 +27,6 @@ int check_room(char* line)
 			if (line[i + 1] != ' ')
 				space++;
 		}
-		else if (!ft_isdigit(line[i]))
-			return 0;
 		i++;
 	}
 	return (space == 2) ? 1 : 0;
@@ -200,7 +198,8 @@ int main(int ac, char **av)
  	ft_putstr(lem.start_room->name);
  	ft_putchar('\n');
  	ft_putnbr(lem.start_room->num_links);
- 	while(i != lem.rooms[2].num_links)
+	ft_putchar('\n');
+ 	while(i != lem.start_room->num_links)
 	{
  		room = lem.start_room->n_rooms[i];
  		ft_putstr(lem.start_room->name);
