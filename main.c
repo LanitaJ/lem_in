@@ -167,6 +167,8 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 		lem->fd = 0;
 	lem->num_rooms = 0;
 	lem->num_links = 0;
+	lem->check_end_kol = 0;
+	lem->check_start_kol = 0;
 }
 
 //функция вывода карты в консоль (Вспомогательная функция. После окончания проекта удалить)
@@ -219,10 +221,10 @@ int main(int ac, char **av)
 		j++;
 	} */
 	altor(&lem);
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
  	t_room *room;
- 	i = 0;
+ 	int i = 0;
  	ft_putstr(lem.start_room->name);
  	ft_putchar('\n');
  	ft_putnbr(lem.start_room->num_links);
@@ -236,10 +238,10 @@ int main(int ac, char **av)
 		ft_putchar(' ');
  		i++;
 	}
-=======
+//=======
 	//вывод 
 	output_map(lem);
 	find_pathes(&lem);
->>>>>>> 08adf54391f5b1d680eb21ac7cfaacadbc455b6f
+//>>>>>>> 08adf54391f5b1d680eb21ac7cfaacadbc455b6f
 	return (0);
 }

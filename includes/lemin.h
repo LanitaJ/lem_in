@@ -40,6 +40,8 @@ typedef	struct			s_lemin
 	int					fd;
 	int					id_start_room;
 	int					id_end_room;
+	int					check_start_kol;
+	int 				check_end_kol;
 	t_room*				rooms;
 	t_room				*start_room;
 	t_room				*end_room;
