@@ -78,11 +78,7 @@ char *get_rooms(t_lemin *lem, char* line)
 	{
 		if (!ft_strcmp(line, "##start"))
 		{
-			if (lem->check_start_kol++ != 0)
-			{
-				ft_putstr("double start");
-				exit(0);
-			}
+			lem->check_start_kol++;
 			get_next_line(lem->fd, &line);
 			exit_get_room(line);
 			lem->id_start_room = lem->num_rooms;
@@ -91,11 +87,7 @@ char *get_rooms(t_lemin *lem, char* line)
 		}
 		else if (!ft_strcmp(line, "##end"))
 		{
-			if (lem->check_end_kol++ != 0)
-			{
-				ft_putstr("double end");
-				exit(0);
-			}
+			lem->check_end_kol++;
 			get_next_line(lem->fd, &line);
 			exit_get_room(line);
 			lem->id_end_room = lem->num_rooms;
@@ -106,6 +98,11 @@ char *get_rooms(t_lemin *lem, char* line)
 		}
 		else
 			add_room(lem, line);
+	}
+	if (lem->check_start_kol != 1 || lem->check_end_kol != 1)
+	{
+		ft_putstr("error in start/end");
+		exit(0);
 	}
 	return line;
 }
