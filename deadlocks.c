@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 09:28:36 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/13 14:33:26 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/26 20:18:33 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,41 @@ static t_room **init_bfs(t_lemin *lem, t_room **room_arr)
 	room_arr[lem->num_rooms - 1] = lem->end_room;
 	room_arr[lem->num_rooms - 1]->in_stack = 1;
 	return(room_arr);
+}
+/* 
+	stack - стек комнат для обработки bfs
+	room_id - индекс комнаты, которую обрабатывается сейчас(соседи которой добавляем в стек)
+	ins_place - место в стеке, куда должна встать следубщая комната
+*/
+int		add_to_stack(t_room **stack, int room_id, int ins_place)
+{
+	int	i;
+
+	i = 0;
+	while (i < stack[room_id]->n_rooms[i]->num_links)
+	{
+		stack[ins_place] = stack[room_id]->n_rooms[i];
+		if (stack[ins_place]->name == stack[0]->name || stack[1].)
+			return (0);
+		i++;
+		ins_place++;
+	}
+}
+
+t_room **shortest_path(t_lemin *lem)
+{
+	t_room	**shortest_path;//стек с кратчайшим путем от start до end
+	int	i;		//номер рассматриваемой комнаты
+	int	j;		//номер комнаты в shortest_path
+	int	insert_place;	//место в стеке комнат куда встанет следующая комната
+	t_room	**stk;		//стек комнат
+	
+	init_shortest_path(lem, stk);//добавляем в стек связи с end`ом
+	while(add_to_stack(stk, i, insert_place))//1 - не дошли до старта, 0 - дошли
+	{
+		shortest_path[j] = min_depth(stk);
+		j++;
+	}
 }
 
 //алгоритм расставляет глубины комнат
@@ -69,6 +104,11 @@ void		find_pathes(t_lemin *lem)
 	max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
 		lem->start_room->num_links : lem->end_room->num_links;
 	room_arr = bfs(lem);
+	/* 
+	поправить bfs чтобы граф ex2_1.map считал вершины так: 0 1 2 4 3
+	сделать, чтобы bfs работал до тех пор, пока не дойдет до узла end 
+		или пока не кончатся комнаты или пока не кончатся комнаты в очереди
+	*/
 	int i = 0;
 	while (i < lem->num_rooms)
 	{
