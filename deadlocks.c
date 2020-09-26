@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 09:28:36 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/26 20:18:33 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/26 22:07:56 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,11 @@
 } */
 
 //создание начальных значений в стеке комнат
-static t_room **init_bfs(t_lemin *lem, t_room **room_arr)
-{
-	lem->start_room->depth = 0;
-	room_arr[0] = lem->start_room;
-	room_arr[0]->in_stack = 1;
-	lem->end_room->depth = 2147483647;
-	room_arr[lem->num_rooms - 1] = lem->end_room;
-	room_arr[lem->num_rooms - 1]->in_stack = 1;
-	return(room_arr);
-}
 /* 
 	stack - стек комнат для обработки bfs
 	room_id - индекс комнаты, которую обрабатывается сейчас(соседи которой добавляем в стек)
 	ins_place - место в стеке, куда должна встать следубщая комната
-*/
+
 int		add_to_stack(t_room **stack, int room_id, int ins_place)
 {
 	int	i;
@@ -66,10 +56,52 @@ t_room **shortest_path(t_lemin *lem)
 		shortest_path[j] = min_depth(stk);
 		j++;
 	}
+}*/
+
+/* static t_room **init_bfs(t_lemin *lem, t_room **stk)
+{
+	lem->start_room->depth = 0;
+	stk[0] = lem->start_room;
+	stk[0]->visited = 1;
+	lem->end_room->depth = 2147483647;
+	stk[lem->num_rooms - 1] = lem->end_room;
+	stk[lem->num_rooms - 1]->visited = 1;
+	return (stk);
+} */
+
+
+    //Для более лаконичной реализации работы, мы будем
+    //хранить указатель не на последний элемент, а
+    //на следующий за ним (несуществующий).
+
+    //Это, в частности, позволит нам проверять очередь на пустоту
+    //простым условием head == tail
+    //int head = 0;    Индекс первого элемента.
+    //int tail = 0;    Индекс элемента, следующего за последним.
+
+void push(int *tail, t_room **a, t_room *x)
+{
+	a[*tail] = x;
+	*tail += 1;
+}
+
+t_room	*pop(int *head, int *tail, t_room **a) {
+	if (*head != *tail)
+	{
+		*head += 1;
+		return a[*head - 1];
+	}
+	else
+		return (0);// СДЕЛАТЬ ОБРАБОТКУ Ошибка, попытка извлечь элемент из пустой очереди.
+}
+
+int is_empty(int head, int tail)
+{
+	return head == tail;
 }
 
 //алгоритм расставляет глубины комнат
-t_room	**bfs(t_lemin *lem)
+/* t_room	**bfs(t_lemin *lem)
 {
 	t_room	**stk;			//стек комнат
 	int		insert_place;	//место в стеке комнат куда встанет следующая комната
@@ -81,20 +113,26 @@ t_room	**bfs(t_lemin *lem)
 	if ((stk = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
 		exit(1);
 	init_bfs(lem, stk);
+	i = -1;
 	while (++i < lem->num_rooms)
 	{
 		j = -1;
 		while (++j < stk[i]->num_links)
-			if (stk[i]->n_rooms[j]->in_stack == 0)
+			if (stk[i]->n_rooms[j]->visited == 0)
 			{
 				stk[insert_place] = stk[i]->n_rooms[j];
-				stk[insert_place]->in_stack = 1;
+				stk[insert_place]->visited = 1;
 				stk[insert_place]->depth = stk[i]->depth + 1;
 				insert_place++;
 			}
 	}
+	
+	while (all_visited(stk) != 0)
+	{
+		
+	}
 	return (stk);
-}
+} */
 
 void		find_pathes(t_lemin *lem)
 {
@@ -103,18 +141,29 @@ void		find_pathes(t_lemin *lem)
 
 	max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
 		lem->start_room->num_links : lem->end_room->num_links;
-	room_arr = bfs(lem);
+
+	/********Для тестирования*********/
+	int head = 0;
+	int tail = 0;	
+	if ((room_arr = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
+		exit(1);
+	push(&tail, room_arr, lem->end_room);
+	ft_printf("%s\n", room_arr[0]->name);
+	ft_printf("%d\n%d\n%d", is_empty(head, tail), head, tail);
+	/********Для тестирования*********/
+	
+	//room_arr = bfs(lem);
 	/* 
 	поправить bfs чтобы граф ex2_1.map считал вершины так: 0 1 2 4 3
 	сделать, чтобы bfs работал до тех пор, пока не дойдет до узла end 
 		или пока не кончатся комнаты или пока не кончатся комнаты в очереди
 	*/
-	int i = 0;
+	/* int i = 0;
 	while (i < lem->num_rooms)
 	{
-		ft_printf("%d ", room_arr[i]->depth);
+		ft_printf("%s ", room_arr[i]->name);
 		i++;
-	}
+	} */
 }
 
 
