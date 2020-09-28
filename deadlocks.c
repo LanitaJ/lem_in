@@ -6,7 +6,7 @@
 /*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 09:28:36 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/26 22:07:56 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/09/28 21:47:55 by ljerk            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,7 @@ t_room **shortest_path(t_lemin *lem)
 	}
 }*/
 
-/* static t_room **init_bfs(t_lemin *lem, t_room **stk)
-{
-	lem->start_room->depth = 0;
-	stk[0] = lem->start_room;
-	stk[0]->visited = 1;
-	lem->end_room->depth = 2147483647;
-	stk[lem->num_rooms - 1] = lem->end_room;
-	stk[lem->num_rooms - 1]->visited = 1;
-	return (stk);
-} */
+
 
 
     //Для более лаконичной реализации работы, мы будем
@@ -85,74 +76,108 @@ void push(int *tail, t_room **a, t_room *x)
 	*tail += 1;
 }
 
-t_room	*pop(int *head, int *tail, t_room **a) {
+t_room	*pop(int *head, int *tail, t_room **room) {
 	if (*head != *tail)
 	{
 		*head += 1;
-		return a[*head - 1];
+		return (room[*head - 1]);
 	}
 	else
-		return (0);// СДЕЛАТЬ ОБРАБОТКУ Ошибка, попытка извлечь элемент из пустой очереди.
+		ft_printf("Error\n");// СДЕЛАТЬ ОБРАБОТКУ Ошибка, попытка извлечь элемент из пустой очереди.
+	return(0);//убрать
 }
 
 int is_empty(int head, int tail)
 {
-	return head == tail;
+	return (head == tail);
+}
+
+static	void init_bfs(t_lemin *lem, int *head, int *tail)
+{
+	*head = 0;
+	*tail = 0;
+	lem->start_room->depth = 0;
+	lem->start_room->visited = 1;
+	lem->end_room->depth = 2147483647;
+}
+
+void print_queue(t_room **queue, t_lemin *lem)
+{
+	int i;
+
+	i = 0;
+	while (i < lem->num_rooms)
+	{
+		if (queue[i] != NULL)
+			ft_printf("%s ",queue[i]->name);
+		i++;
+	}
+	ft_printf("\n");
 }
 
 //алгоритм расставляет глубины комнат
-/* t_room	**bfs(t_lemin *lem)
+int		bfs(t_lemin *lem)
 {
-	t_room	**stk;			//стек комнат
-	int		insert_place;	//место в стеке комнат куда встанет следующая комната
-	int		i;				//номер рассматриваемой комнаты
-	int		j;				//счетчик для заполнения стека
-
-	i = -1;
-	insert_place = 1;
-	if ((stk = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
+	t_room	**queue;			//очередь комнат
+	t_room	*node;
+	int		tail = 0;
+	int		head = 0;
+	int		i;
+	
+	if ((queue = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
 		exit(1);
-	init_bfs(lem, stk);
-	i = -1;
-	while (++i < lem->num_rooms)
+	init_bfs(lem, &tail, &head);
+	push(&tail, queue, lem->start_room);
+	while (!is_empty(head, tail))
 	{
-		j = -1;
-		while (++j < stk[i]->num_links)
-			if (stk[i]->n_rooms[j]->visited == 0)
+		node = pop(&head, &tail, queue);
+		if (ft_strequ(node->name, lem->end_room->name))
+			return (1);
+		i = -1;
+		while (++i < node->num_links)
+			if (node->n_rooms[i]->visited == 0)
 			{
-				stk[insert_place] = stk[i]->n_rooms[j];
-				stk[insert_place]->visited = 1;
-				stk[insert_place]->depth = stk[i]->depth + 1;
-				insert_place++;
+				push(&tail, queue, node->n_rooms[i]);
+				node->n_rooms[i]->visited = 1;
+				node->n_rooms[i]->depth = node->depth + 1;
+				ft_printf("name = %s\n", node->n_rooms[i]->name);
 			}
 	}
-	
-	while (all_visited(stk) != 0)
-	{
-		
-	}
-	return (stk);
-} */
+	return (0);
+}
+
 
 void		find_pathes(t_lemin *lem)
 {
 	int max_pathes;
-	t_room **room_arr;
-
+	int i = 0;
+	
 	max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
 		lem->start_room->num_links : lem->end_room->num_links;
-
+	bfs(lem);
+	while (i < lem->num_rooms)
+	{
+		ft_printf("%s %d\n",lem->rooms[i].name, lem->rooms[i].depth);
+		i++;
+	}
+	//ft_printf("dep %d", lem->start_room->n_rooms[0]->n_rooms[0]->depth);
 	/********Для тестирования*********/
+	/* 
+	t_room **room_arr;
+	t_room *poped;
 	int head = 0;
 	int tail = 0;	
 	if ((room_arr = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
 		exit(1);
 	push(&tail, room_arr, lem->end_room);
 	ft_printf("%s\n", room_arr[0]->name);
-	ft_printf("%d\n%d\n%d", is_empty(head, tail), head, tail);
+	ft_printf("%d\n%d\n%d\n", is_empty(head, tail), head, tail);
+	poped = pop(&head, &tail, room_arr);
+	ft_printf("%s", poped->name);
+	 */
 	/********Для тестирования*********/
 	
-	//room_arr = bfs(lem);
+	//room_arr = 
 	/* 
 	поправить bfs чтобы граф ex2_1.map считал вершины так: 0 1 2 4 3
 	сделать, чтобы bfs работал до тех пор, пока не дойдет до узла end 
@@ -172,7 +197,15 @@ void		find_pathes(t_lemin *lem)
 
 
 
-BFS(start_node, goal_node)
+(1)BFS расставляет глубину для каждого узла
+(2)После BFS идем с конца в начало и ищем кратчайший путь и запоминаем его
+(3)записываем путь в массив
+(4)разворачиваем ребра
+   goto (1)
+*/
+
+
+/* BFS(start_node, goal_node)
 {	
 	for(all nodes i)
 		visited[i] = false; // изначально список посещённых узлов пуст
@@ -194,11 +227,4 @@ BFS(start_node, goal_node)
   		}
  	}
 	return false;                        // Целевой узел недостижим
-}
-
-(1)BFS расставляет глубину для каждого узла
-(2)После BFS идем с конца в начало и ищем кратчайший путь и запоминаем его
-(3)записываем путь в массив
-(4)разворачиваем ребра
-   goto (1)
-*/
+} */

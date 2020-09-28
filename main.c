@@ -193,7 +193,7 @@ static void	output_map(t_lemin lem)
 			ft_printf("%d ", lem.rooms[i].blocks[j]);
 			j++;
 		}
-		ft_printf("\n");
+		ft_printf("\n-------------------\n");
 		i++;
 	}
 }
@@ -223,7 +223,7 @@ int main(int ac, char **av)
 	altor(&lem);
 //<<<<<<< HEAD
 
- 	t_room *room;
+ /* 	t_room *room;
  	int i = 0;
  	ft_putstr(lem.start_room->name);
  	ft_putchar('\n');
@@ -238,10 +238,11 @@ int main(int ac, char **av)
 		ft_putchar(' ');
  		i++;
 	}
+	ft_putchar('\n'); */
 //=======
 	//вывод 
 	output_map(lem);
-	find_pathes(&lem);
+	//find_pathes(&lem);
 //>>>>>>> 08adf54391f5b1d680eb21ac7cfaacadbc455b6f
 	return (0);
 }

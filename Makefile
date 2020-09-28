@@ -6,7 +6,7 @@
 #    By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/31 13:58:04 by ljerk             #+#    #+#              #
-#    Updated: 2020/09/13 11:33:10 by ljerk            ###   ########.fr        #
+#    Updated: 2020/09/28 18:07:26 by ljerk            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ INCLUDE = ./includes/lemin.h
 all: $(NAME)
 
 %.o: %.c $(INCLUDE)
-	$(CC) $(FLAGS) -c $<
+	gcc $(FLAGS) -c $<
 
 $(NAME): $(OBJ)
 	$(MAKE) -C $(LIB_DIR)
