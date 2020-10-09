@@ -242,7 +242,7 @@ int main(int ac, char **av)
 //=======
 	//вывод 
 	output_map(lem);
-	//find_pathes(&lem);
+	find_pathes(&lem);
 //>>>>>>> 08adf54391f5b1d680eb21ac7cfaacadbc455b6f
 	return (0);
 }
