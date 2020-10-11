@@ -12,64 +12,6 @@
 
 #include "includes/lemin.h"
 
-/* void		find_path(t_lemin *lem)
-{
-	t_room *path;
-
-	if ((path = (t_room*)ft_memalloc(sizeof(t_room) * lem->num_rooms)) == NULL)
-		exit(1);
-	
-} */
-
-//создание начальных значений в стеке комнат
-/* 
-	stack - стек комнат для обработки bfs
-	room_id - индекс комнаты, которую обрабатывается сейчас(соседи которой добавляем в стек)
-	ins_place - место в стеке, куда должна встать следубщая комната
-
-int		add_to_stack(t_room **stack, int room_id, int ins_place)
-{
-	int	i;
-
-	i = 0;
-	while (i < stack[room_id]->n_rooms[i]->num_links)
-	{
-		stack[ins_place] = stack[room_id]->n_rooms[i];
-		if (stack[ins_place]->name == stack[0]->name || stack[1].)
-			return (0);
-		i++;
-		ins_place++;
-	}
-}
-
-t_room **shortest_path(t_lemin *lem)
-{
-	t_room	**shortest_path;//стек с кратчайшим путем от start до end
-	int	i;		//номер рассматриваемой комнаты
-	int	j;		//номер комнаты в shortest_path
-	int	insert_place;	//место в стеке комнат куда встанет следующая комната
-	t_room	**stk;		//стек комнат
-	
-	init_shortest_path(lem, stk);//добавляем в стек связи с end`ом
-	while(add_to_stack(stk, i, insert_place))//1 - не дошли до старта, 0 - дошли
-	{
-		shortest_path[j] = min_depth(stk);
-		j++;
-	}
-}*/
-
-
-
-
-    //Для более лаконичной реализации работы, мы будем
-    //хранить указатель не на последний элемент, а
-    //на следующий за ним (несуществующий).
-
-    //Это, в частности, позволит нам проверять очередь на пустоту
-    //простым условием head == tail
-    //int head = 0;    Индекс первого элемента.
-    //int tail = 0;    Индекс элемента, следующего за последним.
-
 int		isolated(t_room *room)
 {
 	if (room->num_links == 0)
