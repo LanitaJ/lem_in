@@ -1,0 +1,21 @@
+39
+##start
+a 1 1
+##end
+h 8 8
+b 2 2
+c 3 3
+d 4 4
+e 5 5
+f 6 6
+g 7 7
+a-b
+d-c
+d-h
+d-g
+b-c
+a-e
+e-f
+f-g
+d-e
+h-g
