@@ -71,7 +71,7 @@ void print_queue(t_room **queue, t_lemin *lem)
 
 t_room	**move_back(t_lemin *lem)
 {
-	t_room	*room;
+	t_room	*room;//рассматриваемая комната
 	t_room	**sh; //shortest path
 	int		i;
 	int		ins;
@@ -81,7 +81,6 @@ t_room	**move_back(t_lemin *lem)
 	//кратчайший путь имеет длину = глубине конечной комнаты
 	if ((sh = (t_room**)ft_memalloc(sizeof(t_room*) * (lem->end_room->depth + 1))) == NULL)
 		exit(1);
-	//sh[lem->end_room->depth] = lem->end_room;
 	while (ft_strequ(room->name, lem->start_room->name) == 0)//1 = rooms are equal
 	{
 		i = 0;
