@@ -221,8 +221,6 @@ int main(int ac, char **av)
 		j++;
 	} */
 	altor(&lem);
-//<<<<<<< HEAD
-
  /* 	t_room *room;
  	int i = 0;
  	ft_putstr(lem.start_room->name);
@@ -239,10 +237,8 @@ int main(int ac, char **av)
  		i++;
 	}
 	ft_putchar('\n'); */
-//=======
 	//вывод 
 	output_map(lem);
-	find_pathes(&lem);
-//>>>>>>> 08adf54391f5b1d680eb21ac7cfaacadbc455b6f
+	find_pathes(lem);
 	return (0);
 }

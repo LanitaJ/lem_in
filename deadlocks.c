@@ -12,47 +12,36 @@
 
 #include "includes/lemin.h"
 
-int		isolated(t_room *room)
-{
-	if (room->num_links == 0)
-		return (1);
-	return (0);
-}
-
-void	push(int *tail, t_room **a, t_room *x)
-{
-	a[*tail] = x;
-	*tail += 1;
-}
-
-t_room	*pop(int *head, int *tail, t_room **room) {
-	if (*head != *tail)
-	{
-		*head += 1;
-		return (room[*head - 1]);
-	}
-	else
-		ft_printf("Error\n");// СДЕЛАТЬ ОБРАБОТКУ Ошибка, попытка извлечь элемент из пустой очереди.
-	return(0);//убрать
-}
-
-int is_empty(int head, int tail)
-{
-	return (head == tail);
-}
-
-static	void init_bfs(t_lemin *lem, int *head, int *tail)
+void	del_first_link(char *isol_room, t_lemin *lem)
 {
 	int	i;
 
 	i = 0;
-	*head = 0;
-	*tail = 0;
-	while (i < lem->num_rooms)
-		lem->rooms[i++].depth = -1;
-	lem->start_room->depth = 0;
-	lem->start_room->visited = 1;
-	lem->end_room->depth = 2147483647;
+	while (i < lem->start_room->num_links)
+	{
+		//ft_printf("%d %s %s\n", i, lem->start_room->n_rooms[i]->name, isol_room);
+		if (ft_strequ(lem->start_room->n_rooms[i]->name, isol_room) == 1)
+		{
+			lem->start_room->blocks[i] = 1;
+			//lem->start_room->n_rooms[i]->blocks
+			//как заблокировать старт? и нужно ли?
+		}
+		i++;
+	}
+} 
+
+int		isolated(t_room *room)
+{
+	int i;
+
+	i = 0;
+	while (i < room->num_links)
+	{
+		if (room->blocks[i] == 0)
+			return (0);//комната НЕ изолирована
+		i++;
+	}
+	return (1);//комната изолирована
 }
 
 void print_queue(t_room **queue, t_lemin *lem)
@@ -94,71 +83,80 @@ t_room	**move_back(t_lemin *lem)
 	return(sh);
 }
 
-//алгоритм расставляет глубины комнат
-int		bfs(t_lemin *lem)
+int			check_shortcut(t_lemin *lem)
 {
-	t_room	**queue;			//очередь комнат
-	t_room	*node;
-	int		tail = 0;
-	int		head = 0;
-	int		i;
-	
-	if ((queue = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
-		exit(1);
-	init_bfs(lem, &tail, &head);
-	push(&tail, queue, lem->start_room);
-	while (!is_empty(head, tail))
+	int	i;
+
+	i = 0;
+	while (i < lem->start_room->num_links)
 	{
-		//int k = 0;
-		node = pop(&head, &tail, queue);
-		/* ft_printf("current node %s\nlinks: ", node->name);
-		while (k < node->num_links)
-		{
-			ft_printf("%s ", node->n_rooms[k]->name);
-			k++;
-		}
-		ft_printf("\n");
-		if (ft_strequ(node->name, lem->end_room->name))
-		{
-			ft_printf("end\n");
+		if (ft_strequ(lem->start_room->n_rooms[i]->name, lem->end_room->name) == 1)
 			return (1);
-		} */	
-		i = -1;
-		while (++i < node->num_links)
-			if (node->n_rooms[i]->visited == 0)
-			{
-				//ft_printf("name = %s\n", node->n_rooms[i]->name);
-				//ft_printf("numlink %d\n", node->num_links);
-				push(&tail, queue, node->n_rooms[i]);
-				node->n_rooms[i]->visited = 1;
-				node->n_rooms[i]->depth = node->depth + 1;
-			}
+		i++;
 	}
 	return (0);
 }
 
-
-void		find_pathes(t_lemin *lem)
+void		print_path(t_lemin lem, t_room **sh)
 {
-	int max_pathes;
-	int i = 0;
-	t_room	**sh;
+	int i;
 
-	max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
-		lem->start_room->num_links : lem->end_room->num_links;
-	bfs(lem);
-	while (i < lem->num_rooms)
-	{
-		ft_printf("name: %s depth: %d\n",lem->rooms[i].name, lem->rooms[i].depth);
-		i++;
-	}
 	i = 0;
-	sh = move_back(lem);
-	while (i <= lem->end_room->depth)
+	while (i <= lem.end_room->depth)
 	{
-		ft_printf("%s-", sh[i]->name);
+		if (i != lem.end_room->depth)
+			ft_printf("%s-", sh[i]->name);
+		else
+			ft_printf("%s\n\n", sh[i]->name);
 		i++;
 	}
+}
+
+void		print_depth(t_lemin lem)
+{
+	int	i = 0;
+
+	while (i < lem.num_rooms)
+	{
+		ft_printf("name: %s depth: %d\n",lem.rooms[i].name, lem.rooms[i].depth);
+		i++;
+	}
+}
+
+void		find_pathes(t_lemin lem)
+{
+	int		max_pathes;
+	char	*first_link;
+	t_room	**sh1;
+	t_room	**sh2;
+
+	if (check_shortcut(&lem) == 1)
+	{
+		ft_printf("start-end link founded");
+		exit(0);//движение сразу всех муравьев 
+	}
+	max_pathes = lem.start_room->num_links < lem.end_room->num_links ? \
+		lem.start_room->num_links : lem.end_room->num_links;
+	//уменьшать max_pathes при сохранении путей
+	/* while (max_pathes > 0 && !isolated(lem.start_room))
+	{
+
+	} */
+	//можно объединить функции
+	bfs(&lem);	
+	print_depth(lem);
+	sh1 = move_back(&lem);	
+	print_path(lem, sh1);
+	first_link = sh1[1]->name;
+	//ft_printf("\n\ndeleted%s", first_link);
+	del_first_link(first_link, &lem);
+	
+	bfs(&lem);
+	print_depth(lem);
+	sh2 = move_back(&lem);
+	print_path(lem, sh2);
+	
+	
 }
 
 /* BFS(start_node, goal_node)

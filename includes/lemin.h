@@ -25,7 +25,7 @@ typedef struct			s_room
 	int					x;
 	int					y;
 	struct s_room*		*n_rooms;
-	int					*blocks;
+	int					*blocks;//0 - связь есть 1 - связи нет 
 	int					num_links;
 	int					depth;//глубина комнаты (0 - старт, 2147483647 - конец)
 	int					visited;//метка, что комнату посетили
@@ -78,4 +78,5 @@ void					error_map(char *line);
 void					error_link(char *line);
 
 //Solver
-void					find_pathes(t_lemin *lem);
+void					find_pathes(t_lemin lem);
+int						bfs(t_lemin *lem);
