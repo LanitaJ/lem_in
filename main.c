@@ -172,7 +172,7 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 }
 
 //функция вывода карты в консоль (Вспомогательная функция. После окончания проекта удалить)
-static void	output_map(t_lemin lem)
+void	output_map(t_lemin lem)
 {
 	int i = 0;
 	int j = 0;
@@ -239,6 +239,6 @@ int main(int ac, char **av)
 	ft_putchar('\n'); */
 	//вывод 
 	output_map(lem);
-	find_pathes(lem);
+	find_pathes(&lem);
 	return (0);
 }

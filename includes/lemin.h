@@ -13,6 +13,8 @@
 # include "../ft_printf/includes/ft_printf.h"
 
 
+
+
 typedef struct			s_link
 {
 	char*				name1;
@@ -25,12 +27,19 @@ typedef struct			s_room
 	int					x;
 	int					y;
 	struct s_room*		*n_rooms;
-	int					*blocks;//0 - связь есть 1 - связи нет 
+	int					*blocks;	//0 - связь есть 1 - связи нет 
 	int					num_links;
-	int					depth;//глубина комнаты (0 - старт, 2147483647 - конец)
-	int					visited;//метка, что комнату посетили
+	int					depth;		//глубина комнаты (0 - старт, 2147483647 - конец)
+	int					visited;	//метка, что комнату посетили
 }						t_room;
 
+typedef struct			s_path
+{
+	t_room				**sh;		//путь
+	int					length;		//длина пути
+}						t_path;
+//может добваить в структуру второй путь для удобного сравнения
+//+ добавить количество муравьев 
 typedef	struct			s_lemin
 {
 	int					num_links;
@@ -78,5 +87,8 @@ void					error_map(char *line);
 void					error_link(char *line);
 
 //Solver
-void					find_pathes(t_lemin lem);
+void					find_pathes(t_lemin *lem);
 int						bfs(t_lemin *lem);
+
+//функция вывода карты в консоль (Вспомогательная функция. После окончания проекта удалить)
+void	output_map(t_lemin lem);
