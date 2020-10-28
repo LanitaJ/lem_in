@@ -19,6 +19,7 @@ int		check_link(char *line)
 	//парсинг 1го и 2го имени, проверка существования комнаты
 	if (line[1] == '-')
 		return (1);
+
 	return (0);
 }
 
@@ -95,6 +96,11 @@ int add_link(t_lemin *lem, char* line)
 	int i = -1;
 
 	tmp = (t_link*)malloc(sizeof(t_link) * ++(lem->num_links));
+	if (tmp == NULL)
+	{
+		ft_putstr("cannot malloc");
+		exit (1);
+	}
 	while(++i != lem->num_links - 1)
 		tmp[i] = lem->links[i];
 	get_link(line, &tmp[i], lem);
@@ -103,6 +109,32 @@ int add_link(t_lemin *lem, char* line)
 	free(line);
 	lem->links = tmp;
 	return 1;
+}
+
+//проверка на наличие дублирующих линков
+int check_dblinks(t_lemin *lem)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while(i != lem->num_links - 1)
+	{
+		j = i;
+		while(j++ < lem->num_links - 1)
+		{
+			if ((!strcmp(lem->links[i].name1, lem->links[j].name2) &&
+				!strcmp(lem->links[i].name2, lem->links[j].name1)) ||
+				(!strcmp(lem->links[i].name2, lem->links[j].name2) &&
+				!strcmp(lem->links[i].name1, lem->links[j].name1)))
+			{
+				ft_putstr("error double links");
+				exit(0);
+			}
+		}
+		i++;
+	}
+	return (1);
 }
 
 //записать связи в основную струкутуру
@@ -119,7 +151,7 @@ int get_links(t_lemin *lem, char *line)
 		else
 			add_link(lem, line);
 	}
-	return 1;
+	return check_dblinks(lem);
 }
 
 //передать ссылки на соседние комнаты

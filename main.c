@@ -95,6 +95,11 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	i = 0;
 	tmp = (t_room* *)malloc(sizeof(t_room*) * ++main_room->num_links);
 	tmp_blocks = (int*)malloc(sizeof(int) * main_room->num_links);
+	if (tmp == NULL || tmp_blocks == NULL)
+	{
+		ft_putstr("cannot malloc");
+		exit (1);
+	}
 	while (i != main_room->num_links - 1)
 	{
 		tmp_blocks[i] = 0;

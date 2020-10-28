@@ -43,6 +43,11 @@ int add_room(t_lemin *lem, char* line)
 	int i = -1;
 
 	tmp = (t_room*)malloc(sizeof(t_room) * ++(lem->num_rooms));
+	if (tmp == NULL)
+	{
+		ft_putstr("cannot malloc");
+		exit (1);
+	}
 	while(++i != lem->num_rooms - 1)
 		tmp[i] = lem->rooms[i];
 	get_room(line, &tmp[i]);
