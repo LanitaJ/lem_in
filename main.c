@@ -166,7 +166,10 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 		av++;
 		lem->fd = open(av[0], O_RDONLY);
 		if (lem->fd == -1)
+		{
 			ft_printf("input error\n");
+			exit(1);
+		}
 	}
 	else
 		lem->fd = 0;

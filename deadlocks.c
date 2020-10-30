@@ -97,12 +97,13 @@ int			check_shortcut(t_lemin *lem)
 	}
 	return (0);
 }
-
+//выводит из каких name состоит путь
 void		print_path(t_path *path)
 {
 	int i;
 
 	i = 0;
+	ft_printf("name chain ");
 	while (i < path->length)
 	{
 		if (i != path->length - 1)
@@ -139,13 +140,27 @@ void		del_path(t_path *path)
 	}
 }
 
+void		init_id(t_lemin *lem)
+{
+	int	id;
+
+	id = 0;
+	while (id < lem->num_rooms)
+	{
+		lem->rooms[id].id = id;
+		//ft_printf("name %s | id %d\n",lem->rooms[id].name, id);
+		id++;
+	}
+}
+
 void		find_pathes(t_lemin *lem)
 {
 	int		max_pathes;
 	char	*first_link;
 	t_path	*path1;
 	t_path	*path2;
-	//int		type;
+	int		type;
+
 	if (check_shortcut(lem) == 1)
 	{
 		ft_printf("start-end link founded");
@@ -166,6 +181,8 @@ void		find_pathes(t_lemin *lem)
 	if (((path1 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL) || \
 		((path2 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL))
 		exit(1);
+	init_id(lem);
+	//output_map(*lem);
 	bfs(lem);
 	//print_depth(lem);
 	move_back(lem, path1);
@@ -173,6 +190,7 @@ void		find_pathes(t_lemin *lem)
 	
 	first_link = path1->sh[1]->name;
 	del_first_link(first_link, lem);
+	//можно поменять на id комнаты
 	//ft_printf("\n\ndeleted%s", first_link);
 
 	bfs(lem);
@@ -182,8 +200,9 @@ void		find_pathes(t_lemin *lem)
 
 	//del_path(path1);
 	//del_path(path2);
-	/* type = choose_type(sh1, sh2);
-	if (type == 1)
+	type = choose_type(lem, path1, path2);
+	ft_printf("type %d", type);
+	/*if (type == 1)
 	{
 		del_path(sh2);
 	} */

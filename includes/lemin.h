@@ -31,6 +31,7 @@ typedef struct			s_room
 	int					num_links;
 	int					depth;		//глубина комнаты (0 - старт, 2147483647 - конец)
 	int					visited;	//метка, что комнату посетили
+	int					id;
 }						t_room;
 
 typedef struct			s_path
@@ -92,3 +93,7 @@ int						bfs(t_lemin *lem);
 
 //функция вывода карты в консоль (Вспомогательная функция. После окончания проекта удалить)
 void	output_map(t_lemin lem);
+
+//функция выбора случаев
+int choose_type(t_lemin *lem, t_path *path1, t_path *path2);
+
