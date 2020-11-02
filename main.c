@@ -38,6 +38,21 @@ ljerk:
 думаю стоит сделать более "гибкую" проверку
 (когда есть отступы в начале строки, пробелы в конце или между значениями)
 */
+
+static int get_aunts(char* line)
+{
+	int i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] > '9' || line[i] < '0')
+			error_ant_count(line);
+		i++;
+	}
+	if (ft_atoi(line) < 0)
+		error_ant_count(line);
+	return ft_atoi(line);
+}
+
 int check_line(char* line)
 {
 	if (line[0] == '#')
@@ -60,11 +75,7 @@ int compare(t_lemin *lem, char* str)//return number of equivalent char* with roo
 		i++;
 	}
 	if (equil != 1)
-	{
-		ft_putstr("compare ");
-		ft_putstr(str);
-		exit(1);
-	}
+		error_link(str);
 	return (equil);
 }
 
@@ -85,6 +96,12 @@ t_room *name_to_room(char *name, t_lemin *lem)
 	exit(1);
 }
 
+static void free_main_room(t_room *main_room) //дополнить чистку
+{
+	free(main_room->n_rooms);
+	free(main_room->blocks);
+}
+
 //добавить связующую комнату(по названию name_add) к основной комнате(main_roon)
 int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 {
@@ -96,10 +113,7 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	tmp = (t_room* *)malloc(sizeof(t_room*) * ++main_room->num_links);
 	tmp_blocks = (int*)malloc(sizeof(int) * main_room->num_links);
 	if (tmp == NULL || tmp_blocks == NULL)
-	{
-		ft_putstr("cannot malloc");
-		exit (1);
-	}
+		error_maloc();
 	while (i != main_room->num_links - 1)
 	{
 		tmp_blocks[i] = 0;
@@ -109,10 +123,7 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	tmp_blocks[i] = 0;
 	tmp[i] = name_to_room(name_add, lem);
 	if (main_room->num_links != 1)
-	{
-		free(main_room->n_rooms);//дополнить чистку
-		free(main_room->blocks);
-	}
+		free_main_room(main_room);
 	main_room->blocks = tmp_blocks;
 	main_room->n_rooms = tmp;
 	return (1);
@@ -145,15 +156,12 @@ int parse_all(t_lemin *lem)
 	char* line;
 
 	get_next_line(lem->fd, &line);
-	lem->num_ants = ft_atoi(line);
+	lem->num_ants = get_aunts(line);
 	free(line);
 	//ft_printf("%d", lem->num_ants);
 	get_links(lem, get_rooms(lem,line));
 	if ((!lem->id_start_room && lem->id_start_room != 0) || (!lem->id_end_room && lem->id_end_room != 0))
-	{
-		ft_putstr("start and end room\n");
-		exit(1);
-	}
+		error_start_end();
 	lem->start_room = &(lem->rooms[lem->id_start_room]);
 	lem->end_room = &lem->rooms[lem->id_end_room];
 	return (1);
@@ -166,10 +174,7 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 		av++;
 		lem->fd = open(av[0], O_RDONLY);
 		if (lem->fd == -1)
-		{
-			ft_printf("input error\n");
-			exit(1);
-		}
+			error_fd();
 	}
 	else
 		lem->fd = 0;
@@ -213,6 +218,7 @@ int main(int ac, char **av)
 
 	init_lemin(&lem, ac, av);
 	parse_all(&lem);
+	ft_putnbr(lem.num_ants);
 	/*int i = 0;
 	 ft_printf("num_ants %d", lem.num_ants);
 	while(i != lem.num_rooms)

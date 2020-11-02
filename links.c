@@ -70,23 +70,11 @@ int get_second_room(char *line, t_link *l)
 void get_link(char* line, t_link *l, t_lemin *lem)
 {
 	if(!get_first_room(line, l))
-	{
-		ft_putstr("get_link ");
-		ft_putstr(line);
-		exit(0);
-	}
+		error_link(line);
 	if(!get_second_room(ft_strchr(line, '-'),l))
-	{
-		ft_putstr("get_link ");
-		ft_putstr(line);
-		exit(0);
-	}
+		error_link(line);
 	if (!(compare(lem,l->name1) * compare(lem,l->name2)))
-	{
-		ft_putstr("compare ");
-		ft_putstr(line);
-		exit(0);
-	}
+		error_link(line);
 }
 
 //добавить связь к существующем с ежевызываемым удалением
@@ -97,10 +85,7 @@ int add_link(t_lemin *lem, char* line)
 
 	tmp = (t_link*)malloc(sizeof(t_link) * ++(lem->num_links));
 	if (tmp == NULL)
-	{
-		ft_putstr("cannot malloc");
-		exit (1);
-	}
+		error_maloc();
 	while(++i != lem->num_links - 1)
 		tmp[i] = lem->links[i];
 	get_link(line, &tmp[i], lem);

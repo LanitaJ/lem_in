@@ -47,7 +47,27 @@ void	error_link(char *line)
 	exit(1);
 }
 
-/* void 	error_input()
+void	error_start_end()
 {
-	ft_printf("input error wrong fd\n");
-} */
+	ft_putstr("Start/end error\n");
+	exit(0);
+}
+
+void 	error_maloc()
+{
+	ft_putstr("Malloc error\n");
+	exit (1);
+}
+
+void	error_getrooms(char *line)
+{
+	ft_putstr("Get_room error\n");
+	free(line);
+	exit(1);
+}
+
+void	error_fd()
+{
+	ft_printf("Fd error\n");
+	exit(1);
+}

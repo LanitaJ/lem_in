@@ -96,6 +96,7 @@ void					error_trash(char *line);
 void					error_memmory(char *line);
 void					error_map(char *line);
 void					error_link(char *line);
+
 void					find_flags(char ***av, t_lemin *lem);
 
 //Solver
