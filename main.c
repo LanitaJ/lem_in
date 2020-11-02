@@ -81,6 +81,12 @@ t_room *name_to_room(char *name, t_lemin *lem)
 	exit(1);
 }
 
+static void free_main_room(t_room *main_room) //дополнить чистку
+{
+	free(main_room->n_rooms);
+	free(main_room->blocks);
+}
+
 //добавить связующую комнату(по названию name_add) к основной комнате(main_roon)
 int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 {
@@ -92,10 +98,7 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	tmp = (t_room* *)malloc(sizeof(t_room*) * ++main_room->num_links);
 	tmp_blocks = (int*)malloc(sizeof(int) * main_room->num_links);
 	if (tmp == NULL || tmp_blocks == NULL)
-	{
-		ft_putstr("cannot malloc");
-		exit (1);
-	}
+		error_maloc();
 	while (i != main_room->num_links - 1)
 	{
 		tmp_blocks[i] = 0;
@@ -105,10 +108,7 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	tmp_blocks[i] = 0;
 	tmp[i] = name_to_room(name_add, lem);
 	if (main_room->num_links != 1)
-	{
-		free(main_room->n_rooms);//дополнить чистку
-		free(main_room->blocks);
-	}
+		free_main_room(main_room);
 	main_room->blocks = tmp_blocks;
 	main_room->n_rooms = tmp;
 	return 1;
