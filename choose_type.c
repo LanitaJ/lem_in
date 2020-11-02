@@ -1,5 +1,28 @@
 #include "includes/lemin.h"
 
+void		del_path(t_path *path)
+{
+	int	i;
+	int	j;
+	int k;
+
+	i = 1;
+	while (i < path->length - 1)
+	{
+		j = 0;
+		while (j < path->sh[i]->num_links)
+		{
+			k = 0;
+			while (path->sh[i]->n_rooms[j]->n_rooms[k]->id != path->sh[i]->id)
+				k++;
+			path->sh[i]->n_rooms[j]->blocks[k] = 1;
+			path->sh[i]->blocks[j] = 1;
+			j++;
+		}
+		i++;
+	}
+}
+
 int *path_to_num(t_lemin *lem, t_path *path)
 {
     int *bin_res;   //представление результата в виде(двоичное число) массива из 0 и 1, где 1 - наличие iой комнаты в пути 
@@ -40,8 +63,21 @@ int choose_type(t_lemin *lem, t_path *path1, t_path *path2)
     else
         return ((sum_sochet == path1->length) ? 2 : 3);
 }
+
+void     path_type(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
+{
+    int type;
+
+    type = choose_type(lem, path1, path2);
+    if (type == 1)
+        do_type1(lem, mas, path1, path2);
+	else if (type == 2)
+        do_type2_3(lem, mas, path1);
+	else
+        do_type2_3(lem, mas, path2);
+}
 /* 
-    1 - разные пути
-    2 - 2ой путь содержит полностью 1ый
-    3 - пути частично пересекаются
+    1 - разные пути(сохраняем оба)
+    2 - 2ой путь содержит полностью 1ый(сохраняем 1ый)
+    3 - пути частично пересекаются(сохраняем 2ой)
 */

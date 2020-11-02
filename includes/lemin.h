@@ -12,8 +12,14 @@
 
 # include "../ft_printf/includes/ft_printf.h"
 
-
-
+# define RED	"\x1B[31m"
+# define GRN	"\x1B[32m"
+# define YEL	"\x1B[33m"
+# define BLU	"\x1B[34m"
+# define MAG	"\x1B[35m"
+# define CYN	"\x1B[36m"
+# define WHT	"\x1B[37m"
+# define RST	"\x1B[0m"
 
 typedef struct			s_link
 {
@@ -38,9 +44,9 @@ typedef struct			s_path
 {
 	t_room				**sh;		//путь
 	int					length;		//длина пути
+	int					count_ants;	//количество муравьев на пути
 }						t_path;
-//может добваить в структуру второй путь для удобного сравнения
-//+ добавить количество муравьев 
+
 typedef	struct			s_lemin
 {
 	int					num_links;
@@ -51,13 +57,17 @@ typedef	struct			s_lemin
 	int					id_end_room;
 	int					check_start_kol;
 	int 				check_end_kol;
+	int					max_pathes;
+	int					ins;
+	int					error;		//флаг -e
+	int					color;		//флаг -c
+	int					bonus_fd;	//флаг -f
+	int					show_path;	//флаг -p
 	t_room*				rooms;
 	t_room				*start_room;
 	t_room				*end_room;
 	t_link*				links;
 }						t_lemin;
-
-
 
 void					get_link(char* line, t_link *l, t_lemin *lem);
 int						add_link(t_lemin *lem, char* line);
@@ -86,14 +96,29 @@ void					error_trash(char *line);
 void					error_memmory(char *line);
 void					error_map(char *line);
 void					error_link(char *line);
+void					find_flags(char ***av, t_lemin *lem);
 
 //Solver
-void					find_pathes(t_lemin *lem);
+t_path					**find_pathes(t_lemin *lem);
 int						bfs(t_lemin *lem);
 
 //функция вывода карты в консоль (Вспомогательная функция. После окончания проекта удалить)
-void	output_map(t_lemin lem);
+void					output_map(t_lemin lem);
+void					print_path(t_path *path);
+void					print_path_color(t_path *path);
+
+
 
 //функция выбора случаев
-int choose_type(t_lemin *lem, t_path *path1, t_path *path2);
+void					path_type(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2);
+
+void					del_path(t_path *path);
+
+//do_types
+void					do_type1(t_lemin *lem, t_path **mas, t_path *path1, t_path *path2);
+void					do_type2_3(t_lemin *lem, t_path **mas, t_path *path);
+
+//free
+void					free_path(t_path *path);
+void					free_room(t_room *room);
 

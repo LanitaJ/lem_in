@@ -12,23 +12,31 @@
 
 #include "includes/lemin.h"
 
-void	del_first_link(char *isol_room, t_lemin *lem)
+void	del_first_link(int id_isol_room, t_lemin *lem)
 {
 	int	i;
 
 	i = 0;
 	while (i < lem->start_room->num_links)
 	{
-		//ft_printf("%d %s %s\n", i, lem->start_room->n_rooms[i]->name, isol_room);
-		if (ft_strequ(lem->start_room->n_rooms[i]->name, isol_room) == 1)
-		{
+		if (id_isol_room == lem->start_room->n_rooms[i]->id)
 			lem->start_room->blocks[i] = 1;
-			//lem->start_room->n_rooms[i]->blocks
-			//как заблокировать старт? и нужно ли?
-		}
 		i++;
 	}
-} 
+}
+
+void	restore_first_link(int id_restore_room, t_lemin *lem)
+{
+	int	i;
+
+	i = 0;
+	while (i < lem->start_room->num_links)
+	{
+		if (id_restore_room == lem->start_room->n_rooms[i]->id)
+			lem->start_room->blocks[i] = 0;
+		i++;
+	}
+}
 
 int		isolated(t_room *room)
 {
@@ -44,20 +52,6 @@ int		isolated(t_room *room)
 	return (1);//комната изолирована
 }
 
-void print_queue(t_room **queue, t_lemin *lem)
-{
-	int i;
-
-	i = 0;
-	while (i < lem->num_rooms)
-	{
-		if (queue[i] != NULL)
-			ft_printf("%s ",queue[i]->name);
-		i++;
-	}
-	ft_printf("\n");
-}
-
 void	move_back(t_lemin *lem, t_path *path)
 {
 	t_room	*room;//рассматриваемая комната
@@ -68,9 +62,10 @@ void	move_back(t_lemin *lem, t_path *path)
 	ins = lem->end_room->depth;
 	room = lem->end_room;
 	//кратчайший путь имеет длину = глубине конечной комнаты
-	if ((sh = (t_room**)ft_memalloc(sizeof(t_room*) * (lem->end_room->depth + 1))) == NULL)
+	if ((sh = (t_room**)ft_memalloc(sizeof(t_room*) * \
+			(lem->end_room->depth + 1))) == NULL)
 		exit(1);
-	while (ft_strequ(room->name, lem->start_room->name) == 0)//1 = rooms are equal
+	while (room->id != lem->start_room->id)//while rooms aren`t equal
 	{
 		i = 0;
 		while (room->n_rooms[i]->depth != room->depth - 1 && i < room->num_links)
@@ -82,6 +77,10 @@ void	move_back(t_lemin *lem, t_path *path)
 	sh[ins] = room;//была стартовая
 	path->sh = sh;
 	path->length = lem->end_room->depth + 1;
+	/* int j = 0;
+	while (j <= ins)
+		free(sh[j++]); */
+	//free(sh);
 }
 
 int			check_shortcut(t_lemin *lem)
@@ -91,12 +90,13 @@ int			check_shortcut(t_lemin *lem)
 	i = 0;
 	while (i < lem->start_room->num_links)
 	{
-		if (ft_strequ(lem->start_room->n_rooms[i]->name, lem->end_room->name) == 1)
+		if (lem->start_room->n_rooms[i]->id == lem->end_room->id)
 			return (1);
 		i++;
 	}
 	return (0);
 }
+//удалить
 //выводит из каких name состоит путь
 void		print_path(t_path *path)
 {
@@ -114,6 +114,35 @@ void		print_path(t_path *path)
 	}
 }
 
+void		print_path_color(t_path *path)
+{
+	int i;
+
+	i = 0;
+	ft_printf(CYN"\n\nname chain\n"RST);
+	while (i < path->length)
+	{
+		if (i != path->length - 1 && i % 2 == 0 && i % 4 != 0 && i % 6 != 0)
+			ft_printf(RED"%s->"RST, path->sh[i]->name);
+		else if (i != path->length - 1 && i % 3 == 0 && i % 6 != 0)
+			ft_printf(GRN"%s->"RST, path->sh[i]->name);
+		else if (i != path->length - 1 && i % 4 == 0)
+			ft_printf(YEL"%s->"RST, path->sh[i]->name);
+		else if (i != path->length - 1 && i % 5 == 0)
+			ft_printf(BLU"%s->"RST, path->sh[i]->name);
+		else if (i != path->length - 1 && i % 6 == 0)
+			ft_printf(MAG"%s->"RST, path->sh[i]->name);
+		else if (i != path->length - 1 && i % 7 == 0)
+			ft_printf(CYN"%s->"RST, path->sh[i]->name);
+		else if (i != path->length - 1)
+			ft_printf(CYN"%s->"RST, path->sh[i]->name);
+		else if (i == path->length - 1)
+			ft_printf("%s\n", path->sh[i]->name);
+		i++;
+	}
+}
+
+//удалить
 void		print_depth(t_lemin lem)
 {
 	int	i = 0;
@@ -124,21 +153,7 @@ void		print_depth(t_lemin lem)
 		i++;
 	}
 }
-void		del_path(t_path *path)
-{
-	int	i;
-	int	j;
-	
-	i = 0;
-	//ft_printf("dep %d\n", path->length);
-	while (i < path->length)
-	{
-		j = -1;
-		while (j++ < path->sh[i]->num_links)
-			path->sh[i]->blocks[j] = 1;
-		i++;
-	}
-}
+
 
 void		init_id(t_lemin *lem)
 {
@@ -148,91 +163,64 @@ void		init_id(t_lemin *lem)
 	while (id < lem->num_rooms)
 	{
 		lem->rooms[id].id = id;
-		//ft_printf("name %s | id %d\n",lem->rooms[id].name, id);
 		id++;
 	}
 }
 
-void		find_pathes(t_lemin *lem)
+int		solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 {
-	int		max_pathes;
-	char	*first_link;
+	bfs(lem);
+	if (lem->end_room->depth == 2147483647)
+		return (1);
+	move_back(lem, path1);
+	lem->max_pathes--;
+	if (lem->max_pathes > 0)
+	{
+		del_first_link(path1->sh[1]->id, lem);
+		bfs(lem);
+		if (lem->end_room->depth == 2147483647)
+			return (1);
+		move_back(lem, path2);
+		restore_first_link(path1->sh[1]->id, lem);
+		path_type(mas, lem, path1, path2);
+	}
+	else
+	{
+		mas[lem->ins] = path1;
+        lem->ins++;
+		del_path(path1);
+		//free_path(path1);
+	}
+	return (0);
+}
+
+t_path		**find_pathes(t_lemin *lem)
+{
 	t_path	*path1;
 	t_path	*path2;
-	int		type;
+	t_path	**mass_pathes;
 
+	lem->ins = 0;
+	init_id(lem);//можно перенести в main.c
 	if (check_shortcut(lem) == 1)
 	{
 		ft_printf("start-end link founded");
-		exit(0);//движение сразу всех муравьев 
+		exit(0);//движение сразу всех муравьев
 	}
-	max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
+	lem->max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
 		lem->start_room->num_links : lem->end_room->num_links;
-	/* if (max_pathes == 1)
-	{
-		добавить обработку, когда возможен только один кратчайший путь
-	} */
-	//уменьшать max_pathes при сохранении путей
-	/* while (max_pathes > 0 && !isolated(lem.start_room))
-	{
-
-	} */
-	//можно объединить функции
-	if (((path1 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL) || \
-		((path2 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL))
+	if ((mass_pathes = (t_path**)ft_memalloc(sizeof(t_path*) * lem->max_pathes)) == NULL)
 		exit(1);
-	init_id(lem);
-	//output_map(*lem);
-	bfs(lem);
-	//print_depth(lem);
-	move_back(lem, path1);
-	print_path(path1);
-	
-	first_link = path1->sh[1]->name;
-	del_first_link(first_link, lem);
-	//можно поменять на id комнаты
-	//ft_printf("\n\ndeleted%s", first_link);
-
-	bfs(lem);
-	//print_depth(lem);
-	move_back(lem, path2);
-	print_path(path2);
-
-	//del_path(path1);
-	//del_path(path2);
-	type = choose_type(lem, path1, path2);
-	ft_printf("type %d", type);
-	/*if (type == 1)
+	while (lem->max_pathes > 0 && !isolated(lem->start_room))
 	{
-		del_path(sh2);
-	} */
-	//output_map(*lem);
-	
-
-	
-	
+		if (((path1 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL) || \
+			((path2 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL))
+			exit(1);
+		if (solver(mass_pathes, lem, path1, path2) == 1)
+			break ;
+		/* free(path1);
+		free(path2); */
+	}
+	return (mass_pathes);
 }
-
-/* BFS(start_node, goal_node)
-{	
-	for(all nodes i)
-		visited[i] = false; // изначально список посещённых узлов пуст
-	
-	queue.push(start_node);              // начиная с узла-источника
-	visited[start_node] = true;
-	while(! queue.empty() )					 // пока очередь не пуста
-	{           
-		node = queue.pop();                 // извлечь первый элемент в очереди
-		if(node == goal_node)
-			return true;                       // проверить, не является ли текущий узел целевым
-  		foreach(child in expand(node))    // все преемники текущего узла, ...
-		{
-			if(visited[child] == false)       // ... которые ещё не были посещены ...
-			{
-				queue.push(child);                // ... добавить в конец очереди...
-    			visited[child] = true;            // ... и пометить как посещённые
-   			}
-  		}
- 	}
-	return false;                        // Целевой узел недостижим
-} */
+//добавить как бонус вывод путей

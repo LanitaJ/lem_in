@@ -29,10 +29,7 @@ static t_room	*pop(int *head, int *tail, t_room **room) {
 	return(0);//убрать
 }
 
-static int is_empty(int head, int tail)
-{
-	return (head == tail);
-}
+
 
 static	void init_bfs(t_lemin *lem, int *head, int *tail)
 {
@@ -52,33 +49,37 @@ static	void init_bfs(t_lemin *lem, int *head, int *tail)
 	lem->end_room->depth = 2147483647;
 }
 
-int		bfs(t_lemin *lem)
+static void	ft_help(t_room	*node, t_room **queue, int *tail, int i)
 {
-	t_room	**queue;			//очередь комнат
+	if (node->n_rooms[i]->visited == 0 && node->blocks[i] == 0)
+	{
+		push(tail, queue, node->n_rooms[i]);
+		node->n_rooms[i]->visited = 1;
+		node->n_rooms[i]->depth = node->depth + 1;
+	}
+}
+
+int			bfs(t_lemin *lem)
+{
+	t_room	**queue;
 	t_room	*node;
-	int		tail = 0;
-	int		head = 0;
+	int		tail;
+	int		head;
 	int		i;
-	
+
+	tail = 0;
+	head = 0;
 	if ((queue = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
 		exit(1);
 	init_bfs(lem, &tail, &head);
 	push(&tail, queue, lem->start_room);
-	while (!is_empty(head, tail))
+	while (!(head == tail))
 	{
 		node = pop(&head, &tail, queue);
-		//ft_printf("%s\n", node->name);	
 		i = -1;
 		while (++i < node->num_links)
-		{
-			//ft_printf("i: %d block %d name %s vis %d\n",i, node->blocks[i], node->n_rooms[i]->name, node->n_rooms[i]->visited);
-			if (node->n_rooms[i]->visited == 0 && node->blocks[i] == 0)
-			{
-				push(&tail, queue, node->n_rooms[i]);
-				node->n_rooms[i]->visited = 1;
-				node->n_rooms[i]->depth = node->depth + 1;
-			}
-		}
+			ft_help(node, queue, &tail, i);
 	}
+	free(queue);
 	return (0);
 }

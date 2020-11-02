@@ -46,3 +46,8 @@ void	error_link(char *line)
 	ft_printf("Link error\n");
 	exit(1);
 }
+
+/* void 	error_input()
+{
+	ft_printf("input error wrong fd\n");
+} */

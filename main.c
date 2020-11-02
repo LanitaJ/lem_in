@@ -41,8 +41,8 @@ ljerk:
 int check_line(char* line)
 {
 	if (line[0] == '#')
-		return 1;
-	return check_room(line);
+		return (1);
+	return (check_room(line));
 }
 
 //возвращает количество совпадений строки и комнат
@@ -78,7 +78,7 @@ t_room *name_to_room(char *name, t_lemin *lem)
 	while(i != lem->num_rooms)
 	{
 		if(!ft_strcmp(lem->rooms[i].name, name))
-			return &lem->rooms[i];
+			return (&lem->rooms[i]);
 		i++;
 	}
 	ft_putstr("name_to_room\n");
@@ -115,7 +115,7 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	}
 	main_room->blocks = tmp_blocks;
 	main_room->n_rooms = tmp;
-	return 1;
+	return (1);
 }
 
 //добавить связи к комнатам
@@ -156,7 +156,7 @@ int parse_all(t_lemin *lem)
 	}
 	lem->start_room = &(lem->rooms[lem->id_start_room]);
 	lem->end_room = &lem->rooms[lem->id_end_room];
-	return 1;
+	return (1);
 }
 
 void init_lemin(t_lemin *lem, int ac, char **av)
@@ -209,7 +209,8 @@ void	output_map(t_lemin lem)
 int main(int ac, char **av)
 {
 	t_lemin lem;
-  
+	t_path	**mass_pathes;
+
 	init_lemin(&lem, ac, av);
 	parse_all(&lem);
 	/*int i = 0;
@@ -245,8 +246,20 @@ int main(int ac, char **av)
  		i++;
 	}
 	ft_putchar('\n'); */
-	//вывод 
-	output_map(lem);
-	find_pathes(&lem);
+	mass_pathes = find_pathes(&lem);
+	int i = 0;
+	lem.color = 0;
+	//вывод всех путей в консоль
+	while (i < lem.ins)
+	{
+		if (lem.color == 1)
+			print_path_color(mass_pathes[i]);
+		else
+			print_path(mass_pathes[i]);
+		//free(mass_pathes[i]);
+		i++;
+	}
+	//ft_printf("ins %d\n", lem.ins);
+	free(mass_pathes);
 	return (0);
 }
