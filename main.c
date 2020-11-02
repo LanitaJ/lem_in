@@ -38,6 +38,21 @@ ljerk:
 думаю стоит сделать более "гибкую" проверку
 (когда есть отступы в начале строки, пробелы в конце или между значениями)
 */
+
+static int get_aunts(char* line)
+{
+	int i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] > '9' || line[i] < '0')
+			error_ant_count(line);
+		i++;
+	}
+	if (ft_atoi(line) < 0)
+		error_ant_count(line);
+	return ft_atoi(line);
+}
+
 int check_line(char* line)
 {
 	if (line[0] == '#')
@@ -141,7 +156,7 @@ int parse_all(t_lemin *lem)
 	char* line;
 
 	get_next_line(lem->fd, &line);
-	lem->num_ants = ft_atoi(line);
+	lem->num_ants = get_aunts(line);
 	free(line);
 	//ft_printf("%d", lem->num_ants);
 	get_links(lem, get_rooms(lem,line));
@@ -202,6 +217,7 @@ int main(int ac, char **av)
   
 	init_lemin(&lem, ac, av);
 	parse_all(&lem);
+	ft_putnbr(lem.num_ants);
 	/*int i = 0;
 	 ft_printf("num_ants %d", lem.num_ants);
 	while(i != lem.num_rooms)
