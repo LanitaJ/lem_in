@@ -60,11 +60,7 @@ int compare(t_lemin *lem, char* str)//return number of equivalent char* with roo
 		i++;
 	}
 	if (equil != 1)
-	{
-		ft_putstr("compare ");
-		ft_putstr(str);
-		exit(1);
-	}
+		error_link(str);
 	return (equil);
 }
 
@@ -150,10 +146,7 @@ int parse_all(t_lemin *lem)
 	//ft_printf("%d", lem->num_ants);
 	get_links(lem, get_rooms(lem,line));
 	if ((!lem->id_start_room && lem->id_start_room != 0) || (!lem->id_end_room && lem->id_end_room != 0))
-	{
-		ft_putstr("start and end room\n");
-		exit(1);
-	}
+		error_start_end();
 	lem->start_room = &(lem->rooms[lem->id_start_room]);
 	lem->end_room = &lem->rooms[lem->id_end_room];
 	return 1;
@@ -166,10 +159,7 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 		av++;
 		lem->fd = open(av[0], O_RDONLY);
 		if (lem->fd == -1)
-		{
-			ft_printf("input error\n");
-			exit(1);
-		}
+			error_fd();
 	}
 	else
 		lem->fd = 0;

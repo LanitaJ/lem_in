@@ -46,3 +46,28 @@ void	error_link(char *line)
 	ft_printf("Link error\n");
 	exit(1);
 }
+
+void	error_start_end()
+{
+	ft_putstr("Start/end error\n");
+	exit(0);
+}
+
+void 	error_maloc()
+{
+	ft_putstr("Malloc error\n");
+	exit (1);
+}
+
+void	error_getrooms(char *line)
+{
+	ft_putstr("Get_room error\n");
+	free(line);
+	exit(1);
+}
+
+void	error_fd()
+{
+	ft_printf("Fd error\n");
+	exit(1);
+}

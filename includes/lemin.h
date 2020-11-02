@@ -86,6 +86,10 @@ void					error_trash(char *line);
 void					error_memmory(char *line);
 void					error_map(char *line);
 void					error_link(char *line);
+void					error_maloc();
+void					error_start_end();
+void					error_getrooms(char *line);
+void 					error_fd();
 
 //Solver
 void					find_pathes(t_lemin *lem);

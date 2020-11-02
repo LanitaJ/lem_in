@@ -44,10 +44,7 @@ int add_room(t_lemin *lem, char* line)
 
 	tmp = (t_room*)malloc(sizeof(t_room) * ++(lem->num_rooms));
 	if (tmp == NULL)
-	{
-		ft_putstr("cannot malloc");
-		exit (1);
-	}
+		error_maloc();
 	while(++i != lem->num_rooms - 1)
 		tmp[i] = lem->rooms[i];
 	get_room(line, &tmp[i]);
@@ -64,10 +61,7 @@ int add_room(t_lemin *lem, char* line)
 void exit_get_room(char* line)
 {
 	if (!check_room(line))
-	{
-		ft_putstr("get_room");
-		exit(1);
-	}
+		error_getrooms(line);
 }
 
 /*парсинг комнат:
@@ -105,9 +99,6 @@ char *get_rooms(t_lemin *lem, char* line)
 			add_room(lem, line);
 	}
 	if (lem->check_start_kol != 1 || lem->check_end_kol != 1)
-	{
-		ft_putstr("error in start/end");
-		exit(0);
-	}
+		error_start_end();
 	return line;
 }
