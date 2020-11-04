@@ -89,6 +89,7 @@ int						compare(t_lemin *lem, char* str);//return number of equivalent char* wi
 t_room					*name_to_room(char *name, t_lemin *lem);
 int						add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem);
 int						altor(t_lemin *lem);
+void 					count_aunts_for_pathes(t_path	**mass_pathes, t_lemin *lem);
 
 //Error handler
 void					error_ant_count(char *line);

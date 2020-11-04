@@ -211,6 +211,32 @@ void	output_map(t_lemin lem)
 	}
 }
 
+void count_aunts_for_pathes(t_path	**mass_pathes, t_lemin *lem)
+{
+	int stage;
+	int UsableAunts;
+	int i;
+
+	UsableAunts = 0;
+	stage = 1;
+	while (1)
+	{
+		i = 0;
+		while(i != lem->ins)
+		{
+			if (UsableAunts >= lem->num_ants)
+				return;
+			if (mass_pathes[i]->length + mass_pathes[i]->count_ants < stage)
+			{
+				mass_pathes[i]->count_ants++;
+				UsableAunts++;
+			}
+			i++;
+		}
+		stage++;
+	}
+}
+
 int main(int ac, char **av)
 {
 	t_lemin lem;
@@ -267,5 +293,17 @@ int main(int ac, char **av)
 	}
 	//ft_printf("ins %d\n", lem.ins);
 	free(mass_pathes);
+	count_aunts_for_pathes(mass_pathes, &lem);
+
+	//для проверки функции count_aunts_for_pathes
+	i = 0;
+	ft_putchar('\n');
+	while (i < lem.ins)
+	{
+		ft_putchar(' ');
+		ft_putnbr(mass_pathes[i]->count_ants);
+		i++;
+	}
+
 	return (0);
 }
