@@ -96,8 +96,11 @@ void					error_trash(char *line);
 void					error_memmory(char *line);
 void					error_map(char *line);
 void					error_link(char *line);
-
+void					error_maloc();
 void					find_flags(char ***av, t_lemin *lem);
+void					error_start_end();
+void					error_fd();
+void					error_getrooms(char *line);
 
 //Solver
 t_path					**find_pathes(t_lemin *lem);

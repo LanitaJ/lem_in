@@ -26,15 +26,11 @@ static unsigned long long	ft_over(char *str, int m)
 	}
 	if (m == -1)
 	{
-		if (res == 9223372036854775807)
-			return (0);
-		if (res > 9223372036854775807)
+		if (res >= 2147483648)
 			return (0);
 		return (res);
 	}
-	if (res == 9223372036854775807)
-		return (-1);
-	if (res > 9223372036854775807)
+	if (res >= 2147483647)
 		return (-1);
 	return (res);
 }

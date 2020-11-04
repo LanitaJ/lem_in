@@ -13,7 +13,7 @@
 NAME = lem-in
 
 SRCS := main.c links.c get_rooms.c error_handle.c deadlocks.c bfs.c \
-		choose_type.c do_types.c free_all.c flags.c
+		choose_type.c do_types.c  flags.c
 OBJ = $(SRCS:.c=.o)
 
 LIB_DIR = ./ft_printf/

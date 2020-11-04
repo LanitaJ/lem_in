@@ -48,7 +48,7 @@ static int get_aunts(char* line)
 			error_ant_count(line);
 		i++;
 	}
-	if (ft_atoi(line) < 0)
+	if (ft_atoi(line) <= 0)
 		error_ant_count(line);
 	return ft_atoi(line);
 }
