@@ -20,6 +20,8 @@ int check_room(char* line)
 
 	i = 0;
 	space = 0;
+	if (line[0] == 'L')
+		error_getrooms(line);
 	while(line[i] != '\0')
 	{
 		if (line[i] == ' ')
@@ -38,6 +40,22 @@ ljerk:
 думаю стоит сделать более "гибкую" проверку
 (когда есть отступы в начале строки, пробелы в конце или между значениями)
 */
+
+void InitAnts(t_lemin *lem)
+{
+	int i;
+
+	lem->ants = (t_ant *)malloc(sizeof(t_ant) * lem->num_ants);
+	i = 1;
+	while (i != lem->num_ants + 1)
+	{
+		lem->ants[i - 1].nbr = i;
+		lem->ants[i - 1].VisitedRoom = NULL;
+		lem->ants[i - 1].UsedPath = NULL;
+		i++;
+
+	}
+}
 
 static int get_aunts(char* line)
 {
@@ -110,7 +128,8 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	int		i;
 
 	i = 0;
-	tmp = (t_room* *)malloc(sizeof(t_room*) * ++main_room->num_links);
+	main_room->num_links++;
+	tmp = (t_room* *)malloc(sizeof(t_room*) * main_room->num_links);
 	tmp_blocks = (int*)malloc(sizeof(int) * main_room->num_links);
 	if (tmp == NULL || tmp_blocks == NULL)
 		error_maloc();
@@ -148,6 +167,12 @@ int altor(t_lemin *lem)//add links to rooms
 		}
 		i++;
 	}
+	i  = 0;
+	while(i != lem->num_links)
+	{
+		free(lem->links[i].name1);
+		free(lem->links[i++].name2);
+	}
 	return (1);
 }
 
@@ -164,6 +189,7 @@ int parse_all(t_lemin *lem)
 		error_start_end();
 	lem->start_room = &(lem->rooms[lem->id_start_room]);
 	lem->end_room = &lem->rooms[lem->id_end_room];
+	InitAnts(lem);
 	return (1);
 }
 
@@ -211,7 +237,7 @@ void	output_map(t_lemin lem)
 	}
 }
 
-void count_aunts_for_pathes(t_path	**mass_pathes, t_lemin *lem)
+void count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem)
 {
 	int stage;
 	int UsableAunts;
@@ -237,6 +263,97 @@ void count_aunts_for_pathes(t_path	**mass_pathes, t_lemin *lem)
 	}
 }
 
+t_room *FindNext(t_path* path, t_room* ThisRoom)
+{
+	int i = 0;
+
+	while (i != path->length - 1)
+	{
+		if (!strcmp(path->sh[i]->name, ThisRoom->name))
+			return path->sh[i + 1];
+
+		i++;
+	}
+
+	return ThisRoom;
+}
+
+void Run(t_lemin *lem, t_path* *mass_pathes)
+{
+	int i;
+	int j;
+	int ant_i;
+
+	ant_i = 0;
+	i = 0;
+	while (i != mass_pathes[lem->num_ants % lem->ins]->length - 1 + lem->num_ants / lem->ins)
+	{
+		ant_i = 0;
+		while(lem->ants[ant_i].VisitedRoom && ant_i <= lem->num_ants - 1)
+		{
+			if (ft_strcmp(lem->ants[ant_i].VisitedRoom->name,lem->end_room->name))
+			{
+				lem->ants[ant_i].VisitedRoom = FindNext(lem->ants[ant_i].UsedPath, lem->ants[ant_i].VisitedRoom);
+				ft_putstr("L");
+				ft_putnbr(lem->ants[ant_i].nbr);
+				ft_putstr("-");
+				ft_putstr(lem->ants[ant_i].VisitedRoom->name);
+				ft_putstr(" ");
+			}
+			//ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
+			ant_i++;
+		}
+
+		j = 0;
+		while(j != lem->ins && ant_i <= lem->num_ants - 1)
+		{
+			if (mass_pathes[j]->count_ants > 0)
+			{
+
+				lem->ants[ant_i].UsedPath = mass_pathes[j];
+
+				lem->ants[ant_i].VisitedRoom = mass_pathes[j]->sh[0];
+
+				mass_pathes[j]->count_ants -= 1;
+				ft_putstr("L");
+				ft_putnbr(lem->ants[ant_i].nbr);
+				ft_putstr("-");
+				ft_putstr(lem->ants[ant_i].VisitedRoom->name);
+				//ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
+
+				ant_i++;
+
+			}
+			j++;
+		}
+
+		ft_putstr("\n");
+
+		i++;
+
+	}
+	ft_putnbr(i);
+}
+
+void free_lemin(t_lemin *lem)
+{
+	int i;
+
+	i = 0;
+	free(lem->links);
+	//free(lem->links[lem->num_links].name1);
+	//free(lem->links[lem->num_links].name2);
+	i = 0;
+
+	while (i != lem->num_rooms)
+	{
+		free(lem->rooms[i].name);
+		i++;
+	}
+	free(lem->rooms);
+	free(lem->ants);
+}
+
 int main(int ac, char **av)
 {
 	t_lemin lem;
@@ -244,7 +361,6 @@ int main(int ac, char **av)
 
 	init_lemin(&lem, ac, av);
 	parse_all(&lem);
-	ft_putnbr(lem.num_ants);
 	/*int i = 0;
 	 ft_printf("num_ants %d", lem.num_ants);
 	while(i != lem.num_rooms)
@@ -292,18 +408,11 @@ int main(int ac, char **av)
 		i++;
 	}
 	//ft_printf("ins %d\n", lem.ins);
-	free(mass_pathes);
+
 	count_aunts_for_pathes(mass_pathes, &lem);
 
-	//для проверки функции count_aunts_for_pathes
-	i = 0;
-	ft_putchar('\n');
-	while (i < lem.ins)
-	{
-		ft_putchar(' ');
-		ft_putnbr(mass_pathes[i]->count_ants);
-		i++;
-	}
-
+	Run(&lem, mass_pathes);
+	free(mass_pathes);
+	free_lemin(&lem);
 	return (0);
 }

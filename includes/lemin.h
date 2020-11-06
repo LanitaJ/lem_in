@@ -47,6 +47,13 @@ typedef struct			s_path
 	int					count_ants;	//количество муравьев на пути
 }						t_path;
 
+typedef struct 			s_ant
+{
+	int					nbr;
+	t_room*				VisitedRoom;
+	t_path*				UsedPath;
+}						t_ant;
+
 typedef	struct			s_lemin
 {
 	int					num_links;
@@ -67,6 +74,7 @@ typedef	struct			s_lemin
 	t_room				*start_room;
 	t_room				*end_room;
 	t_link*				links;
+	t_ant*				ants;
 }						t_lemin;
 
 void					get_link(char* line, t_link *l, t_lemin *lem);

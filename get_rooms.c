@@ -78,6 +78,7 @@ char *get_rooms(t_lemin *lem, char* line)
 		if (!ft_strcmp(line, "##start"))
 		{
 			lem->check_start_kol++;
+			free(line);
 			get_next_line(lem->fd, &line);
 			exit_get_room(line);
 			lem->id_start_room = lem->num_rooms;
@@ -87,6 +88,7 @@ char *get_rooms(t_lemin *lem, char* line)
 		else if (!ft_strcmp(line, "##end"))
 		{
 			lem->check_end_kol++;
+			free(line);
 			get_next_line(lem->fd, &line);
 			exit_get_room(line);
 			lem->id_end_room = lem->num_rooms;

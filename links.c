@@ -89,8 +89,7 @@ int add_link(t_lemin *lem, char* line)
 	while(++i != lem->num_links - 1)
 		tmp[i] = lem->links[i];
 	get_link(line, &tmp[i], lem);
-	if (lem->num_links != 1)
-		free(lem->links);
+	free(lem->links);
 	free(line);
 	lem->links = tmp;
 	return 1;
