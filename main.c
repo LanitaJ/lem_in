@@ -181,6 +181,8 @@ int parse_all(t_lemin *lem)
 	char* line;
 
 	get_next_line(lem->fd, &line);
+	ft_putstr(line);
+	ft_putstr("\n");
 	lem->num_ants = get_aunts(line);
 	free(line);
 	//ft_printf("%d", lem->num_ants);
@@ -303,34 +305,25 @@ void Run(t_lemin *lem, t_path* *mass_pathes)
 			//ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
 			ant_i++;
 		}
-
 		j = 0;
 		while(j != lem->ins && ant_i <= lem->num_ants - 1)
 		{
 			if (mass_pathes[j]->count_ants > 0)
 			{
-
 				lem->ants[ant_i].UsedPath = mass_pathes[j];
-
-				lem->ants[ant_i].VisitedRoom = mass_pathes[j]->sh[0];
-
+				lem->ants[ant_i].VisitedRoom = mass_pathes[j]->sh[1];
 				mass_pathes[j]->count_ants -= 1;
 				ft_putstr("L");
 				ft_putnbr(lem->ants[ant_i].nbr);
 				ft_putstr("-");
 				ft_putstr(lem->ants[ant_i].VisitedRoom->name);
 				//ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
-
 				ant_i++;
-
 			}
 			j++;
 		}
-
 		ft_putstr("\n");
-
 		i++;
-
 	}
 	ft_putnbr(i);
 }
@@ -341,10 +334,7 @@ void free_lemin(t_lemin *lem)
 
 	i = 0;
 	free(lem->links);
-	//free(lem->links[lem->num_links].name1);
-	//free(lem->links[lem->num_links].name2);
 	i = 0;
-
 	while (i != lem->num_rooms)
 	{
 		free(lem->rooms[i].name);

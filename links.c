@@ -130,6 +130,8 @@ int get_links(t_lemin *lem, char *line)
 	add_link(lem, line);
 	while(get_next_line(lem->fd, &line))
 	{
+		ft_putstr(line);
+		ft_putstr("\n");
 		if (line[0] == '#')
 			free(line);
 		else

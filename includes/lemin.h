@@ -89,6 +89,7 @@ int						add_room(t_lemin *lem, char* line);
 void					exit_get_room(char* line);
 int						get_first_room(char* line, t_link *l);
 int						get_second_room(char *line, t_link *l);
+//void 					out_map(t_lemin *lem);
 
 int						numlen(int nbr);
 int						check_room(char* line);
