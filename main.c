@@ -280,15 +280,31 @@ t_room *FindNext(t_path* path, t_room* ThisRoom)
 	return ThisRoom;
 }
 
+int count_iterations(t_lemin *lem, t_path* *mass_pathes)
+{
+	int i = 0;
+	int max;
+	max = -1;
+	while (i != lem->ins)
+	{
+		if (max < mass_pathes[i]->length - 1 + mass_pathes[i]->count_ants && mass_pathes[i]->count_ants != 0)
+			max = mass_pathes[i]->length - 1 + mass_pathes[i]->count_ants;
+		i++;
+	}
+	return max;
+}
+
 void Run(t_lemin *lem, t_path* *mass_pathes)
 {
 	int i;
+	int max;
 	int j;
 	int ant_i;
 
+	max = count_iterations(lem, mass_pathes);
 	ant_i = 0;
 	i = 0;
-	while (i != mass_pathes[lem->num_ants % lem->ins]->length - 1 + lem->num_ants / lem->ins)
+	while (i != max)
 	{
 		ant_i = 0;
 		while(lem->ants[ant_i].VisitedRoom && ant_i <= lem->num_ants - 1)
@@ -296,13 +312,8 @@ void Run(t_lemin *lem, t_path* *mass_pathes)
 			if (ft_strcmp(lem->ants[ant_i].VisitedRoom->name,lem->end_room->name))
 			{
 				lem->ants[ant_i].VisitedRoom = FindNext(lem->ants[ant_i].UsedPath, lem->ants[ant_i].VisitedRoom);
-				ft_putstr("L");
-				ft_putnbr(lem->ants[ant_i].nbr);
-				ft_putstr("-");
-				ft_putstr(lem->ants[ant_i].VisitedRoom->name);
-				ft_putstr(" ");
+				ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
 			}
-			//ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
 			ant_i++;
 		}
 		j = 0;
@@ -313,11 +324,7 @@ void Run(t_lemin *lem, t_path* *mass_pathes)
 				lem->ants[ant_i].UsedPath = mass_pathes[j];
 				lem->ants[ant_i].VisitedRoom = mass_pathes[j]->sh[1];
 				mass_pathes[j]->count_ants -= 1;
-				ft_putstr("L");
-				ft_putnbr(lem->ants[ant_i].nbr);
-				ft_putstr("-");
-				ft_putstr(lem->ants[ant_i].VisitedRoom->name);
-				//ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
+				ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
 				ant_i++;
 			}
 			j++;
@@ -338,6 +345,7 @@ void free_lemin(t_lemin *lem)
 	while (i != lem->num_rooms)
 	{
 		free(lem->rooms[i].name);
+		free_main_room(&lem->rooms[i]);
 		i++;
 	}
 	free(lem->rooms);
