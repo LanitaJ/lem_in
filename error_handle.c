@@ -50,10 +50,10 @@ void	error_link(char *line)
 void	error_start_end()
 {
 	ft_putstr("Start/end error\n");
-	exit(0);
+	exit(1);
 }
 
-void 	error_maloc()
+void 	error_malloc(void)
 {
 	ft_putstr("Malloc error\n");
 	exit (1);
@@ -66,8 +66,22 @@ void	error_getrooms(char *line)
 	exit(1);
 }
 
-void	error_fd()
+void	error_fd(void)
 {
 	ft_printf("Fd error\n");
+	exit(1);
+}
+
+void	error_coord(t_lemin *lem, t_room *r1, t_room *r2)
+{
+	free_lemin(lem);
+	ft_printf("Duplicate coords name: %s x: %d y: %d and name: %s x: %d y: %d",\
+		r1->name, r1->x, r1->y, r2->name, r2->x, r2->y);
+	exit(1);
+}
+
+void error_count_args()
+{
+	ft_printf("Usage: ./lem-in < name.map or ./lem-in name.map\n");
 	exit(1);
 }

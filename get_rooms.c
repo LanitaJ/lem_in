@@ -40,21 +40,19 @@ int get_room(char* line, t_room *room)
 int add_room(t_lemin *lem, char* line)
 {
 	t_room* tmp;
-	int i = -1;
+	int i;
 
+	i = -1;
 	tmp = (t_room*)malloc(sizeof(t_room) * ++(lem->num_rooms));
 	if (tmp == NULL)
-		error_maloc();
+		error_malloc();
 	while(++i != lem->num_rooms - 1)
 		tmp[i] = lem->rooms[i];
 	get_room(line, &tmp[i]);
-	/* 
-	если раскомментить то вылетает ошибка, не понимаю почему(ljerk)
-	 */
 	free(lem->rooms);
-	free(line);//раскоментил, ошибок нет не щнаю почему (icanker)
+	free(line);
 	lem->rooms = tmp;
-	return 1;
+	return (1);
 }
 
 //добавочная функция для проверки комнат
@@ -75,38 +73,33 @@ char *get_rooms(t_lemin *lem, char* line)
 {
 	while(get_next_line(lem->fd, &line) && check_line(line))
 	{
-		ft_putstr(line);
-		ft_putstr("\n");
+		ft_printf("%s\n", line);
 		if (!ft_strcmp(line, "##start"))
 		{
 			lem->check_start_kol++;
 			free(line);
 			get_next_line(lem->fd, &line);
-			ft_putstr(line);
-			ft_putstr("\n");
+			ft_printf("%s\n", line);
 			exit_get_room(line);
 			lem->id_start_room = lem->num_rooms;
 			add_room(lem, line);
-
 		}
 		else if (!ft_strcmp(line, "##end"))
 		{
 			lem->check_end_kol++;
 			free(line);
 			get_next_line(lem->fd, &line);
-			ft_putstr(line);
-			ft_putstr("\n");
+			ft_printf("%s\n", line);
 			exit_get_room(line);
 			lem->id_end_room = lem->num_rooms;
 			add_room(lem, line);
 		}
-		else if (line[0] == '#') {
+		else if (line[0] == '#')
 			free(line);
-		}
 		else
 			add_room(lem, line);
 	}
 	if (lem->check_start_kol != 1 || lem->check_end_kol != 1)
 		error_start_end();
-	return line;
+	return (line);
 }

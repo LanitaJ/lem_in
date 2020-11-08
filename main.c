@@ -1,6 +1,5 @@
 #include "includes/lemin.h"
 
-//разряд инта !!!пример 1234 - разряд 4
 int numlen(int nbr)
 {
 	int	res;
@@ -12,26 +11,16 @@ int numlen(int nbr)
 		return (res);
 }
 
-//чек на имя комнаты
-int check_room(char* line)
+void		init_id(t_lemin *lem)
 {
-	int i;
-	int space;
+	int	id;
 
-	i = 0;
-	space = 0;
-	if (line[0] == 'L')
-		error_getrooms(line);
-	while(line[i] != '\0')
+	id = 0;
+	while (id < lem->num_rooms)
 	{
-		if (line[i] == ' ')
-		{
-			if (line[i + 1] != ' ')
-				space++;
-		}
-		i++;
+		lem->rooms[id].id = id;
+		id++;
 	}
-	return (space == 2) ? 1 : 0;
 }
 
 //проверить комнату
@@ -68,15 +57,10 @@ static int get_aunts(char* line)
 	}
 	if (ft_atoi(line) <= 0)
 		error_ant_count(line);
-	return ft_atoi(line);
+	return (ft_atoi(line));
 }
 
-int check_line(char* line)
-{
-	if (line[0] == '#')
-		return (1);
-	return (check_room(line));
-}
+
 
 //возвращает количество совпадений строки и комнат
 int compare(t_lemin *lem, char* str)//return number of equivalent char* with rooms
@@ -132,7 +116,7 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 	tmp = (t_room* *)malloc(sizeof(t_room*) * main_room->num_links);
 	tmp_blocks = (int*)malloc(sizeof(int) * main_room->num_links);
 	if (tmp == NULL || tmp_blocks == NULL)
-		error_maloc();
+		error_malloc();
 	while (i != main_room->num_links - 1)
 	{
 		tmp_blocks[i] = 0;
@@ -181,11 +165,9 @@ int parse_all(t_lemin *lem)
 	char* line;
 
 	get_next_line(lem->fd, &line);
-	ft_putstr(line);
-	ft_putstr("\n");
+	ft_printf("%s\n", line);
 	lem->num_ants = get_aunts(line);
 	free(line);
-	//ft_printf("%d", lem->num_ants);
 	get_links(lem, get_rooms(lem,line));
 	if ((!lem->id_start_room && lem->id_start_room != 0) || (!lem->id_end_room && lem->id_end_room != 0))
 		error_start_end();
@@ -204,6 +186,8 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 		if (lem->fd == -1)
 			error_fd();
 	}
+	else if (ac > 2)
+		error_count_args();
 	else
 		lem->fd = 0;
 	lem->num_rooms = 0;
@@ -267,31 +251,33 @@ void count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem)
 
 t_room *FindNext(t_path* path, t_room* ThisRoom)
 {
-	int i = 0;
+	int i;
 
+	i = 0;
 	while (i != path->length - 1)
 	{
 		if (!strcmp(path->sh[i]->name, ThisRoom->name))
-			return path->sh[i + 1];
-
+			return (path->sh[i + 1]);
 		i++;
 	}
-
-	return ThisRoom;
+	return (ThisRoom);
 }
 
 int count_iterations(t_lemin *lem, t_path* *mass_pathes)
 {
-	int i = 0;
+	int i;
 	int max;
+
+	i = 0;
 	max = -1;
 	while (i != lem->ins)
 	{
-		if (max < mass_pathes[i]->length - 1 + mass_pathes[i]->count_ants && mass_pathes[i]->count_ants != 0)
+		if (max < mass_pathes[i]->length - 1 + mass_pathes[i]->count_ants && \
+				mass_pathes[i]->count_ants != 0)
 			max = mass_pathes[i]->length - 1 + mass_pathes[i]->count_ants;
 		i++;
 	}
-	return max;
+	return (max);
 }
 
 void Run(t_lemin *lem, t_path* *mass_pathes)
@@ -359,39 +345,10 @@ int main(int ac, char **av)
 
 	init_lemin(&lem, ac, av);
 	parse_all(&lem);
-	/*int i = 0;
-	 ft_printf("num_ants %d", lem.num_ants);
-	while(i != lem.num_rooms)
-	{
-		ft_printf("%s %d %d\n", lem.rooms[i].name, lem.rooms[i].x, lem.rooms[i].y);
-		i++;
-	}
-	ft_printf("%s %d %d\n", lem.start_room->name, lem.start_room->x, lem.start_room->y);
-	ft_printf("%s %d %d\n", lem.end_room->name, lem.end_room->x, lem.end_room->y);
-	
- 	int j = 0;
- 	while(j != lem.num_links)
-	{
-		ft_printf("%s-%s\n", lem.links[j].name1, lem.links[j].name2);
-		j++;
-	} */
 	altor(&lem);
- /* 	t_room *room;
- 	int i = 0;
- 	ft_putstr(lem.start_room->name);
- 	ft_putchar('\n');
- 	ft_putnbr(lem.start_room->num_links);
-	ft_putchar('\n');
- 	while(i != lem.start_room->num_links)
-	{
- 		room = lem.start_room->n_rooms[i];
- 		ft_putstr(lem.start_room->name);
- 		ft_putchar('-');
- 		ft_putstr(room->name);
-		ft_putchar(' ');
- 		i++;
-	}
-	ft_putchar('\n'); */
+
+	init_id(&lem);
+	check_coords(&lem);
 	mass_pathes = find_pathes(&lem);
 	int i = 0;
 	lem.color = 0;
@@ -405,7 +362,7 @@ int main(int ac, char **av)
 		//free(mass_pathes[i]);
 		i++;
 	}
-	//ft_printf("ins %d\n", lem.ins);
+
 
 	count_aunts_for_pathes(mass_pathes, &lem);
 

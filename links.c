@@ -27,9 +27,9 @@ int		check_link(char *line)
 int get_first_room(char* line, t_link *l)
 {
 	int i;
-	int len = 0;
-	//char *c;
+	int len;
 
+	len = 0;
 	i = 0;
 	while(line[i] != '\0')
 	{
@@ -43,11 +43,11 @@ int get_first_room(char* line, t_link *l)
 				l->name1[i] = line[i];
 				i++;
 			}
-			return 1;
+			return (1);
 		}
 		i++;
 	}
-	return 0;
+	return (0);
 }
 //получить название второй комнаты из линка !!!например: 1-2 => записываем комнату 2
 int get_second_room(char *line, t_link *l)
@@ -63,7 +63,7 @@ int get_second_room(char *line, t_link *l)
 		l->name2[i] = line[i + 1];
 		i++;
 	}
-	return 1;
+	return (1);
 }
 
 //записать связь в основную струкутуру
@@ -71,9 +71,9 @@ void get_link(char* line, t_link *l, t_lemin *lem)
 {
 	if(!get_first_room(line, l))
 		error_link(line);
-	if(!get_second_room(ft_strchr(line, '-'),l))
+	if(!get_second_room(ft_strchr(line, '-'), l))
 		error_link(line);
-	if (!(compare(lem,l->name1) * compare(lem,l->name2)))
+	if (!(compare(lem, l->name1) * compare(lem, l->name2)))
 		error_link(line);
 }
 
@@ -85,14 +85,14 @@ int add_link(t_lemin *lem, char* line)
 
 	tmp = (t_link*)malloc(sizeof(t_link) * ++(lem->num_links));
 	if (tmp == NULL)
-		error_maloc();
+		error_malloc();
 	while(++i != lem->num_links - 1)
 		tmp[i] = lem->links[i];
 	get_link(line, &tmp[i], lem);
 	free(lem->links);
 	free(line);
 	lem->links = tmp;
-	return 1;
+	return (1);
 }
 
 //проверка на наличие дублирующих линков
@@ -112,8 +112,8 @@ int check_dblinks(t_lemin *lem)
 				(!strcmp(lem->links[i].name2, lem->links[j].name2) &&
 				!strcmp(lem->links[i].name1, lem->links[j].name1)))
 			{
-				ft_putstr("error double links");
-				exit(0);
+				ft_printf(RED"Error double links"RST);
+				exit(1);
 			}
 		}
 		i++;
@@ -137,7 +137,7 @@ int get_links(t_lemin *lem, char *line)
 		else
 			add_link(lem, line);
 	}
-	return check_dblinks(lem);
+	return (check_dblinks(lem));
 }
 
 //передать ссылки на соседние комнаты
@@ -147,5 +147,5 @@ int create_link(t_room *main_room, t_link *link, t_lemin *lem)
 		add_room_to_room(main_room, link->name2, lem);
 	else
 		add_room_to_room(main_room, link->name1, lem);
-	return 1;
+	return (1);
 }

@@ -159,17 +159,6 @@ void		print_depth(t_lemin lem)
 }
 
 
-void		init_id(t_lemin *lem)
-{
-	int	id;
-
-	id = 0;
-	while (id < lem->num_rooms)
-	{
-		lem->rooms[id].id = id;
-		id++;
-	}
-}
 
 int		solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 {
@@ -205,7 +194,6 @@ t_path		**find_pathes(t_lemin *lem)
 	t_path	**mass_pathes;
 
 	lem->ins = 0;
-	init_id(lem);//можно перенести в main.c
 	if (check_shortcut(lem) == 1)
 	{
 		ft_printf("start-end link founded");
@@ -214,12 +202,12 @@ t_path		**find_pathes(t_lemin *lem)
 	lem->max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
 		lem->start_room->num_links : lem->end_room->num_links;
 	if ((mass_pathes = (t_path**)ft_memalloc(sizeof(t_path*) * lem->max_pathes)) == NULL)
-		exit(1);
+		error_malloc();
 	while (lem->max_pathes > 0 && !isolated(lem->start_room))
 	{
 		if (((path1 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL) || \
 			((path2 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL))
-			exit(1);
+			error_malloc();
 		if (solver(mass_pathes, lem, path1, path2) == 1)
 			break ;
 		/* free(path1);

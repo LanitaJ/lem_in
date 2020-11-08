@@ -106,7 +106,9 @@ void					error_trash(char *line);
 void					error_memmory(char *line);
 void					error_map(char *line);
 void					error_link(char *line);
-void					error_maloc();
+void					error_malloc();
+void					error_count_args();
+void					error_coord(t_lemin *lem, t_room *r1, t_room *r2);
 void					find_flags(char ***av, t_lemin *lem);
 void					error_start_end();
 void					error_fd();
@@ -132,7 +134,17 @@ void					del_path(t_path *path);
 void					do_type1(t_lemin *lem, t_path **mas, t_path *path1, t_path *path2);
 void					do_type2_3(t_lemin *lem, t_path **mas, t_path *path);
 
+
+//check
+int		check_room(char* line);
+int		check_line(char* line);
+void	check_coords(t_lemin *lem);
+
+
+
 //free
 void					free_path(t_path *path);
 void					free_room(t_room *room);
+void					free_lemin(t_lemin *lem);
+
 
