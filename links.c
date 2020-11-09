@@ -83,7 +83,7 @@ int add_link(t_lemin *lem, char* line)
 	t_link* tmp;
 	int i = -1;
 
-	tmp = (t_link*)malloc(sizeof(t_link) * ++(lem->num_links));
+	tmp = (t_link*)ft_memalloc(sizeof(t_link) * ++(lem->num_links));
 	if (tmp == NULL)
 		error_malloc();
 	while(++i != lem->num_links - 1)

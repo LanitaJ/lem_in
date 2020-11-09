@@ -35,8 +35,8 @@ typedef struct			s_room
 	struct s_room*		*n_rooms;
 	int					*blocks;	//0 - связь есть 1 - связи нет 
 	int					num_links;
-	int					depth;		//глубина комнаты (0 - старт, 2147483647 - конец)
-	int					visited;	//метка, что комнату посетили
+	int					depth;
+	int					visited;
 	int					id;
 }						t_room;
 
@@ -67,7 +67,6 @@ typedef	struct			s_lemin
 	int					max_pathes;
 	int					ins;
 	int					color;		//флаг -c
-	int					bonus_fd;	//флаг -f
 	int					show_path;	//флаг -p
 	t_room*				rooms;
 	t_room				*start_room;
@@ -79,6 +78,7 @@ typedef	struct			s_lemin
 void					get_link(char* line, t_link *l, t_lemin *lem);
 int						add_link(t_lemin *lem, char* line);
 int						parse_links(t_lemin *lem);
+void					parse_flags(char **av, t_lemin *lem);
 int						create_link(t_room *main_room, t_link *link, t_lemin *lem);
 int						check_link(char *line);
 int						get_links(t_lemin *lem, char *line);
@@ -88,7 +88,7 @@ int						add_room(t_lemin *lem, char* line);
 void					exit_get_room(char* line);
 int						get_first_room(char* line, t_link *l);
 int						get_second_room(char *line, t_link *l);
-//void 					out_map(t_lemin *lem);
+
 
 int						numlen(int nbr);
 int						check_room(char* line);
@@ -131,8 +131,7 @@ void					del_path(t_path *path);
 
 //do_types
 void					do_type1(t_lemin *lem, t_path **mas, t_path *path1, t_path *path2);
-void					do_type2_3(t_lemin *lem, t_path **mas, t_path *path);
-
+void					do_type2_3(t_lemin *lem, t_path **mas, t_path *path, t_path *del_path);
 
 //bonus
 void	show_pathes(t_lemin lem, t_path **mass_pathes);
@@ -146,8 +145,7 @@ void	check_coords(t_lemin *lem);
 
 
 //free
-void					free_path(t_path *path);
-void					free_room(t_room *room);
 void					free_lemin(t_lemin *lem);
+void					free_path(t_path *path);
 
 

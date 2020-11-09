@@ -43,7 +43,7 @@ int add_room(t_lemin *lem, char* line)
 	int i;
 
 	i = -1;
-	tmp = (t_room*)malloc(sizeof(t_room) * ++(lem->num_rooms));
+	tmp = (t_room*)ft_memalloc(sizeof(t_room) * ++(lem->num_rooms));
 	if (tmp == NULL)
 		error_malloc();
 	while(++i != lem->num_rooms - 1)

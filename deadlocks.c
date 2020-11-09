@@ -52,7 +52,7 @@ int		isolated(t_room *room)
 	return (1);//комната изолирована
 }
 
-void	move_back(t_lemin *lem, t_path *path)
+t_room	**move_back(t_lemin *lem, t_path *path)
 {
 	t_room	*room;//рассматриваемая комната
 	t_room	**sh; //shortest path
@@ -62,7 +62,7 @@ void	move_back(t_lemin *lem, t_path *path)
 	ins = lem->end_room->depth;
 	room = lem->end_room;
 	//кратчайший путь имеет длину = глубине конечной комнаты
-	if ((sh = (t_room**)ft_memalloc(sizeof(t_room*) * \
+	if ((sh = (t_room**)malloc(sizeof(t_room*) * \
 			(lem->end_room->depth + 1))) == NULL)
 		exit(1);
 	while (room->id != lem->start_room->id)//while rooms aren`t equal
@@ -74,13 +74,9 @@ void	move_back(t_lemin *lem, t_path *path)
 		ins--;
 		room = room->n_rooms[i];
 	}
-	sh[ins] = room;//была стартовая
-	path->sh = sh;
+	sh[ins] = room;
 	path->length = lem->end_room->depth + 1;
-	/* int j = 0;
-	while (j <= ins)
-		free(sh[j++]); */
-	//free(sh);
+	return (sh);
 }
 
 int			check_shortcut(t_lemin *lem)
@@ -97,62 +93,24 @@ int			check_shortcut(t_lemin *lem)
 	return (0);
 }
 
-void		print_path(t_path *path)
-{
-	int i;
-
-	i = 0;
-	while (i < path->length)
-	{
-		if (i != path->length - 1)
-			ft_printf("%s-", path->sh[i]->name);
-		else
-			ft_printf("%s\n", path->sh[i]->name);
-		i++;
-	}
-}
-
-void		print_path_color(t_path *path)
-{
-	int i;
-
-	i = 0;
-	while (i < path->length)
-	{
-		if (i != path->length - 1 && i % 2 == 0 && i % 4 != 0 && i % 6 != 0)
-			ft_printf(RED"%s->"RST, path->sh[i]->name);
-		else if (i != path->length - 1 && i % 3 == 0 && i % 6 != 0)
-			ft_printf(GRN"%s->"RST, path->sh[i]->name);
-		else if (i != path->length - 1 && i % 4 == 0)
-			ft_printf(YEL"%s->"RST, path->sh[i]->name);
-		else if (i != path->length - 1 && i % 5 == 0)
-			ft_printf(BLU"%s->"RST, path->sh[i]->name);
-		else if (i != path->length - 1 && i % 6 == 0)
-			ft_printf(MAG"%s->"RST, path->sh[i]->name);
-		else if (i != path->length - 1 && i % 7 == 0)
-			ft_printf(CYN"%s->"RST, path->sh[i]->name);
-		else if (i != path->length - 1)
-			ft_printf(CYN"%s->"RST, path->sh[i]->name);
-		else if (i == path->length - 1)
-			ft_printf("%s\n", path->sh[i]->name);
-		i++;
-	}
-}
-
 int		solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 {
 	bfs(lem);
 	if (lem->end_room->depth == 2147483647)
 		return (1);
-	move_back(lem, path1);
+	path1->sh = move_back(lem, path1);
 	lem->max_pathes--;
 	if (lem->max_pathes > 0)
 	{
 		del_first_link(path1->sh[1]->id, lem);
 		bfs(lem);
 		if (lem->end_room->depth == 2147483647)
+		{
+			free_path(path1);
+			free(path2);
 			return (1);
-		move_back(lem, path2);
+		}
+		path2->sh = move_back(lem, path2);
 		restore_first_link(path1->sh[1]->id, lem);
 		path_type(mas, lem, path1, path2);
 	}
@@ -161,7 +119,7 @@ int		solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 		mas[lem->ins] = path1;
         lem->ins++;
 		del_path(path1);
-		//free_path(path1);
+		free(path2);
 	}
 	return (0);
 }
@@ -180,7 +138,7 @@ t_path		**find_pathes(t_lemin *lem)
 	}
 	lem->max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
 		lem->start_room->num_links : lem->end_room->num_links;
-	if ((mass_pathes = (t_path**)ft_memalloc(sizeof(t_path*) * lem->max_pathes)) == NULL)
+	if ((mass_pathes = (t_path**)malloc(sizeof(t_path*) * lem->max_pathes)) == NULL)
 		error_malloc();
 	while (lem->max_pathes > 0 && !isolated(lem->start_room))
 	{
@@ -189,8 +147,6 @@ t_path		**find_pathes(t_lemin *lem)
 			error_malloc();
 		if (solver(mass_pathes, lem, path1, path2) == 1)
 			break ;
-		/* free(path1);
-		free(path2); */
 	}
 	return (mass_pathes);
 }

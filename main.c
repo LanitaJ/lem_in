@@ -309,22 +309,19 @@ void free_lemin(t_lemin *lem)
 	free(lem->ants);
 }
 
-void	parse_flags(char **av, t_lemin *lem)
+void	free_mass_pathes(t_path **mas, t_lemin *lem)
 {
-	int i;
+	int	i;
 
-	i = 1;
-	if (av[1][0] == '-')
-		while (av[1][i] != '\0')
-		{
-			if (av[1][i] == 'c')
-				lem->color = 1;
-			else if (av[1][i] == 'f')
-				lem->bonus_fd = 1;
-			else if (av[1][i] == 'p')
-				lem->show_path = 1;
-			i++;
-		}
+	i = 0;
+	while (i < lem->ins)
+	{
+		free(mas[i]->sh);
+		//free(mas[i]->length);
+		free(mas[i]);
+		i++;
+	}
+	free(mas);
 }
 
 int main(int ac, char **av)
@@ -348,7 +345,7 @@ int main(int ac, char **av)
 		show_pathes(lem, mass_pathes);
 	count_aunts_for_pathes(mass_pathes, &lem);
 	Run(&lem, mass_pathes);
-	free(mass_pathes);
+	free_mass_pathes(mass_pathes, &lem);
 	free_lemin(&lem);
 	return (0);
 }
