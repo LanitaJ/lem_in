@@ -66,7 +66,6 @@ typedef	struct			s_lemin
 	int 				check_end_kol;
 	int					max_pathes;
 	int					ins;
-	int					error;		//флаг -e
 	int					color;		//флаг -c
 	int					bonus_fd;	//флаг -f
 	int					show_path;	//флаг -p
@@ -133,6 +132,10 @@ void					del_path(t_path *path);
 //do_types
 void					do_type1(t_lemin *lem, t_path **mas, t_path *path1, t_path *path2);
 void					do_type2_3(t_lemin *lem, t_path **mas, t_path *path);
+
+
+//bonus
+void	show_pathes(t_lemin lem, t_path **mass_pathes);
 
 
 //check

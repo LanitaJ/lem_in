@@ -96,24 +96,18 @@ int			check_shortcut(t_lemin *lem)
 	}
 	return (0);
 }
-//удалить
-//выводит из каких name состоит путь
+
 void		print_path(t_path *path)
 {
 	int i;
 
 	i = 0;
-	ft_printf("name chain ");
 	while (i < path->length)
 	{
 		if (i != path->length - 1)
-		{
 			ft_printf("%s-", path->sh[i]->name);
-		}
 		else
-		{
-			ft_printf("%s\n\n", path->sh[i]->name);
-		}
+			ft_printf("%s\n", path->sh[i]->name);
 		i++;
 	}
 }
@@ -123,7 +117,6 @@ void		print_path_color(t_path *path)
 	int i;
 
 	i = 0;
-	ft_printf(CYN"\n\nname chain\n"RST);
 	while (i < path->length)
 	{
 		if (i != path->length - 1 && i % 2 == 0 && i % 4 != 0 && i % 6 != 0)
@@ -145,20 +138,6 @@ void		print_path_color(t_path *path)
 		i++;
 	}
 }
-
-//удалить
-void		print_depth(t_lemin lem)
-{
-	int	i = 0;
-
-	while (i < lem.num_rooms)
-	{
-		ft_printf("name: %s depth: %d\n",lem.rooms[i].name, lem.rooms[i].depth);
-		i++;
-	}
-}
-
-
 
 int		solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 {
@@ -215,4 +194,3 @@ t_path		**find_pathes(t_lemin *lem)
 	}
 	return (mass_pathes);
 }
-//добавить как бонус вывод путей

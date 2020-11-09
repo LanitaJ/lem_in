@@ -23,13 +23,6 @@ void		init_id(t_lemin *lem)
 	}
 }
 
-//проверить комнату
-/*
-ljerk:
-думаю стоит сделать более "гибкую" проверку
-(когда есть отступы в начале строки, пробелы в конце или между значениями)
-*/
-
 void InitAnts(t_lemin *lem)
 {
 	int i;
@@ -59,8 +52,6 @@ static int get_aunts(char* line)
 		error_ant_count(line);
 	return (ft_atoi(line));
 }
-
-
 
 //возвращает количество совпадений строки и комнат
 int compare(t_lemin *lem, char* str)//return number of equivalent char* with rooms
@@ -196,33 +187,6 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 	lem->check_start_kol = 0;
 }
 
-//функция вывода карты в консоль (Вспомогательная функция. После окончания проекта удалить)
-void	output_map(t_lemin lem)
-{
-	int i = 0;
-	int j = 0;
-	while(i < lem.num_rooms)
-	{
-		ft_printf("\nroom[%d] = %s\n", i, lem.rooms[i].name);
-		j = 0;
-		ft_printf("links: ");
-		while (j < lem.rooms[i].num_links)
-		{
-			ft_printf("%s ", lem.rooms[i].n_rooms[j]->name);
-			j++;
-		}
-		j = 0;
-		ft_printf("blocks: ");
-		while (j < lem.rooms[i].num_links)
-		{
-			ft_printf("%d ", lem.rooms[i].blocks[j]);
-			j++;
-		}
-		ft_printf("\n-------------------\n");
-		i++;
-	}
-}
-
 void count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem)
 {
 	int stage;
@@ -231,13 +195,18 @@ void count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem)
 
 	UsableAunts = 0;
 	stage = 1;
+	i = 0;
+	while(i < lem->ins)
+		mass_pathes[i++]->count_ants = 0;
 	while (1)
 	{
 		i = 0;
+		if (i == lem->ins)
+			return ;
 		while(i != lem->ins)
 		{
 			if (UsableAunts >= lem->num_ants)
-				return;
+				return ;
 			if (mass_pathes[i]->length + mass_pathes[i]->count_ants < stage)
 			{
 				mass_pathes[i]->count_ants++;
@@ -277,6 +246,7 @@ int count_iterations(t_lemin *lem, t_path* *mass_pathes)
 			max = mass_pathes[i]->length - 1 + mass_pathes[i]->count_ants;
 		i++;
 	}
+	//ft_printf("max %d\n", max);
 	return (max);
 }
 
@@ -290,8 +260,10 @@ void Run(t_lemin *lem, t_path* *mass_pathes)
 	max = count_iterations(lem, mass_pathes);
 	ant_i = 0;
 	i = 0;
+	ft_bzero(lem->ants, sizeof(lem->ants));
 	while (i != max)
 	{
+		ft_putstr("\n");
 		ant_i = 0;
 		while(lem->ants[ant_i].VisitedRoom && ant_i <= lem->num_ants - 1)
 		{
@@ -315,10 +287,9 @@ void Run(t_lemin *lem, t_path* *mass_pathes)
 			}
 			j++;
 		}
-		ft_putstr("\n");
 		i++;
 	}
-	ft_putnbr(i);
+	//ft_printf("i = %d\n", i);
 }
 
 void free_lemin(t_lemin *lem)
@@ -338,34 +309,44 @@ void free_lemin(t_lemin *lem)
 	free(lem->ants);
 }
 
+void	parse_flags(char **av, t_lemin *lem)
+{
+	int i;
+
+	i = 1;
+	if (av[1][0] == '-')
+		while (av[1][i] != '\0')
+		{
+			if (av[1][i] == 'c')
+				lem->color = 1;
+			else if (av[1][i] == 'f')
+				lem->bonus_fd = 1;
+			else if (av[1][i] == 'p')
+				lem->show_path = 1;
+			i++;
+		}
+}
+
 int main(int ac, char **av)
 {
 	t_lemin lem;
 	t_path	**mass_pathes;
 
+	if (ac == 3)
+	{
+		parse_flags(av, &lem);
+		av++;
+		ac--;
+	}
 	init_lemin(&lem, ac, av);
 	parse_all(&lem);
 	altor(&lem);
-
 	init_id(&lem);
 	check_coords(&lem);
 	mass_pathes = find_pathes(&lem);
-	int i = 0;
-	lem.color = 0;
-	//вывод всех путей в консоль
-	while (i < lem.ins)
-	{
-		if (lem.color == 1)
-			print_path_color(mass_pathes[i]);
-		else
-			print_path(mass_pathes[i]);
-		//free(mass_pathes[i]);
-		i++;
-	}
-
-
+	if (lem.show_path == 1)
+		show_pathes(lem, mass_pathes);
 	count_aunts_for_pathes(mass_pathes, &lem);
-
 	Run(&lem, mass_pathes);
 	free(mass_pathes);
 	free_lemin(&lem);
