@@ -1,0 +1,55 @@
+#include "includes/lemin.h"
+
+void	del_first_link(int id_isol_room, t_lemin *lem)
+{
+	int	i;
+
+	i = 0;
+	while (i < lem->start_room->num_links)
+	{
+		if (id_isol_room == lem->start_room->n_rooms[i]->id)
+			lem->start_room->blocks[i] = 1;
+		i++;
+	}
+}
+
+void	restore_first_link(int id_restore_room, t_lemin *lem)
+{
+	int	i;
+
+	i = 0;
+	while (i < lem->start_room->num_links)
+	{
+		if (id_restore_room == lem->start_room->n_rooms[i]->id)
+			lem->start_room->blocks[i] = 0;
+		i++;
+	}
+}
+
+int		isolated(t_room *room)
+{
+	int i;
+
+	i = 0;
+	while (i < room->num_links)
+	{
+		if (room->blocks[i] == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int			check_shortcut(t_lemin *lem)
+{
+	int	i;
+
+	i = 0;
+	while (i < lem->start_room->num_links)
+	{
+		if (lem->start_room->n_rooms[i]->id == lem->end_room->id)
+			return (1);
+		i++;
+	}
+	return (0);
+}

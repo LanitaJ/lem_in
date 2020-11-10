@@ -70,6 +70,7 @@ typedef	struct			s_lemin
 	int					ins;
 	int					color;		//флаг -c
 	int					show_path;	//флаг -p
+	int					num_lines;	//флаг -n
 	t_room*				rooms;
 	t_room				*start_room;
 	t_room				*end_room;
@@ -112,6 +113,7 @@ void					error_map(char *line);
 void					error_link(char *line);
 void					error_malloc();
 void					error_count_args();
+void					error_isolated_start(t_lemin *lem);
 void					error_coord(t_lemin *lem, t_room *r1, t_room *r2);
 void					find_flags(char ***av, t_lemin *lem);
 void					error_start_end();
@@ -153,5 +155,12 @@ void	check_coords(t_lemin *lem);
 //free
 void					free_lemin(t_lemin *lem);
 void					free_path(t_path *path);
+void					free_mass_pathes(t_path **mas, t_lemin *lem);
+void					free_main_room(t_room *main_room);
+
+int						check_shortcut(t_lemin *lem);
+int						isolated(t_room *room);
+void					del_first_link(int id_isol_room, t_lemin *lem);
+void					restore_first_link(int id_restore_room, t_lemin *lem);
 
 

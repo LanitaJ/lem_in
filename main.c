@@ -89,13 +89,6 @@ t_room *name_to_room(char *name, t_lemin *lem)
 	exit(1);
 }
 
-static void free_main_room(t_room *main_room) //дополнить чистку
-{
-	free(main_room->n_rooms);
-	free(main_room->blocks);
-}
-
-//добавить связующую комнату(по названию name_add) к основной комнате(main_roon)
 int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 {
 	t_room*	*tmp;
@@ -189,38 +182,6 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 	lem->check_start_kol = 0;
 }
 
-void free_lemin(t_lemin *lem)
-{
-	int i;
-
-	i = 0;
-	free(lem->links);
-	i = 0;
-	while (i != lem->num_rooms)
-	{
-		free(lem->rooms[i].name);
-		free_main_room(&lem->rooms[i]);
-		i++;
-	}
-	free(lem->rooms);
-	free(lem->ants);
-}
-
-void	free_mass_pathes(t_path **mas, t_lemin *lem)
-{
-	int	i;
-
-	i = 0;
-	while (i < lem->ins)
-	{
-		free(mas[i]->sh);
-		//free(mas[i]->length);
-		free(mas[i]);
-		i++;
-	}
-	free(mas);
-}
-
 int main(int ac, char **av)
 {
 	t_lemin lem;
@@ -237,6 +198,8 @@ int main(int ac, char **av)
 	altor(&lem);
 	init_id(&lem);
 	check_coords(&lem);
+	if (isolated(lem.start_room))
+		error_isolated_start(&lem);
 	mass_pathes = find_pathes(&lem);
 	if (lem.show_path == 1)
 		show_pathes(lem, mass_pathes);

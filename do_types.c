@@ -1,11 +1,5 @@
 #include "includes/lemin.h"
 
-void	free_path(t_path *path)
-{
-	free(path->sh);
-	free(path);
-}
-
 void	do_type1(t_lemin *lem, t_path **mas, t_path *path1, t_path *path2)
 {
 	mas[lem->ins] = path1;

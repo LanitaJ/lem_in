@@ -94,7 +94,6 @@ void print_solve(t_lemin *lem, t_path* *mass_pathes)
 	int max;
 	int j;
 
-
 	max = count_iterations(lem, mass_pathes);
 	i = 0;
 	ft_bzero(lem->ants, sizeof(lem->ants));
@@ -104,4 +103,7 @@ void print_solve(t_lemin *lem, t_path* *mass_pathes)
 		do_iteration(&j, lem, mass_pathes);
 		i++;
 	}
+	if (lem->num_lines == 1)
+		lem->color ? ft_printf(GRN"Count of lines: %d\n"RST, max) : \
+						ft_printf("Count of lines: %d\n", max);
 }

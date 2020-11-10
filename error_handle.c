@@ -85,3 +85,10 @@ void error_count_args()
 	ft_printf("Usage: ./lem-in < name.map or ./lem-in name.map\n");
 	exit(1);
 }
+
+void	error_isolated_start(t_lemin *lem)
+{
+	ft_printf("{fd}Start isolated\n", 2);
+	free_lemin(lem);
+	exit(1);
+}

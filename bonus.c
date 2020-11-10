@@ -11,6 +11,8 @@ void	parse_flags(char **av, t_lemin *lem)
 				lem->color = 1;
 			else if (av[1][i] == 'p')
 				lem->show_path = 1;
+			else if (av[1][i] == 'n')
+				lem->num_lines = 1;
 			i++;
 		}
 }
