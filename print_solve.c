@@ -79,8 +79,7 @@ static	void	do_iteration(int *j, t_lemin *lem, t_path **pathes, int *a_i)
 		{
 			lem->ants[*a_i].VisitedRoom = findnext(lem->ants[*a_i].UsedPath,
 				lem->ants[*a_i].VisitedRoom);
-			ft_printf("L%d-%s ", lem->ants[*a_i].nbr,
-				lem->ants[*a_i].VisitedRoom->name);
+			print_color_solve(lem, a_i);
 		}
 		(*a_i)++;
 	}
@@ -92,8 +91,7 @@ static	void	do_iteration(int *j, t_lemin *lem, t_path **pathes, int *a_i)
 			lem->ants[*a_i].UsedPath = pathes[*j];
 			lem->ants[*a_i].VisitedRoom = pathes[*j]->sh[1];
 			pathes[*j]->count_ants -= 1;
-			ft_printf("L%d-%s ",
-				lem->ants[*a_i].nbr, lem->ants[*a_i].VisitedRoom->name);
+			print_color_solve(lem, a_i);
 			(*a_i)++;
 		}
 		(*j)++;

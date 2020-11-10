@@ -4,8 +4,8 @@
 void		parse_flags(char **av, t_lemin *lem)
 {
 	int i;
-
-	i = 1;s
+	lem->bonus = 0;
+	i = 1;
 	if (av[1][0] == '-')
 		while (av[1][i] != '\0')
 		{
@@ -17,6 +17,8 @@ void		parse_flags(char **av, t_lemin *lem)
 				lem->num_lines = 1;
 			i++;
 		}
+	if (lem->color == 1 || lem->show_path == 1 || lem->num_lines == 1)
+		lem->bonus = 1;
 }
 
 void		print_path(t_path *path)
@@ -78,4 +80,31 @@ void		show_pathes(t_lemin lem, t_path **mass_pathes)
 			print_path(mass_pathes[i]);
 		i++;
 	}
+}
+
+void		print_color_solve(t_lemin *lem, int *a_i)
+{
+	if (lem->color == 1)
+	{
+		if (*a_i % 2 == 0 &&*a_i % 4 != 0 &&*a_i % 6 != 0)
+			ft_printf(RED"L%d-%s "RST, lem->ants[*a_i].nbr,\
+				lem->ants[*a_i].VisitedRoom->name);
+		else if (*a_i % 3 == 0 && *a_i % 6 != 0)
+			ft_printf(GRN"L%d-%s "RST, lem->ants[*a_i].nbr,\
+				lem->ants[*a_i].VisitedRoom->name);
+		else if (*a_i % 4 == 0)
+			ft_printf(CYN"L%d-%s "RST, lem->ants[*a_i].nbr,\
+				lem->ants[*a_i].VisitedRoom->name);
+		else if (*a_i % 5 == 0)
+			ft_printf(BLU"L%d-%s "RST, lem->ants[*a_i].nbr,\
+				lem->ants[*a_i].VisitedRoom->name);
+		else if (*a_i % 6 == 0)
+			ft_printf(MAG"L%d-%s "RST, lem->ants[*a_i].nbr,\
+				lem->ants[*a_i].VisitedRoom->name);
+		else
+			ft_printf(YEL"L%d-%s "RST, lem->ants[*a_i].nbr,\
+				lem->ants[*a_i].VisitedRoom->name);
+	}
+	else
+		ft_printf("L%d-%s ", lem->ants[*a_i].nbr, lem->ants[*a_i].VisitedRoom->name);
 }

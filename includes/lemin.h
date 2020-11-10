@@ -71,6 +71,7 @@ typedef	struct			s_lemin
 	int					color;		//флаг -c
 	int					show_path;	//флаг -p
 	int					num_lines;	//флаг -n
+	int					bonus;
 	t_room*				rooms;
 	t_room				*start_room;
 	t_room				*end_room;
@@ -168,5 +169,5 @@ int						check_shortcut(t_lemin *lem);
 int						isolated(t_room *room);
 void					del_first_link(int id_isol_room, t_lemin *lem);
 void					restore_first_link(int id_restore_room, t_lemin *lem);
-
+void					print_color_solve(t_lemin *lem, int *a_i);
 
