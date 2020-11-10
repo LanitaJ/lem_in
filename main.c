@@ -1,8 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: icanker <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/10 16:11:36 by icanker           #+#    #+#             */
+/*   Updated: 2020/11/10 16:11:38 by icanker          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/lemin.h"
 
-static int get_aunts(char* line)
+static	int	get_aunts(char *line)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (line[i] != '\0')
 	{
 		if (line[i] > '9' || line[i] < '0')
@@ -14,16 +28,17 @@ static int get_aunts(char* line)
 	return (ft_atoi(line));
 }
 
-int parse_all(t_lemin *lem)
+int			parse_all(t_lemin *lem)
 {
-	char* line;
+	char	*line;
 
 	get_next_line(lem->fd, &line);
 	ft_printf("%s\n", line);
 	lem->num_ants = get_aunts(line);
 	free(line);
-	get_links(lem, get_rooms(lem,line));
-	if ((!lem->id_start_room && lem->id_start_room != 0) || (!lem->id_end_room && lem->id_end_room != 0))
+	get_links(lem, get_rooms(lem, line));
+	if ((!lem->id_start_room && lem->id_start_room != 0) ||
+		(!lem->id_end_room && lem->id_end_room != 0))
 		error_start_end();
 	lem->start_room = &(lem->rooms[lem->id_start_room]);
 	lem->end_room = &lem->rooms[lem->id_end_room];
@@ -31,7 +46,7 @@ int parse_all(t_lemin *lem)
 	return (1);
 }
 
-void free_lemin(t_lemin *lem)
+void		free_lemin(t_lemin *lem)
 {
 	int i;
 
@@ -48,7 +63,7 @@ void free_lemin(t_lemin *lem)
 	free(lem->ants);
 }
 
-void	free_mass_pathes(t_path **mas, t_lemin *lem)
+void		free_mass_pathes(t_path **mas, t_lemin *lem)
 {
 	int	i;
 
@@ -56,16 +71,15 @@ void	free_mass_pathes(t_path **mas, t_lemin *lem)
 	while (i < lem->ins)
 	{
 		free(mas[i]->sh);
-		//free(mas[i]->length);
 		free(mas[i]);
 		i++;
 	}
 	free(mas);
 }
 
-int main(int ac, char **av)
+int			main(int ac, char **av)
 {
-	t_lemin lem;
+	t_lemin	lem;
 	t_path	**mass_pathes;
 
 	if (ac == 3)
