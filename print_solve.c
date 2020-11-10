@@ -82,7 +82,7 @@ static	void	do_iteration(int *j, t_lemin *lem, t_path **pathes, int *a_i)
 			ft_printf("L%d-%s ", lem->ants[*a_i].nbr,
 				lem->ants[*a_i].VisitedRoom->name);
 		}
-		*a_i++;
+		(*a_i)++;
 	}
 	*j = 0;
 	while (*j != lem->ins && *a_i <= lem->num_ants - 1)
@@ -94,7 +94,7 @@ static	void	do_iteration(int *j, t_lemin *lem, t_path **pathes, int *a_i)
 			pathes[*j]->count_ants -= 1;
 			ft_printf("L%d-%s ",
 				lem->ants[*a_i].nbr, lem->ants[*a_i].VisitedRoom->name);
-			*a_i++;
+			(*a_i)++;
 		}
 		(*j)++;
 	}
@@ -109,7 +109,6 @@ void			print_solve(t_lemin *lem, t_path **pathes)
 
 	max = count_iterations(lem, pathes);
 	i = 0;
-	ft_bzero(lem->ants, sizeof(lem->ants));
 	while (i != max)
 	{
 		a_i = 0;
