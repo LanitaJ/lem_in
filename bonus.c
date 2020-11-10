@@ -17,7 +17,6 @@ void	parse_flags(char **av, t_lemin *lem)
 		}
 }
 
-
 void		print_path(t_path *path)
 {
 	int i;
@@ -78,4 +77,3 @@ void	show_pathes(t_lemin lem, t_path **mass_pathes)
 			i++;
 		}
 }
-
