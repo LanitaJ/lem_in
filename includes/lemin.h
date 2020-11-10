@@ -108,7 +108,7 @@ int						altor(t_lemin *lem);
 void 					count_aunts_for_pathes(t_path	**mass_pathes, t_lemin *lem);
 int 					count_iterations(t_lemin *lem, t_path* *mass_pathes);
 void 					count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem);
-t_room 					*FindNext(t_path* path, t_room* ThisRoom);
+t_room 					*findnext(t_path* path, t_room* ThisRoom);
 
 //Error handler
 void					error_ant_count(char *line);

@@ -12,25 +12,26 @@
 
 #include "includes/lemin.h"
 
-void count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem)
+void			count_aunts_for_pathes(t_path **pathes, t_lemin *lem)
 {
 	int i;
 
 	i = 0;
-	while(i < lem->ins)
-		mass_pathes[i++]->count_ants = 0;
+	while (i < lem->ins)
+		pathes[i++]->count_ants = 0;
 	while (1)
 	{
 		i = 0;
 		if (i == lem->ins)
 			return ;
-		while(i != lem->ins)
+		while (i != lem->ins)
 		{
 			if (lem->UsableAunts >= lem->num_ants)
 				return ;
-			if (mass_pathes[i]->length + mass_pathes[i]->count_ants < lem->stage)
+			if (pathes[i]->length + pathes[i]->count_ants
+				< lem->stage)
 			{
-				mass_pathes[i]->count_ants++;
+				pathes[i]->count_ants++;
 				lem->UsableAunts++;
 			}
 			i++;
@@ -39,21 +40,21 @@ void count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem)
 	}
 }
 
-t_room *FindNext(t_path* path, t_room* ThisRoom)
+t_room			*findnext(t_path *path, t_room *this_room)
 {
 	int i;
 
 	i = 0;
 	while (i != path->length - 1)
 	{
-		if (!strcmp(path->sh[i]->name, ThisRoom->name))
+		if (!strcmp(path->sh[i]->name, this_room->name))
 			return (path->sh[i + 1]);
 		i++;
 	}
-	return (ThisRoom);
+	return (this_room);
 }
 
-int count_iterations(t_lemin *lem, t_path* *mass_pathes)
+int				count_iterations(t_lemin *lem, t_path **pathes)
 {
 	int i;
 	int max;
@@ -62,58 +63,58 @@ int count_iterations(t_lemin *lem, t_path* *mass_pathes)
 	max = -1;
 	while (i != lem->ins)
 	{
-		if (max < mass_pathes[i]->length - 1 + mass_pathes[i]->count_ants && \
-				mass_pathes[i]->count_ants != 0)
-			max = mass_pathes[i]->length - 1 + mass_pathes[i]->count_ants;
+		if (max < pathes[i]->length - 1 + pathes[i]->count_ants && \
+				pathes[i]->count_ants != 0)
+			max = pathes[i]->length - 1 + pathes[i]->count_ants;
 		i++;
 	}
-	//ft_printf("max %d\n", max);
 	return (max);
 }
 
-static void do_iteration(int *j, t_lemin *lem, t_path* *mass_pathes)
+static	void	do_iteration(int *j, t_lemin *lem, t_path **pathes, int *a_i)
 {
-	int ant_i;
-
-	ant_i = 0;
-	while(lem->ants[ant_i].VisitedRoom && ant_i <= lem->num_ants - 1)
+	while (lem->ants[*a_i].VisitedRoom && *a_i <= lem->num_ants - 1)
 	{
-		if (ft_strcmp(lem->ants[ant_i].VisitedRoom->name,lem->end_room->name))
+		if (ft_strcmp(lem->ants[*a_i].VisitedRoom->name, lem->end_room->name))
 		{
-			lem->ants[ant_i].VisitedRoom = FindNext(lem->ants[ant_i].UsedPath, lem->ants[ant_i].VisitedRoom);
-			ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
+			lem->ants[*a_i].VisitedRoom = findnext(lem->ants[*a_i].UsedPath,
+				lem->ants[*a_i].VisitedRoom);
+			ft_printf("L%d-%s ", lem->ants[*a_i].nbr,
+				lem->ants[*a_i].VisitedRoom->name);
 		}
-		ant_i++;
+		*a_i++;
 	}
 	*j = 0;
-	while(*j != lem->ins && ant_i <= lem->num_ants - 1)
+	while (*j != lem->ins && *a_i <= lem->num_ants - 1)
 	{
-		if (mass_pathes[*j]->count_ants > 0)
+		if (pathes[*j]->count_ants > 0)
 		{
-			lem->ants[ant_i].UsedPath = mass_pathes[*j];
-			lem->ants[ant_i].VisitedRoom = mass_pathes[*j]->sh[1];
-			mass_pathes[*j]->count_ants -= 1;
-			ft_printf("L%d-%s ", lem->ants[ant_i].nbr, lem->ants[ant_i].VisitedRoom->name);
-			ant_i++;
+			lem->ants[*a_i].UsedPath = pathes[*j];
+			lem->ants[*a_i].VisitedRoom = pathes[*j]->sh[1];
+			pathes[*j]->count_ants -= 1;
+			ft_printf("L%d-%s ",
+				lem->ants[*a_i].nbr, lem->ants[*a_i].VisitedRoom->name);
+			*a_i++;
 		}
 		(*j)++;
 	}
-};
+}
 
-void print_solve(t_lemin *lem, t_path* *mass_pathes)
+void			print_solve(t_lemin *lem, t_path **pathes)
 {
 	int i;
 	int max;
 	int j;
+	int a_i;
 
-
-	max = count_iterations(lem, mass_pathes);
+	max = count_iterations(lem, pathes);
 	i = 0;
 	ft_bzero(lem->ants, sizeof(lem->ants));
 	while (i != max)
 	{
+		a_i = 0;
 		ft_putstr("\n");
-		do_iteration(&j, lem, mass_pathes);
+		do_iteration(&j, lem, pathes, &a_i);
 		i++;
 	}
 }
