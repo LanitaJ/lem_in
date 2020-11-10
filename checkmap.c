@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checkmap.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: icanker <icanker@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/10 15:59:26 by icanker           #+#    #+#             */
+/*   Updated: 2020/11/10 16:00:25 by icanker          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/lemin.h"
 
-//чек на имя комнаты
-int check_room(char* line)
+int		check_room(char *line)
 {
 	int i;
 	int space;
@@ -10,7 +21,7 @@ int check_room(char* line)
 	space = 0;
 	if (line[0] == 'L')
 		error_getrooms(line);
-	while(line[i] != '\0')
+	while (line[i] != '\0')
 	{
 		if (line[i] == ' ')
 		{
@@ -22,7 +33,7 @@ int check_room(char* line)
 	return (space == 2) ? 1 : 0;
 }
 
-int check_line(char* line)
+int		check_line(char *line)
 {
 	if (line[0] == '#')
 		return (1);
@@ -40,7 +51,8 @@ void	check_coords(t_lemin *lem)
 		j = lem->num_rooms - 1;
 		while (j > i)
 		{
-			if (lem->rooms[i].x == lem->rooms[j].x && lem->rooms[i].y == lem->rooms[j].y)
+			if (lem->rooms[i].x == lem->rooms[j].x &&
+				lem->rooms[i].y == lem->rooms[j].y)
 				error_coord(lem, &lem->rooms[i], &lem->rooms[j]);
 			j--;
 		}

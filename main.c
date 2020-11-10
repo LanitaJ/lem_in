@@ -1,47 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: icanker <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/10 16:11:36 by icanker           #+#    #+#             */
+/*   Updated: 2020/11/10 16:11:38 by icanker          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/lemin.h"
 
-int numlen(int nbr)
+static	int	get_aunts(char *line)
 {
-	int	res;
+	int	i;
 
-	res = 1;
-	if (nbr / 10 >= 1)
-		return (numlen(nbr / 10) + res);
-	else
-		return (res);
-}
-
-void		init_id(t_lemin *lem)
-{
-	int	id;
-
-	id = 0;
-	while (id < lem->num_rooms)
-	{
-		lem->rooms[id].id = id;
-		id++;
-	}
-}
-
-void InitAnts(t_lemin *lem)
-{
-	int i;
-
-	lem->ants = (t_ant *)malloc(sizeof(t_ant) * lem->num_ants);
-	i = 1;
-	while (i != lem->num_ants + 1)
-	{
-		lem->ants[i - 1].nbr = i;
-		lem->ants[i - 1].VisitedRoom = NULL;
-		lem->ants[i - 1].UsedPath = NULL;
-		i++;
-
-	}
-}
-
-static int get_aunts(char* line)
-{
-	int i = 0;
+	i = 0;
 	while (line[i] != '\0')
 	{
 		if (line[i] > '9' || line[i] < '0')
@@ -53,6 +28,7 @@ static int get_aunts(char* line)
 	return (ft_atoi(line));
 }
 
+<<<<<<< HEAD
 //возвращает количество совпадений строки и комнат
 int compare(t_lemin *lem, char* str)//return number of equivalent char* with rooms
 {
@@ -118,46 +94,23 @@ int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
 
 //добавить связи к комнатам
 int altor(t_lemin *lem)//add links to rooms
+=======
+int			parse_all(t_lemin *lem)
+>>>>>>> 08cbd88b2d060af364cce5b7bc4cfda238c7049a
 {
-	int i;
-	int j;
-
-	i = 0;
-	while(i != lem->num_rooms)
-	{
-		lem->rooms[i].num_links = 0;
-		j = 0;
-		while(j != lem->num_links)
-		{
-			if((!ft_strcmp(lem->rooms[i].name, lem->links[j].name1)) || (!ft_strcmp(lem->rooms[i].name, lem->links[j].name2)))
-					create_link(&lem->rooms[i], &lem->links[j], lem);
-			j++;
-		}
-		i++;
-	}
-	i  = 0;
-	while(i != lem->num_links)
-	{
-		free(lem->links[i].name1);
-		free(lem->links[i++].name2);
-	}
-	return (1);
-}
-
-int parse_all(t_lemin *lem)
-{
-	char* line;
+	char	*line;
 
 	get_next_line(lem->fd, &line);
 	ft_printf("%s\n", line);
 	lem->num_ants = get_aunts(line);
 	free(line);
-	get_links(lem, get_rooms(lem,line));
-	if ((!lem->id_start_room && lem->id_start_room != 0) || (!lem->id_end_room && lem->id_end_room != 0))
+	get_links(lem, get_rooms(lem, line));
+	if ((!lem->id_start_room && lem->id_start_room != 0) ||
+		(!lem->id_end_room && lem->id_end_room != 0))
 		error_start_end();
 	lem->start_room = &(lem->rooms[lem->id_start_room]);
 	lem->end_room = &lem->rooms[lem->id_end_room];
-	InitAnts(lem);
+	init_ants(lem);
 	return (1);
 }
 
@@ -184,7 +137,7 @@ void init_lemin(t_lemin *lem, int ac, char **av)
 
 int main(int ac, char **av)
 {
-	t_lemin lem;
+	t_lemin	lem;
 	t_path	**mass_pathes;
 
 	if (ac == 3)

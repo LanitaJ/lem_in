@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+         #
+#    By: icanker <icanker@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/31 13:58:04 by ljerk             #+#    #+#              #
-#    Updated: 2020/09/28 18:07:26 by ljerk            ###   ########.fr        #
+#    Updated: 2020/11/10 15:09:35 by icanker          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = lem-in
 
 SRCS := main.c links.c get_rooms.c error_handle.c deadlocks.c bfs.c \
 		choose_type.c do_types.c checkmap.c bonus.c print_solve.c \
-		solve_service.c free_all.c
+		solve_service.c free_all.c get_rooms2.c init.c links2.c
 OBJ = $(SRCS:.c=.o)
 
 LIB_DIR = ./ft_printf/
