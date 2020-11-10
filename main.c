@@ -28,75 +28,7 @@ static	int	get_aunts(char *line)
 	return (ft_atoi(line));
 }
 
-<<<<<<< HEAD
-//возвращает количество совпадений строки и комнат
-int compare(t_lemin *lem, char* str)//return number of equivalent char* with rooms
-{
-	int i;
-	int equil;
-
-	i = 0;
-	equil = 0;
-	while(i != lem->num_rooms)
-	{
-		if(!ft_strcmp(lem->rooms[i].name, str))
-			equil++;
-		i++;
-	}
-	if (equil != 1)
-		error_link(str);
-	return (equil);
-}
-
-
-//возвращает ссылку на комнату исходя из имени
-t_room *name_to_room(char *name, t_lemin *lem)
-{
-	int i;
-
-	i = 0;
-	while(i != lem->num_rooms)
-	{
-		if(!ft_strcmp(lem->rooms[i].name, name))
-			return (&lem->rooms[i]);
-		i++;
-	}
-	ft_putstr("name_to_room\n");
-	exit(1);
-}
-
-int add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem)
-{
-	t_room*	*tmp;
-	int*	tmp_blocks;
-	int		i;
-
-	i = 0;
-	main_room->num_links++;
-	tmp = (t_room* *)malloc(sizeof(t_room*) * main_room->num_links);
-	tmp_blocks = (int*)malloc(sizeof(int) * main_room->num_links);
-	if (tmp == NULL || tmp_blocks == NULL)
-		error_malloc();
-	while (i != main_room->num_links - 1)
-	{
-		tmp_blocks[i] = 0;
-		tmp[i] = main_room->n_rooms[i];
-		i++;
-	}
-	tmp_blocks[i] = 0;
-	tmp[i] = name_to_room(name_add, lem);
-	if (main_room->num_links != 1)
-		free_main_room(main_room);
-	main_room->blocks = tmp_blocks;
-	main_room->n_rooms = tmp;
-	return (1);
-}
-
-//добавить связи к комнатам
-int altor(t_lemin *lem)//add links to rooms
-=======
 int			parse_all(t_lemin *lem)
->>>>>>> 08cbd88b2d060af364cce5b7bc4cfda238c7049a
 {
 	char	*line;
 
@@ -112,27 +44,6 @@ int			parse_all(t_lemin *lem)
 	lem->end_room = &lem->rooms[lem->id_end_room];
 	init_ants(lem);
 	return (1);
-}
-
-void init_lemin(t_lemin *lem, int ac, char **av)
-{
-	if (ac == 2)
-	{
-		av++;
-		lem->fd = open(av[0], O_RDONLY);
-		if (lem->fd == -1)
-			error_fd();
-	}
-	else if (ac > 2)
-		error_count_args();
-	else
-		lem->fd = 0;
-	lem->UsableAunts = 0;
-	lem->stage = 1;
-	lem->num_rooms = 0;
-	lem->num_links = 0;
-	lem->check_end_kol = 0;
-	lem->check_start_kol = 0;
 }
 
 int main(int ac, char **av)

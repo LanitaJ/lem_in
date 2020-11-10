@@ -38,12 +38,6 @@ t_room	*name_to_room(char *name, t_lemin *lem)
 	exit(1);
 }
 
-void	free_main_room(t_room *main_room)
-{
-	free(main_room->n_rooms);
-	free(main_room->blocks);
-}
-
 int		add_room_to_room(t_room *main_room, char *name_add, t_lemin *lem)
 {
 	t_room	**tmp;
