@@ -12,51 +12,63 @@
 
 #include "libft.h"
 
-static int	out(char **line, char *ostatok)
+static	int	app_line(char **mas_str, char **line)
 {
-	char	*sn;
+	int		len;
+	char	*fd_str;
 
-	sn = ft_strchr(ostatok, '\n');
-	if (sn)
+	len = 0;
+	while ((*mas_str)[len] != '\0' && (*mas_str)[len] != '\n')
+		len++;
+	if ((*mas_str)[len] == '\n')
 	{
-		*sn = '\0';
-		sn++;
-		*line = ft_strdup(ostatok);
-		ft_memmove(ostatok, sn, ft_strlen(sn) + 1);
-		return (1);
+		*line = ft_strsub(*mas_str, 0, len);
+		fd_str = ft_strdup(&((*mas_str)[len + 1]));
+		free(*mas_str);
+		*mas_str = fd_str;
+		if ((*mas_str)[0] == '\0')
+			ft_strdel(mas_str);
 	}
-	else if (ft_strlen(ostatok) > 0)
+	else
 	{
-		*line = ft_strdup(ostatok);
-		*ostatok = 0;
-		return (1);
+		*line = ft_strdup(*mas_str);
+		ft_strdel(mas_str);
 	}
-	return (0);
+	return (1);
+}
+
+static	int	out(char **mas_str, char **line, int rd_len, int fd)
+{
+	if (rd_len < 0)
+		return (-1);
+	else if (rd_len == 0 && mas_str[fd] == NULL)
+		return (0);
+	else
+		return (app_line(&mas_str[fd], line));
 }
 
 int			get_next_line(const int fd, char **line)
 {
-	int				oput;
-	int				size;
-	char			buf[BUFF_SIZE + 1];
-	static char		*ostatok[10240];
-	char			*tmp;
+	int			rd_len;
+	static char	*mas_str[200];
+	char		buff[BUFF_SIZE + 1];
+	char		*fd_str;
 
-	if (fd < 0 || fd > 10240 || BUFF_SIZE < 1 || !line)
+	if (fd < 0 || line == NULL)
 		return (-1);
-	if (!ostatok[fd] && !(ostatok[fd] = ft_strnew(1)))
-		return (-1);
-	while (!(ft_strchr(ostatok[fd], '\n')))
+	while ((rd_len = read(fd, buff, BUFF_SIZE)) > 0)
 	{
-		if ((size = read(fd, buf, BUFF_SIZE)) == -1)
-			return (-1);
-		if (size == 0)
+		buff[rd_len] = '\0';
+		if (mas_str[fd] == NULL)
+			mas_str[fd] = ft_strdup(buff);
+		else
+		{
+			fd_str = ft_strjoin(mas_str[fd], buff);
+			free(mas_str[fd]);
+			mas_str[fd] = fd_str;
+		}
+		if (ft_strchr(mas_str[fd], '\n'))
 			break ;
-		buf[size] = '\0';
-		tmp = ostatok[fd];
-		ostatok[fd] = ft_strjoin(ostatok[fd], buf);
-		free(tmp);
 	}
-	oput = out(line, ostatok[fd]);
-	return (oput);
+	return (out(mas_str, line, rd_len, fd));
 }

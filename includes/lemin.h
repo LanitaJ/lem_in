@@ -65,6 +65,8 @@ typedef	struct			s_lemin
 	int					check_start_kol;
 	int 				check_end_kol;
 	int					max_pathes;
+	int 				stage;
+	int 				UsableAunts;
 	int					ins;
 	int					color;		//флаг -c
 	int					show_path;	//флаг -p
@@ -98,6 +100,9 @@ t_room					*name_to_room(char *name, t_lemin *lem);
 int						add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem);
 int						altor(t_lemin *lem);
 void 					count_aunts_for_pathes(t_path	**mass_pathes, t_lemin *lem);
+int 					count_iterations(t_lemin *lem, t_path* *mass_pathes);
+void 					count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem);
+t_room 					*FindNext(t_path* path, t_room* ThisRoom);
 
 //Error handler
 void					error_ant_count(char *line);
@@ -121,6 +126,7 @@ int						bfs(t_lemin *lem);
 void					output_map(t_lemin lem);
 void					print_path(t_path *path);
 void					print_path_color(t_path *path);
+void 					print_solve(t_lemin *lem, t_path* *mass_pathes);
 
 
 
