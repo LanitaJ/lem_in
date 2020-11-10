@@ -26,7 +26,7 @@ void		print_path(t_path *path)
 	while (i < path->length)
 	{
 		if (i != path->length - 1)
-			ft_printf("%s-", path->sh[i]->name);
+			ft_printf("%s->", path->sh[i]->name);
 		else
 			ft_printf("%s\n", path->sh[i]->name);
 		i++;
