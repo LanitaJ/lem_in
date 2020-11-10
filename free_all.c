@@ -20,13 +20,13 @@ void	free_mass_pathes(t_path **mas, t_lemin *lem)
 	free(mas);
 }
 
-void free_main_room(t_room *main_room)
+void	free_main_room(t_room *main_room)
 {
 	free(main_room->n_rooms);
 	free(main_room->blocks);
 }
 
-void free_lemin(t_lemin *lem)
+void	free_lemin(t_lemin *lem)
 {
 	int i;
 

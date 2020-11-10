@@ -12,7 +12,7 @@
 
 #include "includes/lemin.h"
 
-t_room	**move_back(t_lemin *lem, t_path *path)
+t_room		**move_back(t_lemin *lem, t_path *path)
 {
 	t_room	*room;
 	t_room	**sh;
@@ -27,7 +27,8 @@ t_room	**move_back(t_lemin *lem, t_path *path)
 	while (room->id != lem->start_room->id)
 	{
 		i = 0;
-		while (room->n_rooms[i]->depth != room->depth - 1 && i < room->num_links)
+		while (room->n_rooms[i]->depth != room->depth - 1 &&\
+									i < room->num_links)
 			i++;
 		sh[ins] = room;
 		ins--;
@@ -38,7 +39,8 @@ t_room	**move_back(t_lemin *lem, t_path *path)
 	return (sh);
 }
 
-int		find_sec_path(t_path *path1, t_path *path2, t_lemin *lem, t_path **mas)
+int			find_sec_path(t_path *path1, t_path *path2,\
+								t_lemin *lem, t_path **mas)
 {
 	del_first_link(path1->sh[1]->id, lem);
 	bfs(lem);
@@ -54,7 +56,7 @@ int		find_sec_path(t_path *path1, t_path *path2, t_lemin *lem, t_path **mas)
 	return (0);
 }
 
-int		solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
+int			solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 {
 	bfs(lem);
 	if (lem->end_room->depth == 2147483647)
@@ -70,7 +72,7 @@ int		solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 	else
 	{
 		mas[lem->ins] = path1;
-        lem->ins++;
+		lem->ins++;
 		del_path(path1);
 		free(path2);
 	}
@@ -79,7 +81,7 @@ int		solver(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 
 t_path		**shortcut(t_lemin *lem, t_path **mass_pathes)
 {
-	t_path *path;
+	t_path	*path;
 
 	if ((path = (t_path*)ft_memalloc(sizeof(t_path))) == NULL)
 		exit(1);
@@ -90,7 +92,7 @@ t_path		**shortcut(t_lemin *lem, t_path **mass_pathes)
 	mass_pathes[0] = path;
 	lem->ins++;
 	lem->max_pathes--;
-	return(mass_pathes);
+	return (mass_pathes);
 }
 
 t_path		**find_pathes(t_lemin *lem)
@@ -102,7 +104,8 @@ t_path		**find_pathes(t_lemin *lem)
 	lem->ins = 0;
 	lem->max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
 		lem->start_room->num_links : lem->end_room->num_links;
-	if ((mass_pathes = (t_path**)malloc(sizeof(t_path*) * lem->max_pathes)) == NULL)
+	if ((mass_pathes = (t_path**)malloc(sizeof(t_path*) \
+		* lem->max_pathes)) == NULL)
 		error_malloc();
 	if (check_shortcut(lem) == 1)
 		return (shortcut(lem, mass_pathes));
@@ -110,7 +113,7 @@ t_path		**find_pathes(t_lemin *lem)
 	{
 		if (((path1 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL) || \
 			((path2 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL))
-				error_malloc();
+			error_malloc();
 		if (solver(mass_pathes, lem, path1, path2) == 1)
 			break ;
 	}

@@ -12,7 +12,7 @@
 
 #include "includes/lemin.h"
 
-static	int	get_aunts(char *line)
+static int	get_aunts(char *line)
 {
 	int	i;
 
@@ -46,7 +46,7 @@ int			parse_all(t_lemin *lem)
 	return (1);
 }
 
-int main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_lemin	lem;
 	t_path	**mass_pathes;

@@ -12,28 +12,28 @@
 
 #include "includes/lemin.h"
 
-void error_ant_count(char *line)
+void	error_ant_count(char *line)
 {
 	free(line);
 	ft_printf(RED"{fd}Wrong count of ants\n"RST, 2);
 	exit(1);
 }
 
-void error_trash(char *line)
+void	error_trash(char *line)
 {
 	free(line);
 	ft_printf(RED"{fd}Wrong input(incorrect chars)\n"RST, 2);
 	exit(1);
 }
 
-void error_memmory(char *line)
+void	error_memmory(char *line)
 {
 	free(line);
 	ft_printf(RED"{fd}Memmory error\n"RST, 2);
 	exit(1);
 }
 
-void error_map(char *line)
+void	error_map(char *line)
 {
 	free(line);
 	ft_printf(RED"{fd}Map error\n"RST, 2);
@@ -53,10 +53,10 @@ void	error_start_end()
 	exit(1);
 }
 
-void 	error_malloc(void)
+void	error_malloc(void)
 {
 	ft_printf(RED"{fd}Malloc error\n"RST, 2);
-	exit (1);
+	exit(1);
 }
 
 void	error_getrooms(char *line)
@@ -80,9 +80,9 @@ void	error_coord(t_lemin *lem, t_room *r1, t_room *r2)
 	exit(1);
 }
 
-void error_count_args()
+void	error_count_args()
 {
-	ft_printf(RED"{fd}Usage: ./lem-in < name.map or ./lem-in name.map\n"RST, 2);
+	ft_printf(RED"{fd}Usage:./lem-in < name.map or ./lem-in name.map\n"RST, 2);
 	exit(1);
 }
 

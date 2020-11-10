@@ -1,6 +1,6 @@
 #include "includes/lemin.h"
 
-void		del_path(t_path *path)
+void	del_path(t_path *path)
 {
 	int	i;
 	int	j;
@@ -23,11 +23,11 @@ void		del_path(t_path *path)
 	}
 }
 
-int *path_to_num(t_lemin *lem, t_path *path)
+int		*path_to_num(t_lemin *lem, t_path *path)
 {
-	int *bin_res;   //представление результата в виде(двоичное число) массива из 0 и 1, где 1 - наличие iой комнаты в пути 
-	int i;
-	
+	int	*bin_res;
+	int	i;
+
 	i = 0;
 	if ((bin_res = (int*)ft_memalloc(sizeof(int) * lem->num_rooms)) == NULL)
 		exit(1);
@@ -39,9 +39,9 @@ int *path_to_num(t_lemin *lem, t_path *path)
 	return (bin_res);
 }
 
-int choose_type(t_lemin *lem, t_path *path1, t_path *path2)
+int		choose_type(t_lemin *lem, t_path *path1, t_path *path2)
 {
-	int *bin_path1; //двоичное представление путей. 0 - комната с id = i отстутствует в пути
+	int *bin_path1;
 	int *bin_path2;
 	int sum_sochet;
 	int i;
@@ -64,20 +64,15 @@ int choose_type(t_lemin *lem, t_path *path1, t_path *path2)
 		return ((sum_sochet == path1->length) ? 2 : 3);
 }
 
-void	 path_type(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
+void	path_type(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2)
 {
-	int type;
+	int	type;
 
 	type = choose_type(lem, path1, path2);
 	if (type == 1)
 		do_type1(lem, mas, path1, path2);
 	else if (type == 2)
-		do_type2_3(lem, mas, path1, path2);	
+		do_type2_3(lem, mas, path1, path2);
 	else
 		do_type2_3(lem, mas, path2, path1);
 }
-/* 
-	1 - разные пути(сохраняем оба)
-	2 - 2ой путь содержит полностью 1ый(сохраняем 1ый)
-	3 - пути частично пересекаются(сохраняем 2ой)
-*/

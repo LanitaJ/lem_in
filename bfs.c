@@ -12,13 +12,14 @@
 
 #include "includes/lemin.h"
 
-static void	push(int *tail, t_room **a, t_room *x)
+static void		push(int *tail, t_room **a, t_room *x)
 {
 	a[*tail] = x;
 	*tail += 1;
 }
 
-static t_room	*pop(int *head, int *tail, t_room **room) {
+static t_room	*pop(int *head, int *tail, t_room **room)
+{
 	if (*head != *tail)
 	{
 		*head += 1;
@@ -26,12 +27,10 @@ static t_room	*pop(int *head, int *tail, t_room **room) {
 	}
 	else
 		ft_printf("Error\n");// СДЕЛАТЬ ОБРАБОТКУ Ошибка, попытка извлечь элемент из пустой очереди.
-	return(0);//убрать
+	return (0);//убрать
 }
 
-
-
-static	void init_bfs(t_lemin *lem, int *head, int *tail)
+static void		init_bfs(t_lemin *lem, int *head, int *tail)
 {
 	int	i;
 
@@ -49,7 +48,7 @@ static	void init_bfs(t_lemin *lem, int *head, int *tail)
 	lem->end_room->depth = 2147483647;
 }
 
-static void	ft_help(t_room	*node, t_room **queue, int *tail, int i)
+static void		ft_help(t_room	*node, t_room **queue, int *tail, int i)
 {
 	if (node->n_rooms[i]->visited == 0 && node->blocks[i] == 0)
 	{
@@ -59,7 +58,7 @@ static void	ft_help(t_room	*node, t_room **queue, int *tail, int i)
 	}
 }
 
-int			bfs(t_lemin *lem)
+int				bfs(t_lemin *lem)
 {
 	t_room	**queue;
 	t_room	*node;
@@ -69,7 +68,8 @@ int			bfs(t_lemin *lem)
 
 	tail = 0;
 	head = 0;
-	if ((queue = (t_room**)ft_memalloc(sizeof(t_room*) * lem->num_rooms)) == NULL)
+	if ((queue = (t_room**)ft_memalloc(sizeof(t_room*)\
+			* lem->num_rooms)) == NULL)
 		exit(1);
 	init_bfs(lem, &tail, &head);
 	push(&tail, queue, lem->start_room);
