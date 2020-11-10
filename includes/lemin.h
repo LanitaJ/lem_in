@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lemin.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ljerk <ljerk@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icanker <icanker@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/31 14:11:57 by ljerk             #+#    #+#             */
-/*   Updated: 2020/09/28 18:48:43 by ljerk            ###   ########.fr       */
+/*   Updated: 2020/11/10 15:21:06 by icanker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ typedef	struct			s_lemin
 	t_ant*				ants;
 }						t_lemin;
 
+void					init_lemin(t_lemin *lem, int ac, char **av);
+void					init_ants(t_lemin *lem);
+void					init_lemin(t_lemin *lem, int ac, char **av);
+
 void					get_link(char* line, t_link *l, t_lemin *lem);
 int						add_link(t_lemin *lem, char* line);
 int						parse_links(t_lemin *lem);
@@ -90,11 +94,13 @@ int						add_room(t_lemin *lem, char* line);
 void					exit_get_room(char* line);
 int						get_first_room(char* line, t_link *l);
 int						get_second_room(char *line, t_link *l);
+void					init_id(t_lemin *lem);
 
 
 int						numlen(int nbr);
 int						check_room(char* line);
 int						check_line(char* line);
+int 					check_dblinks(t_lemin *lem);
 int						compare(t_lemin *lem, char* str);//return number of equivalent char* with rooms
 t_room					*name_to_room(char *name, t_lemin *lem);
 int						add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem);
@@ -153,5 +159,6 @@ void	check_coords(t_lemin *lem);
 //free
 void					free_lemin(t_lemin *lem);
 void					free_path(t_path *path);
+void					free_main_room(t_room *main_room);
 
 
