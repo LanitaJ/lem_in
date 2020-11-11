@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bonus.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: icanker <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/11 12:53:46 by icanker           #+#    #+#             */
+/*   Updated: 2020/11/11 12:53:51 by icanker          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "includes/lemin.h"
 
 void		parse_flags(char **av, t_lemin *lem)
 {
 	int i;
+
 	lem->bonus = 0;
 	i = 1;
 	if (av[1][0] == '-')
@@ -86,7 +98,7 @@ void		print_color_solve(t_lemin *lem, int *a_i)
 {
 	if (lem->color == 1)
 	{
-		if (*a_i % 2 == 0 &&*a_i % 4 != 0 &&*a_i % 6 != 0)
+		if (*a_i % 2 == 0 && *a_i % 4 != 0 && *a_i % 6 != 0)
 			ft_printf(RED"L%d-%s "RST, lem->ants[*a_i].nbr,\
 				lem->ants[*a_i].VisitedRoom->name);
 		else if (*a_i % 3 == 0 && *a_i % 6 != 0)
@@ -106,5 +118,6 @@ void		print_color_solve(t_lemin *lem, int *a_i)
 				lem->ants[*a_i].VisitedRoom->name);
 	}
 	else
-		ft_printf("L%d-%s ", lem->ants[*a_i].nbr, lem->ants[*a_i].VisitedRoom->name);
+		ft_printf("L%d-%s ", lem->ants[*a_i].nbr,\
+			lem->ants[*a_i].VisitedRoom->name);
 }
