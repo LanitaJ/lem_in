@@ -85,10 +85,8 @@ void					init_lemin(t_lemin *lem, int ac, char **av);
 
 void					get_link(char* line, t_link *l, t_lemin *lem);
 int						add_link(t_lemin *lem, char* line);
-int						parse_links(t_lemin *lem);
 void					parse_flags(char **av, t_lemin *lem);
 int						create_link(t_room *main_room, t_link *link, t_lemin *lem);
-int						check_link(char *line);
 int						get_links(t_lemin *lem, char *line);
 char					*get_rooms(t_lemin *lem, char* line);
 int						get_room(char* line, t_room *room);
@@ -114,15 +112,11 @@ t_room 					*findnext(t_path* path, t_room* ThisRoom);
 
 //Error handler
 void					error_ant_count(char *line);
-void					error_trash(char *line);
-void					error_memmory(char *line);
-void					error_map(char *line);
 void					error_link(char *line);
 void					error_malloc();
 void					error_count_args();
 void					error_isolated_start(t_lemin *lem);
 void					error_coord(t_lemin *lem, t_room *r1, t_room *r2);
-void					find_flags(char ***av, t_lemin *lem);
 void					error_start_end();
 void					error_fd();
 void					error_getrooms(char *line);
