@@ -74,7 +74,6 @@ typedef	struct			s_lemin
 	int					color;
 	int					show_path;
 	int					num_lines;
-	int					bonus;
 	t_room				*rooms;
 	t_room				*start_room;
 	t_room				*end_room;
@@ -156,5 +155,6 @@ void					del_first_link(int id_isol_room, t_lemin *lem);
 void					restore_first_link(int id_restore_room, t_lemin *lem);
 void					print_color_solve(t_lemin *lem, int *a_i);
 void					help_do_iteration(t_lemin *lem);
+void					check_max_pathes(t_lemin *lem);
 
 #endif

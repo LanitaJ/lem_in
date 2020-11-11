@@ -16,7 +16,9 @@ void		parse_flags(char **av, t_lemin *lem)
 {
 	int i;
 
-	lem->bonus = 0;
+	lem->color = 0;
+	lem->num_lines = 0;
+	lem->show_path = 0;
 	i = 1;
 	if (av[1][0] == '-')
 		while (av[1][i] != '\0')
@@ -29,8 +31,6 @@ void		parse_flags(char **av, t_lemin *lem)
 				lem->num_lines = 1;
 			i++;
 		}
-	if (lem->color == 1 || lem->show_path == 1 || lem->num_lines == 1)
-		lem->bonus = 1;
 }
 
 void		print_path(t_path *path)

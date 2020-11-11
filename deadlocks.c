@@ -102,8 +102,7 @@ t_path		**find_pathes(t_lemin *lem)
 	t_path	**mass_pathes;
 
 	lem->ins = 0;
-	lem->max_pathes = lem->start_room->num_links < lem->end_room->num_links ? \
-		lem->start_room->num_links : lem->end_room->num_links;
+	check_max_pathes(lem);
 	if ((mass_pathes = (t_path**)malloc(sizeof(t_path*) \
 		* lem->max_pathes)) == NULL)
 		error_malloc();
