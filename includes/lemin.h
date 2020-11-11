@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef LEMIN_H
+# define LEMIN_H
+
 # include "../ft_printf/includes/ft_printf.h"
 
 # define RED	"\x1B[31m"
@@ -29,11 +32,11 @@ typedef struct			s_link
 
 typedef struct			s_room
 {
-	char*				name;
+	char				*name;
 	int					x;
 	int					y;
-	struct s_room*		*n_rooms;
-	int					*blocks;	//0 - связь есть 1 - связи нет 
+	struct s_room		**n_rooms;
+	int					*blocks;
 	int					num_links;
 	int					depth;
 	int					visited;
@@ -42,16 +45,16 @@ typedef struct			s_room
 
 typedef struct			s_path
 {
-	t_room				**sh;		//путь
-	int					length;		//длина пути
-	int					count_ants;	//количество муравьев на пути
+	t_room				**sh;
+	int					length;
+	int					count_ants;
 }						t_path;
 
-typedef struct 			s_ant
+typedef	struct			s_ant
 {
 	int					nbr;
-	t_room*				VisitedRoom;
-	t_path*				UsedPath;
+	t_room				*visited_room;
+	t_path				*used_path;
 }						t_ant;
 
 typedef	struct			s_lemin
@@ -63,54 +66,56 @@ typedef	struct			s_lemin
 	int					id_start_room;
 	int					id_end_room;
 	int					check_start_kol;
-	int 				check_end_kol;
+	int					check_end_kol;
 	int					max_pathes;
-	int 				stage;
-	int 				UsableAunts;
+	int					stage;
+	int					usable_aunts;
 	int					ins;
-	int					color;		//флаг -c
-	int					show_path;	//флаг -p
-	int					num_lines;	//флаг -n
+	int					color;
+	int					show_path;
+	int					num_lines;
 	int					bonus;
-	t_room*				rooms;
+	t_room				*rooms;
 	t_room				*start_room;
 	t_room				*end_room;
-	t_link*				links;
-	t_ant*				ants;
+	t_link				*links;
+	t_ant				*ants;
 }						t_lemin;
 
 void					init_lemin(t_lemin *lem, int ac, char **av);
 void					init_ants(t_lemin *lem);
 void					init_lemin(t_lemin *lem, int ac, char **av);
 
-void					get_link(char* line, t_link *l, t_lemin *lem);
-int						add_link(t_lemin *lem, char* line);
+void					get_link(char *line, t_link *l, t_lemin *lem);
+int						add_link(t_lemin *lem, char *line);
 void					parse_flags(char **av, t_lemin *lem);
-int						create_link(t_room *main_room, t_link *link, t_lemin *lem);
+int						create_link(t_room *main_room,\
+							t_link *link, t_lemin *lem);
 int						get_links(t_lemin *lem, char *line);
-char					*get_rooms(t_lemin *lem, char* line);
-int						get_room(char* line, t_room *room);
-int						add_room(t_lemin *lem, char* line);
-void					exit_get_room(char* line);
-int						get_first_room(char* line, t_link *l);
+char					*get_rooms(t_lemin *lem, char *line);
+int						get_room(char *line, t_room *room);
+int						add_room(t_lemin *lem, char *line);
+void					exit_get_room(char *line);
+int						get_first_room(char *line, t_link *l);
 int						get_second_room(char *line, t_link *l);
 void					init_id(t_lemin *lem);
 
-
 int						numlen(int nbr);
-int						check_room(char* line);
-int						check_line(char* line);
-int 					check_dblinks(t_lemin *lem);
-int						compare(t_lemin *lem, char* str);//return number of equivalent char* with rooms
+int						check_room(char *line);
+int						check_line(char *line);
+int						check_dblinks(t_lemin *lem);
+int						compare(t_lemin *lem, char *str);
 t_room					*name_to_room(char *name, t_lemin *lem);
-int						add_room_to_room(t_room *main_room, char* name_add, t_lemin* lem);
+int						add_room_to_room(t_room *main_room,\
+							char *name_add, t_lemin *lem);
 int						altor(t_lemin *lem);
-void 					count_aunts_for_pathes(t_path	**mass_pathes, t_lemin *lem);
-int 					count_iterations(t_lemin *lem, t_path* *mass_pathes);
-void 					count_aunts_for_pathes(t_path* *mass_pathes, t_lemin *lem);
-t_room 					*findnext(t_path* path, t_room* ThisRoom);
+void					count_aunts_for_pathes\
+							(t_path	**mass_pathes, t_lemin *lem);
+int						count_iterations(t_lemin *lem, t_path **mass_pathes);
+void					count_aunts_for_pathes\
+							(t_path **mass_pathes, t_lemin *lem);
+t_room					*findnext(t_path *path, t_room *this_room);
 
-//Error handler
 void					error_ant_count(char *line);
 void					error_link(char *line);
 void					error_malloc();
@@ -121,39 +126,25 @@ void					error_start_end();
 void					error_fd();
 void					error_getrooms(char *line);
 
-//Solver
 t_path					**find_pathes(t_lemin *lem);
 int						bfs(t_lemin *lem);
-
-//функция вывода карты в консоль (Вспомогательная функция. После окончания проекта удалить)
-void					output_map(t_lemin lem);
 void					print_path(t_path *path);
 void					print_path_color(t_path *path);
-void 					print_solve(t_lemin *lem, t_path* *mass_pathes);
-
-
-
-//функция выбора случаев
-void					path_type(t_path **mas, t_lemin *lem, t_path *path1, t_path *path2);
-
+void					print_solve(t_lemin *lem, t_path **mass_pathes);
+void					path_type(t_path **mas, t_lemin *lem,\
+							t_path *path1, t_path *path2);
 void					del_path(t_path *path);
+void					do_type1(t_lemin *lem, t_path **mas,\
+							t_path *path1, t_path *path2);
+void					do_type2_3(t_lemin *lem, t_path **mas,\
+							t_path *path, t_path *del_path);
 
-//do_types
-void					do_type1(t_lemin *lem, t_path **mas, t_path *path1, t_path *path2);
-void					do_type2_3(t_lemin *lem, t_path **mas, t_path *path, t_path *del_path);
+void					show_pathes(t_lemin lem, t_path **mass_pathes);
 
-//bonus
-void	show_pathes(t_lemin lem, t_path **mass_pathes);
+int						check_room(char *line);
+int						check_line(char *line);
+void					check_coords(t_lemin *lem);
 
-
-//check
-int		check_room(char* line);
-int		check_line(char* line);
-void	check_coords(t_lemin *lem);
-
-
-
-//free
 void					free_lemin(t_lemin *lem);
 void					free_path(t_path *path);
 void					free_mass_pathes(t_path **mas, t_lemin *lem);
@@ -165,3 +156,4 @@ void					del_first_link(int id_isol_room, t_lemin *lem);
 void					restore_first_link(int id_restore_room, t_lemin *lem);
 void					print_color_solve(t_lemin *lem, int *a_i);
 
+#endif

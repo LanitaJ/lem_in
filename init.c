@@ -33,8 +33,8 @@ void	init_ants(t_lemin *lem)
 	while (i != lem->num_ants + 1)
 	{
 		lem->ants[i - 1].nbr = i;
-		lem->ants[i - 1].VisitedRoom = NULL;
-		lem->ants[i - 1].UsedPath = NULL;
+		lem->ants[i - 1].visited_room = NULL;
+		lem->ants[i - 1].used_path = NULL;
 		i++;
 	}
 }
@@ -58,7 +58,7 @@ void	init_lemin(t_lemin *lem, int ac, char **av)
 		error_count_args();
 	else
 		lem->fd = 0;
-	lem->UsableAunts = 0;
+	lem->usable_aunts = 0;
 	lem->stage = 1;
 	lem->num_rooms = 0;
 	lem->num_links = 0;

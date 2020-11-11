@@ -100,24 +100,24 @@ void		print_color_solve(t_lemin *lem, int *a_i)
 	{
 		if (*a_i % 2 == 0 && *a_i % 4 != 0 && *a_i % 6 != 0)
 			ft_printf(RED"L%d-%s "RST, lem->ants[*a_i].nbr,\
-				lem->ants[*a_i].VisitedRoom->name);
+				lem->ants[*a_i].visited_room->name);
 		else if (*a_i % 3 == 0 && *a_i % 6 != 0)
 			ft_printf(GRN"L%d-%s "RST, lem->ants[*a_i].nbr,\
-				lem->ants[*a_i].VisitedRoom->name);
+				lem->ants[*a_i].visited_room->name);
 		else if (*a_i % 4 == 0)
 			ft_printf(CYN"L%d-%s "RST, lem->ants[*a_i].nbr,\
-				lem->ants[*a_i].VisitedRoom->name);
+				lem->ants[*a_i].visited_room->name);
 		else if (*a_i % 5 == 0)
 			ft_printf(BLU"L%d-%s "RST, lem->ants[*a_i].nbr,\
-				lem->ants[*a_i].VisitedRoom->name);
+				lem->ants[*a_i].visited_room->name);
 		else if (*a_i % 6 == 0)
 			ft_printf(MAG"L%d-%s "RST, lem->ants[*a_i].nbr,\
-				lem->ants[*a_i].VisitedRoom->name);
+				lem->ants[*a_i].visited_room->name);
 		else
 			ft_printf(YEL"L%d-%s "RST, lem->ants[*a_i].nbr,\
-				lem->ants[*a_i].VisitedRoom->name);
+				lem->ants[*a_i].visited_room->name);
 	}
 	else
 		ft_printf("L%d-%s ", lem->ants[*a_i].nbr,\
-			lem->ants[*a_i].VisitedRoom->name);
+			lem->ants[*a_i].visited_room->name);
 }

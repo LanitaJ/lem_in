@@ -26,13 +26,13 @@ void			count_aunts_for_pathes(t_path **pathes, t_lemin *lem)
 			return ;
 		while (i != lem->ins)
 		{
-			if (lem->UsableAunts >= lem->num_ants)
+			if (lem->usable_aunts >= lem->num_ants)
 				return ;
 			if (pathes[i]->length + pathes[i]->count_ants
 				< lem->stage)
 			{
 				pathes[i]->count_ants++;
-				lem->UsableAunts++;
+				lem->usable_aunts++;
 			}
 			i++;
 		}
@@ -73,12 +73,12 @@ int				count_iterations(t_lemin *lem, t_path **pathes)
 
 static	void	do_iteration(int *j, t_lemin *lem, t_path **pathes, int *a_i)
 {
-	while (lem->ants[*a_i].VisitedRoom && *a_i <= lem->num_ants - 1)
+	while (lem->ants[*a_i].visited_room && *a_i <= lem->num_ants - 1)
 	{
-		if (ft_strcmp(lem->ants[*a_i].VisitedRoom->name, lem->end_room->name))
+		if (ft_strcmp(lem->ants[*a_i].visited_room->name, lem->end_room->name))
 		{
-			lem->ants[*a_i].VisitedRoom = findnext(lem->ants[*a_i].UsedPath,
-				lem->ants[*a_i].VisitedRoom);
+			lem->ants[*a_i].visited_room = findnext(lem->ants[*a_i].used_path,
+				lem->ants[*a_i].visited_room);
 			print_color_solve(lem, a_i);
 		}
 		(*a_i)++;
@@ -88,8 +88,8 @@ static	void	do_iteration(int *j, t_lemin *lem, t_path **pathes, int *a_i)
 	{
 		if (pathes[*j]->count_ants > 0)
 		{
-			lem->ants[*a_i].UsedPath = pathes[*j];
-			lem->ants[*a_i].VisitedRoom = pathes[*j]->sh[1];
+			lem->ants[*a_i].used_path = pathes[*j];
+			lem->ants[*a_i].visited_room = pathes[*j]->sh[1];
 			pathes[*j]->count_ants -= 1;
 			print_color_solve(lem, a_i);
 			(*a_i)++;
