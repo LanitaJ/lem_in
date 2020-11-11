@@ -75,13 +75,11 @@ static void	do_iteration(char *line, t_lemin *lem)
 		free(line);
 		help_do_iteration(lem);
 	}
-	else if (line[0] == '#' && line[1] == '#')
+	else if (line[0] == '#')
 	{
 		ft_printf("%s\n", line);
 		free(line);
 	}
-	else if (line[0] == '#')
-		free(line);
 	else
 		add_room(lem, line);
 }
