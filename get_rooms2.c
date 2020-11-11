@@ -12,6 +12,16 @@
 
 #include "includes/lemin.h"
 
+void	help_do_iteration(t_lemin *lem)
+{
+	char *line;
+
+	get_next_line(lem->fd, &line);
+	ft_printf("%s\n", line);
+	exit_get_room(line);
+	add_room(lem, line);
+}
+
 int		numlen(int nbr)
 {
 	int	res;

@@ -64,22 +64,21 @@ static void	do_iteration(char *line, t_lemin *lem)
 	if (!ft_strcmp(line, "##start"))
 	{
 		lem->check_start_kol++;
-		free(line);
-		get_next_line(lem->fd, &line);
-		ft_printf("%s\n", line);
-		exit_get_room(line);
 		lem->id_start_room = lem->num_rooms;
-		add_room(lem, line);
+		free(line);
+		help_do_iteration(lem);
 	}
 	else if (!ft_strcmp(line, "##end"))
 	{
 		lem->check_end_kol++;
-		free(line);
-		get_next_line(lem->fd, &line);
-		ft_printf("%s\n", line);
-		exit_get_room(line);
 		lem->id_end_room = lem->num_rooms;
-		add_room(lem, line);
+		free(line);
+		help_do_iteration(lem);
+	}
+	else if (line[0] == '#' && line[1] == '#')
+	{
+		ft_printf("%s\n", line);
+		free(line);
 	}
 	else if (line[0] == '#')
 		free(line);

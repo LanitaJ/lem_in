@@ -81,7 +81,6 @@ typedef	struct			s_lemin
 	t_link				*links;
 	t_ant				*ants;
 }						t_lemin;
-
 void					init_lemin(t_lemin *lem, int ac, char **av);
 void					init_ants(t_lemin *lem);
 void					init_lemin(t_lemin *lem, int ac, char **av);
@@ -156,5 +155,6 @@ int						isolated(t_room *room);
 void					del_first_link(int id_isol_room, t_lemin *lem);
 void					restore_first_link(int id_restore_room, t_lemin *lem);
 void					print_color_solve(t_lemin *lem, int *a_i);
+void					help_do_iteration(t_lemin *lem);
 
 #endif
