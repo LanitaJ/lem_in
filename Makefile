@@ -21,7 +21,7 @@ OBJ = $(SRCS:.c=.o)
 LIB_DIR = ./ft_printf/
 LIBFT = $(LIB_DIR)libftprintf.a
 
-FLAGS = -g -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra
 INCLUDE = ./includes/lemin.h
 
 all: $(NAME)

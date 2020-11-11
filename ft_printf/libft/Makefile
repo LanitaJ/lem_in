@@ -29,7 +29,7 @@ NAME = libft.a
 
 OPTION = -I libft.h -c
 
-FLAG = -g -Wall -Wextra -Werror
+FLAG = -Wall -Wextra -Werror
 
 all: $(NAME)
 

@@ -41,13 +41,13 @@ void	init_ants(t_lemin *lem)
 
 void	init_lemin(t_lemin *lem, int ac, char **av)
 {
-	if (ac == 2)
+	if (ac == 2 || ac == 3)
 	{
 		av++;
 		lem->fd = open(av[0], O_RDONLY);
 		if (lem->fd == -1)
 			error_fd();
-		if (lem->bonus == 0)
+		if (ac == 2)
 		{
 			lem->color = 0;
 			lem->num_lines = 0;

@@ -55,7 +55,6 @@ int			main(int ac, char **av)
 	{
 		parse_flags(av, &lem);
 		av++;
-		ac--;
 	}
 	init_lemin(&lem, ac, av);
 	parse_all(&lem);

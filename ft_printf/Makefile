@@ -26,12 +26,14 @@ SRC =	ft_printf.c specificator.c flags.c fourthflags.c star.c\
 OBJ = $(SRC:.c=.o)
 
 OPTION = ./includes/ft_printf.h
-FLAGS = -g -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
+
+OBJ = $(patsubst %.c,%.o,$(SRC))
 
 all: $(NAME)
 
 %.o: %.c $(OPTION)
-	@gcc $(FLAGS) -I $(OPTION) -o $@ -c $<
+	gcc $(FLAGS) -c $< -I $(OPTION) -o $@ 
 
 $(NAME): $(OBJ)
 	@$(MAKE) -C $(LIBFT)
