@@ -26,7 +26,7 @@ void	error_coord(t_lemin *lem, t_room *r1, t_room *r2)
 	exit(1);
 }
 
-void	error_count_args()
+void	error_count_args(void)
 {
 	ft_printf(RED"{fd}Usage:./lem-in < name.map or ./lem-in name.map\n"RST, 2);
 	exit(1);

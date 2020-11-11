@@ -26,7 +26,7 @@ void	error_link(char *line)
 	exit(1);
 }
 
-void	error_start_end()
+void	error_start_end(void)
 {
 	ft_printf(RED"{fd}Start/end error\n"RST, 2);
 	exit(1);
