@@ -80,6 +80,7 @@ typedef	struct			s_lemin
 	t_link				*links;
 	t_ant				*ants;
 }						t_lemin;
+
 void					init_lemin(t_lemin *lem, int ac, char **av);
 void					init_ants(t_lemin *lem);
 void					init_lemin(t_lemin *lem, int ac, char **av);
