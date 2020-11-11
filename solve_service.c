@@ -40,7 +40,7 @@ int		isolated(t_room *room)
 	return (1);
 }
 
-int			check_shortcut(t_lemin *lem)
+int		check_shortcut(t_lemin *lem)
 {
 	int	i;
 
@@ -52,4 +52,16 @@ int			check_shortcut(t_lemin *lem)
 		i++;
 	}
 	return (0);
+}
+
+t_path	**check_solution(t_lemin *lem, t_path **mass_pathes)
+{
+	if (lem->ins == 0)
+	{
+		ft_printf(RED"{fd}No solution\n"RST, 2);
+		free_mass_pathes(mass_pathes, lem);
+		free_lemin(lem);
+		exit(1);
+	}
+	return (mass_pathes);
 }

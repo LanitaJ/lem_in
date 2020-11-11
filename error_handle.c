@@ -75,8 +75,9 @@ void	error_fd(void)
 void	error_coord(t_lemin *lem, t_room *r1, t_room *r2)
 {
 	free_lemin(lem);
-	ft_printf(RED"{fd}Duplicate coords name: %s x: %d y: %d and name:\
-		%s x: %d y: %d"RST, 2, r1->name, r1->x, r1->y, r2->name, r2->x, r2->y);
+	ft_printf(RED"Duplicate coords name: %s x:%d y: %d and\
+		 name:%s x: %d y: %d", r1->name, r1->x, r1->y, r2->name, r2->x, r2->y);
+	ft_printf(""RST);
 	exit(1);
 }
 

@@ -165,6 +165,7 @@ void					free_path(t_path *path);
 void					free_mass_pathes(t_path **mas, t_lemin *lem);
 void					free_main_room(t_room *main_room);
 
+t_path					**check_solution(t_lemin *lem, t_path **mass_pathes);
 int						check_shortcut(t_lemin *lem);
 int						isolated(t_room *room);
 void					del_first_link(int id_isol_room, t_lemin *lem);
