@@ -115,7 +115,7 @@ t_path		**find_pathes(t_lemin *lem)
 			((path2 = (t_path*)ft_memalloc(sizeof(t_path))) == NULL))
 			error_malloc();
 		if (solver(mass_pathes, lem, path1, path2) == 1)
-			break ;
+			return (check_solution(lem, mass_pathes));
 	}
 	return (mass_pathes);
 }
