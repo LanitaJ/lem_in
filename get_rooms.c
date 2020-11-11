@@ -77,7 +77,6 @@ static void	do_iteration(char *line, t_lemin *lem)
 	}
 	else if (line[0] == '#')
 	{
-		ft_printf("%s\n", line);
 		free(line);
 	}
 	else
