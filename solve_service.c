@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solve_service.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: icanker <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/11 12:57:44 by icanker           #+#    #+#             */
+/*   Updated: 2020/11/11 12:58:01 by icanker          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/lemin.h"
 
 void	del_first_link(int id_isol_room, t_lemin *lem)
@@ -40,7 +52,7 @@ int		isolated(t_room *room)
 	return (1);
 }
 
-int			check_shortcut(t_lemin *lem)
+int		check_shortcut(t_lemin *lem)
 {
 	int	i;
 

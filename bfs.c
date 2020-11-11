@@ -26,8 +26,8 @@ static t_room	*pop(int *head, int *tail, t_room **room)
 		return (room[*head - 1]);
 	}
 	else
-		ft_printf("Error\n");// СДЕЛАТЬ ОБРАБОТКУ Ошибка, попытка извлечь элемент из пустой очереди.
-	return (0);//убрать
+		ft_printf("Error\n");
+	return (0);
 }
 
 static void		init_bfs(t_lemin *lem, int *head, int *tail)
@@ -48,7 +48,7 @@ static void		init_bfs(t_lemin *lem, int *head, int *tail)
 	lem->end_room->depth = 2147483647;
 }
 
-static void		ft_help(t_room	*node, t_room **queue, int *tail, int i)
+static	void	ft_help(t_room *node, t_room **queue, int *tail, int i)
 {
 	if (node->n_rooms[i]->visited == 0 && node->blocks[i] == 0)
 	{
